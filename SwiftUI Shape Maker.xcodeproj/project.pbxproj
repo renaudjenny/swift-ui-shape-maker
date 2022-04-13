@@ -1,0 +1,706 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4C7BC15C28073F0A001942AE /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC15B28073F0A001942AE /* Tests_iOS.swift */; };
+		4C7BC15E28073F0A001942AE /* Tests_iOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC15D28073F0A001942AE /* Tests_iOSLaunchTests.swift */; };
+		4C7BC16828073F0A001942AE /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC16728073F0A001942AE /* Tests_macOS.swift */; };
+		4C7BC16A28073F0A001942AE /* Tests_macOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC16928073F0A001942AE /* Tests_macOSLaunchTests.swift */; };
+		4C7BC16B28073F0A001942AE /* SwiftUI_Shape_MakerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC14328073F0A001942AE /* SwiftUI_Shape_MakerApp.swift */; };
+		4C7BC16C28073F0A001942AE /* SwiftUI_Shape_MakerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC14328073F0A001942AE /* SwiftUI_Shape_MakerApp.swift */; };
+		4C7BC16D28073F0A001942AE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC14428073F0A001942AE /* ContentView.swift */; };
+		4C7BC16E28073F0A001942AE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC14428073F0A001942AE /* ContentView.swift */; };
+		4C7BC16F28073F0A001942AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C7BC14528073F0A001942AE /* Assets.xcassets */; };
+		4C7BC17028073F0A001942AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C7BC14528073F0A001942AE /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4C7BC15828073F0A001942AE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C7BC13E28073F0A001942AE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4C7BC14928073F0A001942AE;
+			remoteInfo = "SwiftUI Shape Maker (iOS)";
+		};
+		4C7BC16428073F0A001942AE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C7BC13E28073F0A001942AE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4C7BC14F28073F0A001942AE;
+			remoteInfo = "SwiftUI Shape Maker (macOS)";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4C7BC14328073F0A001942AE /* SwiftUI_Shape_MakerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_Shape_MakerApp.swift; sourceTree = "<group>"; };
+		4C7BC14428073F0A001942AE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		4C7BC14528073F0A001942AE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4C7BC14A28073F0A001942AE /* SwiftUI Shape Maker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftUI Shape Maker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C7BC15028073F0A001942AE /* SwiftUI Shape Maker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftUI Shape Maker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C7BC15228073F0A001942AE /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
+		4C7BC15728073F0A001942AE /* Tests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C7BC15B28073F0A001942AE /* Tests_iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_iOS.swift; sourceTree = "<group>"; };
+		4C7BC15D28073F0A001942AE /* Tests_iOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_iOSLaunchTests.swift; sourceTree = "<group>"; };
+		4C7BC16328073F0A001942AE /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C7BC16728073F0A001942AE /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
+		4C7BC16928073F0A001942AE /* Tests_macOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOSLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4C7BC14728073F0A001942AE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C7BC14D28073F0A001942AE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C7BC15428073F0A001942AE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C7BC16028073F0A001942AE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4C7BC13D28073F0A001942AE = {
+			isa = PBXGroup;
+			children = (
+				4C7BC14228073F0A001942AE /* Shared */,
+				4C7BC15128073F0A001942AE /* macOS */,
+				4C7BC15A28073F0A001942AE /* Tests iOS */,
+				4C7BC16628073F0A001942AE /* Tests macOS */,
+				4C7BC14B28073F0A001942AE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4C7BC14228073F0A001942AE /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				4C7BC14328073F0A001942AE /* SwiftUI_Shape_MakerApp.swift */,
+				4C7BC14428073F0A001942AE /* ContentView.swift */,
+				4C7BC14528073F0A001942AE /* Assets.xcassets */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		4C7BC14B28073F0A001942AE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4C7BC14A28073F0A001942AE /* SwiftUI Shape Maker.app */,
+				4C7BC15028073F0A001942AE /* SwiftUI Shape Maker.app */,
+				4C7BC15728073F0A001942AE /* Tests iOS.xctest */,
+				4C7BC16328073F0A001942AE /* Tests macOS.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4C7BC15128073F0A001942AE /* macOS */ = {
+			isa = PBXGroup;
+			children = (
+				4C7BC15228073F0A001942AE /* macOS.entitlements */,
+			);
+			path = macOS;
+			sourceTree = "<group>";
+		};
+		4C7BC15A28073F0A001942AE /* Tests iOS */ = {
+			isa = PBXGroup;
+			children = (
+				4C7BC15B28073F0A001942AE /* Tests_iOS.swift */,
+				4C7BC15D28073F0A001942AE /* Tests_iOSLaunchTests.swift */,
+			);
+			path = "Tests iOS";
+			sourceTree = "<group>";
+		};
+		4C7BC16628073F0A001942AE /* Tests macOS */ = {
+			isa = PBXGroup;
+			children = (
+				4C7BC16728073F0A001942AE /* Tests_macOS.swift */,
+				4C7BC16928073F0A001942AE /* Tests_macOSLaunchTests.swift */,
+			);
+			path = "Tests macOS";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4C7BC14928073F0A001942AE /* SwiftUI Shape Maker (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C7BC17328073F0A001942AE /* Build configuration list for PBXNativeTarget "SwiftUI Shape Maker (iOS)" */;
+			buildPhases = (
+				4C7BC14628073F0A001942AE /* Sources */,
+				4C7BC14728073F0A001942AE /* Frameworks */,
+				4C7BC14828073F0A001942AE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SwiftUI Shape Maker (iOS)";
+			productName = "SwiftUI Shape Maker (iOS)";
+			productReference = 4C7BC14A28073F0A001942AE /* SwiftUI Shape Maker.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4C7BC14F28073F0A001942AE /* SwiftUI Shape Maker (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C7BC17628073F0A001942AE /* Build configuration list for PBXNativeTarget "SwiftUI Shape Maker (macOS)" */;
+			buildPhases = (
+				4C7BC14C28073F0A001942AE /* Sources */,
+				4C7BC14D28073F0A001942AE /* Frameworks */,
+				4C7BC14E28073F0A001942AE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SwiftUI Shape Maker (macOS)";
+			productName = "SwiftUI Shape Maker (macOS)";
+			productReference = 4C7BC15028073F0A001942AE /* SwiftUI Shape Maker.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4C7BC15628073F0A001942AE /* Tests iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C7BC17928073F0A001942AE /* Build configuration list for PBXNativeTarget "Tests iOS" */;
+			buildPhases = (
+				4C7BC15328073F0A001942AE /* Sources */,
+				4C7BC15428073F0A001942AE /* Frameworks */,
+				4C7BC15528073F0A001942AE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4C7BC15928073F0A001942AE /* PBXTargetDependency */,
+			);
+			name = "Tests iOS";
+			productName = "Tests iOS";
+			productReference = 4C7BC15728073F0A001942AE /* Tests iOS.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		4C7BC16228073F0A001942AE /* Tests macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C7BC17C28073F0A001942AE /* Build configuration list for PBXNativeTarget "Tests macOS" */;
+			buildPhases = (
+				4C7BC15F28073F0A001942AE /* Sources */,
+				4C7BC16028073F0A001942AE /* Frameworks */,
+				4C7BC16128073F0A001942AE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4C7BC16528073F0A001942AE /* PBXTargetDependency */,
+			);
+			name = "Tests macOS";
+			productName = "Tests macOS";
+			productReference = 4C7BC16328073F0A001942AE /* Tests macOS.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4C7BC13E28073F0A001942AE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1330;
+				LastUpgradeCheck = 1330;
+				TargetAttributes = {
+					4C7BC14928073F0A001942AE = {
+						CreatedOnToolsVersion = 13.3.1;
+					};
+					4C7BC14F28073F0A001942AE = {
+						CreatedOnToolsVersion = 13.3.1;
+					};
+					4C7BC15628073F0A001942AE = {
+						CreatedOnToolsVersion = 13.3.1;
+						TestTargetID = 4C7BC14928073F0A001942AE;
+					};
+					4C7BC16228073F0A001942AE = {
+						CreatedOnToolsVersion = 13.3.1;
+						TestTargetID = 4C7BC14F28073F0A001942AE;
+					};
+				};
+			};
+			buildConfigurationList = 4C7BC14128073F0A001942AE /* Build configuration list for PBXProject "SwiftUI Shape Maker" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4C7BC13D28073F0A001942AE;
+			productRefGroup = 4C7BC14B28073F0A001942AE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4C7BC14928073F0A001942AE /* SwiftUI Shape Maker (iOS) */,
+				4C7BC14F28073F0A001942AE /* SwiftUI Shape Maker (macOS) */,
+				4C7BC15628073F0A001942AE /* Tests iOS */,
+				4C7BC16228073F0A001942AE /* Tests macOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4C7BC14828073F0A001942AE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C7BC16F28073F0A001942AE /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C7BC14E28073F0A001942AE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C7BC17028073F0A001942AE /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C7BC15528073F0A001942AE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C7BC16128073F0A001942AE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4C7BC14628073F0A001942AE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C7BC16D28073F0A001942AE /* ContentView.swift in Sources */,
+				4C7BC16B28073F0A001942AE /* SwiftUI_Shape_MakerApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C7BC14C28073F0A001942AE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C7BC16E28073F0A001942AE /* ContentView.swift in Sources */,
+				4C7BC16C28073F0A001942AE /* SwiftUI_Shape_MakerApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C7BC15328073F0A001942AE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C7BC15E28073F0A001942AE /* Tests_iOSLaunchTests.swift in Sources */,
+				4C7BC15C28073F0A001942AE /* Tests_iOS.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C7BC15F28073F0A001942AE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C7BC16A28073F0A001942AE /* Tests_macOSLaunchTests.swift in Sources */,
+				4C7BC16828073F0A001942AE /* Tests_macOS.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4C7BC15928073F0A001942AE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4C7BC14928073F0A001942AE /* SwiftUI Shape Maker (iOS) */;
+			targetProxy = 4C7BC15828073F0A001942AE /* PBXContainerItemProxy */;
+		};
+		4C7BC16528073F0A001942AE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4C7BC14F28073F0A001942AE /* SwiftUI Shape Maker (macOS) */;
+			targetProxy = 4C7BC16428073F0A001942AE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4C7BC17128073F0A001942AE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		4C7BC17228073F0A001942AE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		4C7BC17428073F0A001942AE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MBQ98GC8JT;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "renaud.jenny.SwiftUI-Shape-Maker";
+				PRODUCT_NAME = "SwiftUI Shape Maker";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4C7BC17528073F0A001942AE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MBQ98GC8JT;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "renaud.jenny.SwiftUI-Shape-Maker";
+				PRODUCT_NAME = "SwiftUI Shape Maker";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4C7BC17728073F0A001942AE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MBQ98GC8JT;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "renaud.jenny.SwiftUI-Shape-Maker";
+				PRODUCT_NAME = "SwiftUI Shape Maker";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		4C7BC17828073F0A001942AE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MBQ98GC8JT;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "renaud.jenny.SwiftUI-Shape-Maker";
+				PRODUCT_NAME = "SwiftUI Shape Maker";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		4C7BC17A28073F0A001942AE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MBQ98GC8JT;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "renaud.jenny.Tests-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "SwiftUI Shape Maker (iOS)";
+			};
+			name = Debug;
+		};
+		4C7BC17B28073F0A001942AE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MBQ98GC8JT;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "renaud.jenny.Tests-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "SwiftUI Shape Maker (iOS)";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4C7BC17D28073F0A001942AE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MBQ98GC8JT;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "renaud.jenny.Tests-macOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "SwiftUI Shape Maker (macOS)";
+			};
+			name = Debug;
+		};
+		4C7BC17E28073F0A001942AE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MBQ98GC8JT;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "renaud.jenny.Tests-macOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "SwiftUI Shape Maker (macOS)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4C7BC14128073F0A001942AE /* Build configuration list for PBXProject "SwiftUI Shape Maker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C7BC17128073F0A001942AE /* Debug */,
+				4C7BC17228073F0A001942AE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4C7BC17328073F0A001942AE /* Build configuration list for PBXNativeTarget "SwiftUI Shape Maker (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C7BC17428073F0A001942AE /* Debug */,
+				4C7BC17528073F0A001942AE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4C7BC17628073F0A001942AE /* Build configuration list for PBXNativeTarget "SwiftUI Shape Maker (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C7BC17728073F0A001942AE /* Debug */,
+				4C7BC17828073F0A001942AE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4C7BC17928073F0A001942AE /* Build configuration list for PBXNativeTarget "Tests iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C7BC17A28073F0A001942AE /* Debug */,
+				4C7BC17B28073F0A001942AE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4C7BC17C28073F0A001942AE /* Build configuration list for PBXNativeTarget "Tests macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C7BC17D28073F0A001942AE /* Debug */,
+				4C7BC17E28073F0A001942AE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4C7BC13E28073F0A001942AE /* Project object */;
+}
