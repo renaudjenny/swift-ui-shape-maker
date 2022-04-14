@@ -7,7 +7,7 @@ import Quartz
 struct ContentView: View {
     @State private var image: Image? = nil
     @State private var imageOpacity = 1.0
-    @State private var code: String = "Code"
+    @State private var codeLines: [AnyView] = []
 
     var body: some View {
         VStack {
@@ -19,7 +19,7 @@ struct ContentView: View {
             HStack {
                 ZStack {
                     ZStack {
-                        DrawingPanel(code: $code)
+                        DrawingPanel(codeLines: $codeLines)
                         image?
                             .resizable()
                             .aspectRatio(contentMode: .fit)
@@ -28,7 +28,11 @@ struct ContentView: View {
                     .frame(width: 800, height: 800)
                     .padding()
                 }
-                Text(code).frame(maxWidth: .infinity)
+                VStack {
+                    ForEach(Array(codeLines.enumerated()), id: \.offset) { offset, code in
+                        code
+                    }
+                }
             }
         }
     }
@@ -49,7 +53,12 @@ struct DrawingPanel: View {
     @State private var points: [CGPoint] = [] {
         didSet { updateCode() }
     }
-    @Binding var code: String
+    @State private var hoveredPointsIndexes: Set<Int> = Set() {
+        didSet { updateCode() }
+    }
+    @Binding var codeLines: [AnyView]
+
+    private var hoveredPointIndex: Int? { hoveredPointsIndexes.first }
 
     var body: some View {
         ZStack {
@@ -78,7 +87,16 @@ struct DrawingPanel: View {
 
             ForEach(Array(points.enumerated()), id: \.offset) { offset, point in
                 Circle()
-                    .frame(width: 5, height: 5)
+                    .frame(width: hoveredPointIndex == offset ? 10 : 5)
+                    .onHover { isHovered in
+                        withAnimation(.easeInOut) {
+                            if isHovered {
+                                hoveredPointsIndexes.insert(offset)
+                            } else {
+                                hoveredPointsIndexes.remove(offset)
+                            }
+                        }
+                    }
                     .position(point)
             }
         }
@@ -102,33 +120,39 @@ struct DrawingPanel: View {
     }
 
     private func updateCode() {
-        let pointsCode = points.map { point in
+        let pointsCode = points.enumerated().map { offset, point -> AnyView in
             let pointInCode = pointInCode(point)
-            return """
-            path.addLine(to: CGPoint(
-                x: rect.midX \(pointInCode.xSign) width * \(pointInCode.x)/1000,
-                y: rect.midY \(pointInCode.ySign) width * \(pointInCode.y)/1000
+            return AnyView(
+                Text("""
+                path.addLine(to: CGPoint(
+                    x: rect.midX \(pointInCode.xSign) width * \(pointInCode.x)/1000,
+                    y: rect.midY \(pointInCode.ySign) width * \(pointInCode.y)/1000
+                )
+                """)
+                .scaleEffect(offset == hoveredPointIndex ? 1.1 : 1)
+                .onHover { isHovered in
+                    withAnimation(.easeInOut) {
+                        if isHovered {
+                            hoveredPointsIndexes.insert(offset)
+                        } else {
+                            hoveredPointsIndexes.remove(offset)
+                        }
+                    }
+                }
             )
-            """
-        }.joined(separator: "\n")
+        }
 
-        let onDragCode: String
         if tapGesturePoint != .zero {
             let dragPointInCode = pointInCode(tapGesturePoint)
-            onDragCode = """
-
-
-            // On drag point
+            codeLines = pointsCode + [AnyView(Text("")), AnyView(Text("""
             path.addLine(to: CGPoint(
                 x: rect.midX \(dragPointInCode.xSign) width * \(dragPointInCode.x)/1000,
                 y: rect.midY \(dragPointInCode.ySign) width * \(dragPointInCode.y)/1000
             )
-            """
+            """).bold())]
         } else {
-            onDragCode = ""
+            codeLines = pointsCode
         }
-
-        code = pointsCode + onDragCode
     }
 
     private func pointInCode(_ point: CGPoint) -> (x: Int, y: Int, xSign: String, ySign: String) {
