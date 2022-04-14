@@ -43,7 +43,9 @@ struct ContentView: View {
 }
 
 struct DrawingPanel: View {
-    @State private var tapGesturePoint: CGPoint = .zero
+    @State private var tapGesturePoint: CGPoint = .zero {
+        didSet { updateCode() }
+    }
     @State private var points: [CGPoint] = [] {
         didSet { updateCode() }
     }
@@ -59,8 +61,14 @@ struct DrawingPanel: View {
                         }
                         .onEnded { _ in
                             points.append(tapGestureStandardizedPosition)
+                            tapGesturePoint = .zero
                         }
                 )
+
+            Path { path in
+                points.first.map { path.move(to: $0) }
+                points.forEach { path.addLine(to: $0) }
+            }.stroke()
 
             if tapGesturePoint != .zero {
                 Circle()
@@ -94,18 +102,41 @@ struct DrawingPanel: View {
     }
 
     private func updateCode() {
-        code = points.map { point in
-            let x = abs(point.x - 400) * 10/8
-            let y = abs(point.y - 400) * 10/8
-            let xSign = point.x > 400 ? "+" : "-"
-            let ySign = point.y > 400 ? "-" : "+"
+        let pointsCode = points.map { point in
+            let pointInCode = pointInCode(point)
             return """
             path.addLine(to: CGPoint(
-                x: rect.midX \(xSign) width * \(Int(x.rounded()))/1000,
-                y: rect.midY \(ySign) width * \(Int(y.rounded()))/1000
+                x: rect.midX \(pointInCode.xSign) width * \(pointInCode.x)/1000,
+                y: rect.midY \(pointInCode.ySign) width * \(pointInCode.y)/1000
             )
             """
         }.joined(separator: "\n")
+
+        let onDragCode: String
+        if tapGesturePoint != .zero {
+            let dragPointInCode = pointInCode(tapGesturePoint)
+            onDragCode = """
+
+
+            // On drag point
+            path.addLine(to: CGPoint(
+                x: rect.midX \(dragPointInCode.xSign) width * \(dragPointInCode.x)/1000,
+                y: rect.midY \(dragPointInCode.ySign) width * \(dragPointInCode.y)/1000
+            )
+            """
+        } else {
+            onDragCode = ""
+        }
+
+        code = pointsCode + onDragCode
+    }
+
+    private func pointInCode(_ point: CGPoint) -> (x: Int, y: Int, xSign: String, ySign: String) {
+        let x = abs(point.x - 400) * 10/8
+        let y = abs(point.y - 400) * 10/8
+        let xSign = point.x > 400 ? "+" : "-"
+        let ySign = point.y > 400 ? "-" : "+"
+        return (Int(x.rounded()), Int(y.rounded()), xSign, ySign)
     }
 }
 
