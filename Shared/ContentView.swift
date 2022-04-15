@@ -4,14 +4,34 @@ import SwiftUI
 import Quartz
 #endif
 
+enum PathTool: CaseIterable, Identifiable {
+    case move
+    case line
+    case quadCurve
+
+    var id: Int { hashValue }
+}
+
 enum PathElement {
     case move(to: CGPoint)
     case line(to: CGPoint)
+    case quadCurve(to: CGPoint, control: CGPoint)
 
-    mutating func update(to: CGPoint) {
+    var to: CGPoint {
         switch self {
-        case .move: self = .move(to: to)
-        case .line: self = .line(to: to)
+        case let .move(to), let .line(to), let .quadCurve(to: to, _):
+            return to
+        }
+    }
+
+    mutating func update(to newTo: CGPoint? = nil, control newControl: CGPoint? = nil) {
+        switch self {
+        case let .move(to):
+            self = .move(to: newTo ?? to)
+        case let .line(to):
+            self = .line(to: newTo ?? to)
+        case let .quadCurve(to: to, control: control):
+            self = .quadCurve(to: newTo ?? to, control: newControl ?? control)
         }
     }
 }
@@ -20,18 +40,31 @@ struct ContentView: View {
     @State private var image: Image? = nil
     @State private var imageOpacity = 1.0
     @State private var pathElements: [PathElement] = []
+    @State private var selectedPathTool: PathTool = .line
 
     var body: some View {
         VStack {
-            HStack {
-                Slider(value: $imageOpacity) { Text("Image opacity") }
-                Button("Choose an image") { openImagePicker() }
+            VStack {
+                HStack {
+                    Slider(value: $imageOpacity) { Text("Image opacity") }
+                    Button("Choose an image") { openImagePicker() }
+                }
+                HStack {
+                    Picker("Tool", selection: $selectedPathTool) {
+                        Text("Move").tag(PathTool.move)
+                        Text("Line").tag(PathTool.line)
+                        Text("Quad curve").tag(PathTool.quadCurve)
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    .frame(width: 300)
+                    Spacer()
+                }
             }
             .padding()
             HStack {
                 ZStack {
                     ZStack {
-                        DrawingPanel(pathElements: $pathElements)
+                        DrawingPanel(pathElements: $pathElements, selectedPathTool: selectedPathTool)
                         image?
                             .resizable()
                             .aspectRatio(contentMode: .fit)
@@ -92,6 +125,13 @@ struct ContentView: View {
                         to: \(pointForCode(to))
                     )
             """
+        case let .quadCurve(to, control):
+            return """
+                    path.addQuadCurve(
+                        to: \(pointForCode(to)),
+                        control: \(pointForCode(control))
+                    )
+            """
         }
     }
 
@@ -113,6 +153,7 @@ struct DrawingPanel: View {
     @State private var isAdding = false
     @State private var draggingElementOffset: Int?
     @Binding var pathElements: [PathElement]
+    let selectedPathTool: PathTool
 
     var body: some View {
         ZStack {
@@ -124,7 +165,7 @@ struct DrawingPanel: View {
                                 isAdding = true
                                 pathElements.append(
                                     pathElements.count > 0
-                                        ? .line(to: inBoundsPoint(value.location))
+                                        ? element(to: inBoundsPoint(value.location))
                                         : .move(to: inBoundsPoint(value.location))
                                 )
                             } else {
@@ -136,7 +177,7 @@ struct DrawingPanel: View {
                             pathElements.removeLast()
                             pathElements.append(
                                 pathElements.count > 0
-                                    ? .line(to: inBoundsPoint(value.location))
+                                    ? element(to: inBoundsPoint(value.location))
                                     : .move(to: inBoundsPoint(value.location))
                             )
                         }
@@ -165,10 +206,61 @@ struct DrawingPanel: View {
                                     withAnimation { draggingElementOffset = nil }
                                 }
                         )
+                case let .quadCurve(to, control):
+                    ZStack {
+                        CircleElementView(isDragged: draggingElementOffset == offset)
+                            .position(to)
+                            .gesture(
+                                DragGesture()
+                                    .onChanged { value in
+                                        withAnimation(.interactiveSpring()) {
+                                            pathElements[offset].update(to: inBoundsPoint(value.location))
+                                        }
+                                        draggingElementOffset = offset
+                                    }
+                                    .onEnded { value in
+                                        pathElements[offset].update(to: inBoundsPoint(value.location))
+                                        withAnimation { draggingElementOffset = nil }
+                                    }
+                            )
+                        SquareElementView(isDragged: draggingElementOffset == offset)
+                            .position(control)
+                            .gesture(
+                                DragGesture()
+                                    .onChanged { value in
+                                        withAnimation(.interactiveSpring()) {
+                                            pathElements[offset].update(control: inBoundsPoint(value.location))
+                                        }
+                                        draggingElementOffset = offset
+                                    }
+                                    .onEnded { value in
+                                        pathElements[offset].update(control: inBoundsPoint(value.location))
+                                        withAnimation { draggingElementOffset = nil }
+                                    }
+                            )
+                        Path { path in
+                            path.move(to: control)
+                            path.addLine(to: to)
+                            path.move(to: control)
+                            path.addLine(to: pathElements[offset - 1].to)
+                        }.stroke(style: .init(dash: [5], dashPhase: 1))
+                    }
                 }
             }
         }
     }
+
+    private func element(to: CGPoint) -> PathElement {
+            switch selectedPathTool {
+            case .move: return .move(to: to)
+            case .line: return .line(to: to)
+            case .quadCurve:
+                guard let lastPoint = pathElements.last?.to else { return .line(to: to) }
+                let control = CGPoint(x: to.x - 20, y: to.y - 20)
+                return .quadCurve(to: to, control: control)
+            }
+        }
+
 
     private func inBoundsPoint(_ point: CGPoint) -> CGPoint {
         var inBondsPoint = point
@@ -206,6 +298,24 @@ private struct CircleElementView: View {
     }
 }
 
+private struct SquareElementView: View {
+    @State private var isHovered = false
+    let isDragged: Bool
+
+    var body: some View {
+        Rectangle()
+            .frame(width: 5, height: 5)
+            .padding()
+            .contentShape(Rectangle())
+            .onHover { hover in
+                withAnimation(isHovered || isDragged ? nil : .easeInOut) {
+                    isHovered = hover
+                }
+            }
+            .scaleEffect(isHovered || isDragged ? 2 : 1)
+    }
+}
+
 private extension Path {
     mutating func addElement(_ element: PathElement) {
         switch element {
@@ -213,6 +323,8 @@ private extension Path {
             move(to: to)
         case let .line(to):
             addLine(to: to)
+        case let .quadCurve(to, control):
+            addQuadCurve(to: to, control: control)
         }
     }
 }
