@@ -102,8 +102,8 @@ struct ContentView: View {
         let ySign = point.y > 400 ? "-" : "+"
         return """
         CGPoint(
-                        x: rect.midX \(xSign) width * \(x)/1000,
-                        y: rect.midY \(ySign) width * \(y)/1000
+                        x: rect.midX \(xSign) width * \(Int(x.rounded()))/1000,
+                        y: rect.midY \(ySign) width * \(Int(y.rounded()))/1000
                     )
         """
     }
@@ -203,23 +203,6 @@ private struct CircleElementView: View {
                 }
             }
             .scaleEffect(isHovered || isDragged ? 2 : 1)
-    }
-
-    private func inBoundsPoint(_ point: CGPoint) -> CGPoint {
-        var inBondsPoint = point
-        if inBondsPoint.x < 0 {
-            inBondsPoint.x = 0
-        }
-        if inBondsPoint.y < 0 {
-            inBondsPoint.y = 0
-        }
-        if inBondsPoint.x > 800 {
-            inBondsPoint.x = 800
-        }
-        if inBondsPoint.y > 800 {
-            inBondsPoint.y = 800
-        }
-        return inBondsPoint
     }
 }
 
