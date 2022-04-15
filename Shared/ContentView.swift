@@ -174,10 +174,10 @@ struct DrawingPanel: View {
                         }
                         .onEnded { value in
                             isAdding = false
-                            pathElements.removeLast()
+                            let lastElement = pathElements.removeLast()
                             pathElements.append(
                                 pathElements.count > 0
-                                    ? element(to: inBoundsPoint(value.location))
+                                    ? element(to: inBoundsPoint(value.location), lastElement: lastElement)
                                     : .move(to: inBoundsPoint(value.location))
                             )
                         }
@@ -250,13 +250,18 @@ struct DrawingPanel: View {
         }
     }
 
-    private func element(to: CGPoint) -> PathElement {
+    private func element(to: CGPoint, lastElement: PathElement? = nil) -> PathElement {
             switch selectedPathTool {
             case .move: return .move(to: to)
             case .line: return .line(to: to)
             case .quadCurve:
                 guard let lastPoint = pathElements.last?.to else { return .line(to: to) }
-                let control = CGPoint(x: to.x - 20, y: to.y - 20)
+                if case let .quadCurve(_, control) = lastElement {
+                    return .quadCurve(to: to, control: control)
+                }
+                let x = (to.x + lastPoint.x) / 2
+                let y = (to.y + lastPoint.y) / 2
+                let control = CGPoint(x: x - 20, y: y - 20)
                 return .quadCurve(to: to, control: control)
             }
         }
