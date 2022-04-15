@@ -45,6 +45,7 @@ struct ContentView: View {
                     .font(.body.monospaced())
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity)
+                    .padding()
             }
         }
     }
@@ -110,7 +111,7 @@ struct ContentView: View {
 
 struct DrawingPanel: View {
     @State private var isAdding = false
-    @State private var isDragging = false
+    @State private var draggingElementOffset: Int?
     @Binding var pathElements: [PathElement]
 
     var body: some View {
@@ -148,9 +149,8 @@ struct DrawingPanel: View {
 
             ForEach(Array(pathElements.enumerated()), id: \.offset) { offset, element in
                 switch element {
-                case let .move(to):
-                    Circle()
-                        .frame(width: 5)
+                case let .move(to), let .line(to):
+                    CircleElementView(isDragged: draggingElementOffset == offset)
                         .position(to)
                         .gesture(
                             DragGesture()
@@ -158,29 +158,51 @@ struct DrawingPanel: View {
                                     withAnimation(.interactiveSpring()) {
                                         pathElements[offset].update(to: inBoundsPoint(value.location))
                                     }
+                                    draggingElementOffset = offset
                                 }
                                 .onEnded { value in
                                     pathElements[offset].update(to: inBoundsPoint(value.location))
-                                }
-                        )
-                case let .line(to):
-                    Circle()
-                        .frame(width: 5)
-                        .position(to)
-                        .gesture(
-                            DragGesture()
-                                .onChanged { value in
-                                    withAnimation(.interactiveSpring()) {
-                                        pathElements[offset].update(to: inBoundsPoint(value.location))
-                                    }
-                                }
-                                .onEnded { value in
-                                    pathElements[offset].update(to: inBoundsPoint(value.location))
+                                    withAnimation { draggingElementOffset = nil }
                                 }
                         )
                 }
             }
         }
+    }
+
+    private func inBoundsPoint(_ point: CGPoint) -> CGPoint {
+        var inBondsPoint = point
+        if inBondsPoint.x < 0 {
+            inBondsPoint.x = 0
+        }
+        if inBondsPoint.y < 0 {
+            inBondsPoint.y = 0
+        }
+        if inBondsPoint.x > 800 {
+            inBondsPoint.x = 800
+        }
+        if inBondsPoint.y > 800 {
+            inBondsPoint.y = 800
+        }
+        return inBondsPoint
+    }
+}
+
+private struct CircleElementView: View {
+    @State private var isHovered = false
+    let isDragged: Bool
+
+    var body: some View {
+        Circle()
+            .frame(width: 5, height: 5)
+            .padding()
+            .contentShape(Rectangle())
+            .onHover { hover in
+                withAnimation(isHovered || isDragged ? nil : .easeInOut) {
+                    isHovered = hover
+                }
+            }
+            .scaleEffect(isHovered || isDragged ? 2 : 1)
     }
 
     private func inBoundsPoint(_ point: CGPoint) -> CGPoint {
