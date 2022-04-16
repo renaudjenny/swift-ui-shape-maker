@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C31F715280A0C8B0048DE77 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F714280A0C8B0048DE77 /* Configuration.swift */; };
+		4C31F716280A0C8B0048DE77 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F714280A0C8B0048DE77 /* Configuration.swift */; };
 		4C7BC15C28073F0A001942AE /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC15B28073F0A001942AE /* Tests_iOS.swift */; };
 		4C7BC15E28073F0A001942AE /* Tests_iOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC15D28073F0A001942AE /* Tests_iOSLaunchTests.swift */; };
 		4C7BC16828073F0A001942AE /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC16728073F0A001942AE /* Tests_macOS.swift */; };
@@ -37,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C31F714280A0C8B0048DE77 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		4C7BC14328073F0A001942AE /* SwiftUI_Shape_MakerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_Shape_MakerApp.swift; sourceTree = "<group>"; };
 		4C7BC14428073F0A001942AE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		4C7BC14528073F0A001942AE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -100,6 +103,7 @@
 				4C7BC14328073F0A001942AE /* SwiftUI_Shape_MakerApp.swift */,
 				4C7BC14428073F0A001942AE /* ContentView.swift */,
 				4C7BC14528073F0A001942AE /* Assets.xcassets */,
+				4C31F714280A0C8B0048DE77 /* Configuration.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -299,6 +303,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C31F715280A0C8B0048DE77 /* Configuration.swift in Sources */,
 				4C7BC16D28073F0A001942AE /* ContentView.swift in Sources */,
 				4C7BC16B28073F0A001942AE /* SwiftUI_Shape_MakerApp.swift in Sources */,
 			);
@@ -308,6 +313,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C31F716280A0C8B0048DE77 /* Configuration.swift in Sources */,
 				4C7BC16E28073F0A001942AE /* ContentView.swift in Sources */,
 				4C7BC16C28073F0A001942AE /* SwiftUI_Shape_MakerApp.swift in Sources */,
 			);

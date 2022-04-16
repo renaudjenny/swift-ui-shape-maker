@@ -41,6 +41,7 @@ struct ContentView: View {
     @State private var imageOpacity = 1.0
     @State private var pathElements: [PathElement] = []
     @State private var selectedPathTool: PathTool = .line
+    @State private var configuration = Configuration()
 
     var body: some View {
         VStack {
@@ -57,6 +58,7 @@ struct ContentView: View {
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     .frame(width: 300)
+                    Toggle("Display path indicators", isOn: $configuration.isPathIndicatorsDisplayed)
                     Spacer()
                 }
             }
@@ -64,7 +66,11 @@ struct ContentView: View {
             HStack {
                 ZStack {
                     ZStack {
-                        DrawingPanel(pathElements: $pathElements, selectedPathTool: selectedPathTool)
+                        DrawingPanel(
+                            pathElements: $pathElements,
+                            selectedPathTool: selectedPathTool,
+                            configuration: configuration
+                        )
                         image?
                             .resizable()
                             .aspectRatio(contentMode: .fit)
@@ -154,6 +160,7 @@ struct DrawingPanel: View {
     @State private var draggingElementOffset: Int?
     @Binding var pathElements: [PathElement]
     let selectedPathTool: PathTool
+    let configuration: Configuration
 
     var body: some View {
         ZStack {
@@ -165,8 +172,8 @@ struct DrawingPanel: View {
                                 isAdding = true
                                 pathElements.append(
                                     pathElements.count > 0
-                                        ? element(to: inBoundsPoint(value.location))
-                                        : .move(to: inBoundsPoint(value.location))
+                                    ? element(to: inBoundsPoint(value.location))
+                                    : .move(to: inBoundsPoint(value.location))
                                 )
                             } else {
                                 pathElements[pathElements.count - 1].update(to: inBoundsPoint(value.location))
@@ -177,8 +184,8 @@ struct DrawingPanel: View {
                             let lastElement = pathElements.removeLast()
                             pathElements.append(
                                 pathElements.count > 0
-                                    ? element(to: inBoundsPoint(value.location), lastElement: lastElement)
-                                    : .move(to: inBoundsPoint(value.location))
+                                ? element(to: inBoundsPoint(value.location), lastElement: lastElement)
+                                : .move(to: inBoundsPoint(value.location))
                             )
                         }
                 )
@@ -188,9 +195,33 @@ struct DrawingPanel: View {
             }
             .stroke()
 
-            ForEach(Array(pathElements.enumerated()), id: \.offset) { offset, element in
-                switch element {
-                case let .move(to), let .line(to):
+            if configuration.isPathIndicatorsDisplayed {
+                pathIndicators()
+            }
+        }
+    }
+
+    private func pathIndicators() -> some View {
+        ForEach(Array(pathElements.enumerated()), id: \.offset) { offset, element in
+            switch element {
+            case let .move(to), let .line(to):
+                CircleElementView(isDragged: draggingElementOffset == offset)
+                    .position(to)
+                    .gesture(
+                        DragGesture()
+                            .onChanged { value in
+                                withAnimation(.interactiveSpring()) {
+                                    pathElements[offset].update(to: inBoundsPoint(value.location))
+                                }
+                                draggingElementOffset = offset
+                            }
+                            .onEnded { value in
+                                pathElements[offset].update(to: inBoundsPoint(value.location))
+                                withAnimation { draggingElementOffset = nil }
+                            }
+                    )
+            case let .quadCurve(to, control):
+                ZStack {
                     CircleElementView(isDragged: draggingElementOffset == offset)
                         .position(to)
                         .gesture(
@@ -206,65 +237,48 @@ struct DrawingPanel: View {
                                     withAnimation { draggingElementOffset = nil }
                                 }
                         )
-                case let .quadCurve(to, control):
-                    ZStack {
-                        CircleElementView(isDragged: draggingElementOffset == offset)
-                            .position(to)
-                            .gesture(
-                                DragGesture()
-                                    .onChanged { value in
-                                        withAnimation(.interactiveSpring()) {
-                                            pathElements[offset].update(to: inBoundsPoint(value.location))
-                                        }
-                                        draggingElementOffset = offset
-                                    }
-                                    .onEnded { value in
-                                        pathElements[offset].update(to: inBoundsPoint(value.location))
-                                        withAnimation { draggingElementOffset = nil }
-                                    }
-                            )
-                        SquareElementView(isDragged: draggingElementOffset == offset)
-                            .position(control)
-                            .gesture(
-                                DragGesture()
-                                    .onChanged { value in
-                                        withAnimation(.interactiveSpring()) {
-                                            pathElements[offset].update(control: inBoundsPoint(value.location))
-                                        }
-                                        draggingElementOffset = offset
-                                    }
-                                    .onEnded { value in
+                    SquareElementView(isDragged: draggingElementOffset == offset)
+                        .position(control)
+                        .gesture(
+                            DragGesture()
+                                .onChanged { value in
+                                    withAnimation(.interactiveSpring()) {
                                         pathElements[offset].update(control: inBoundsPoint(value.location))
-                                        withAnimation { draggingElementOffset = nil }
                                     }
-                            )
-                        Path { path in
-                            path.move(to: control)
-                            path.addLine(to: to)
-                            path.move(to: control)
-                            path.addLine(to: pathElements[offset - 1].to)
-                        }.stroke(style: .init(dash: [5], dashPhase: 1))
-                    }
+                                    draggingElementOffset = offset
+                                }
+                                .onEnded { value in
+                                    pathElements[offset].update(control: inBoundsPoint(value.location))
+                                    withAnimation { draggingElementOffset = nil }
+                                }
+                        )
+                    Path { path in
+                        path.move(to: control)
+                        path.addLine(to: to)
+                        path.move(to: control)
+                        path.addLine(to: pathElements[offset - 1].to)
+                    }.stroke(style: .init(dash: [5], dashPhase: 1))
                 }
             }
         }
     }
 
+
     private func element(to: CGPoint, lastElement: PathElement? = nil) -> PathElement {
-            switch selectedPathTool {
-            case .move: return .move(to: to)
-            case .line: return .line(to: to)
-            case .quadCurve:
-                guard let lastPoint = pathElements.last?.to else { return .line(to: to) }
-                if case let .quadCurve(_, control) = lastElement {
-                    return .quadCurve(to: to, control: control)
-                }
-                let x = (to.x + lastPoint.x) / 2
-                let y = (to.y + lastPoint.y) / 2
-                let control = CGPoint(x: x - 20, y: y - 20)
+        switch selectedPathTool {
+        case .move: return .move(to: to)
+        case .line: return .line(to: to)
+        case .quadCurve:
+            guard let lastPoint = pathElements.last?.to else { return .line(to: to) }
+            if case let .quadCurve(_, control) = lastElement {
                 return .quadCurve(to: to, control: control)
             }
+            let x = (to.x + lastPoint.x) / 2
+            let y = (to.y + lastPoint.y) / 2
+            let control = CGPoint(x: x - 20, y: y - 20)
+            return .quadCurve(to: to, control: control)
         }
+    }
 
 
     private func inBoundsPoint(_ point: CGPoint) -> CGPoint {
