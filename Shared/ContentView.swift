@@ -37,7 +37,7 @@ enum PathElement {
 }
 
 struct ContentView: View {
-    @State private var image: Image? = nil
+    @State private var image: Image?
     @State private var imageOpacity = 1.0
     @State private var pathElements: [PathElement] = []
     @State private var selectedPathTool: PathTool = .line
@@ -117,6 +117,7 @@ struct ContentView: View {
         )
     }
 
+    // swiftlint:disable indentation_width
     private func code(fromPathElement pathElement: PathElement) -> String {
         switch pathElement {
         case let .move(to):
@@ -140,6 +141,7 @@ struct ContentView: View {
             """
         }
     }
+    // swiftlint: enable identation_width
 
     private func pointForCode(_ point: CGPoint) -> String {
         let x = abs(point.x - 400) * 10/8
@@ -201,6 +203,7 @@ struct DrawingPanel: View {
         }
     }
 
+    // swiftlint:disable:next function_body_length
     private func pathIndicators() -> some View {
         ForEach(Array(pathElements.enumerated()), id: \.offset) { offset, element in
             switch element {
@@ -263,7 +266,6 @@ struct DrawingPanel: View {
         }
     }
 
-
     private func element(to: CGPoint, lastElement: PathElement? = nil) -> PathElement {
         switch selectedPathTool {
         case .move: return .move(to: to)
@@ -279,7 +281,6 @@ struct DrawingPanel: View {
             return .quadCurve(to: to, control: control)
         }
     }
-
 
     private func inBoundsPoint(_ point: CGPoint) -> CGPoint {
         var inBondsPoint = point

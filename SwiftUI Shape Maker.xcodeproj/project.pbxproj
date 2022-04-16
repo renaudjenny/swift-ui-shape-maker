@@ -9,12 +9,12 @@
 /* Begin PBXBuildFile section */
 		4C31F715280A0C8B0048DE77 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F714280A0C8B0048DE77 /* Configuration.swift */; };
 		4C31F716280A0C8B0048DE77 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F714280A0C8B0048DE77 /* Configuration.swift */; };
-		4C7BC15C28073F0A001942AE /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC15B28073F0A001942AE /* Tests_iOS.swift */; };
-		4C7BC15E28073F0A001942AE /* Tests_iOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC15D28073F0A001942AE /* Tests_iOSLaunchTests.swift */; };
-		4C7BC16828073F0A001942AE /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC16728073F0A001942AE /* Tests_macOS.swift */; };
-		4C7BC16A28073F0A001942AE /* Tests_macOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC16928073F0A001942AE /* Tests_macOSLaunchTests.swift */; };
-		4C7BC16B28073F0A001942AE /* SwiftUI_Shape_MakerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC14328073F0A001942AE /* SwiftUI_Shape_MakerApp.swift */; };
-		4C7BC16C28073F0A001942AE /* SwiftUI_Shape_MakerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC14328073F0A001942AE /* SwiftUI_Shape_MakerApp.swift */; };
+		4C7BC15C28073F0A001942AE /* TestsiOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC15B28073F0A001942AE /* TestsiOS.swift */; };
+		4C7BC15E28073F0A001942AE /* TestsiOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC15D28073F0A001942AE /* TestsiOSLaunchTests.swift */; };
+		4C7BC16828073F0A001942AE /* TestsMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC16728073F0A001942AE /* TestsMacOS.swift */; };
+		4C7BC16A28073F0A001942AE /* TestsMacOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC16928073F0A001942AE /* TestsMacOSLaunchTests.swift */; };
+		4C7BC16B28073F0A001942AE /* SwiftUIShapeMakerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC14328073F0A001942AE /* SwiftUIShapeMakerApp.swift */; };
+		4C7BC16C28073F0A001942AE /* SwiftUIShapeMakerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC14328073F0A001942AE /* SwiftUIShapeMakerApp.swift */; };
 		4C7BC16D28073F0A001942AE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC14428073F0A001942AE /* ContentView.swift */; };
 		4C7BC16E28073F0A001942AE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC14428073F0A001942AE /* ContentView.swift */; };
 		4C7BC16F28073F0A001942AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C7BC14528073F0A001942AE /* Assets.xcassets */; };
@@ -40,18 +40,18 @@
 
 /* Begin PBXFileReference section */
 		4C31F714280A0C8B0048DE77 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
-		4C7BC14328073F0A001942AE /* SwiftUI_Shape_MakerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_Shape_MakerApp.swift; sourceTree = "<group>"; };
+		4C7BC14328073F0A001942AE /* SwiftUIShapeMakerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIShapeMakerApp.swift; sourceTree = "<group>"; };
 		4C7BC14428073F0A001942AE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		4C7BC14528073F0A001942AE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4C7BC14A28073F0A001942AE /* SwiftUI Shape Maker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftUI Shape Maker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C7BC15028073F0A001942AE /* SwiftUI Shape Maker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftUI Shape Maker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C7BC15228073F0A001942AE /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
 		4C7BC15728073F0A001942AE /* Tests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C7BC15B28073F0A001942AE /* Tests_iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_iOS.swift; sourceTree = "<group>"; };
-		4C7BC15D28073F0A001942AE /* Tests_iOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_iOSLaunchTests.swift; sourceTree = "<group>"; };
+		4C7BC15B28073F0A001942AE /* TestsiOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsiOS.swift; sourceTree = "<group>"; };
+		4C7BC15D28073F0A001942AE /* TestsiOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsiOSLaunchTests.swift; sourceTree = "<group>"; };
 		4C7BC16328073F0A001942AE /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C7BC16728073F0A001942AE /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
-		4C7BC16928073F0A001942AE /* Tests_macOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOSLaunchTests.swift; sourceTree = "<group>"; };
+		4C7BC16728073F0A001942AE /* TestsMacOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsMacOS.swift; sourceTree = "<group>"; };
+		4C7BC16928073F0A001942AE /* TestsMacOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsMacOSLaunchTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,7 +100,7 @@
 		4C7BC14228073F0A001942AE /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				4C7BC14328073F0A001942AE /* SwiftUI_Shape_MakerApp.swift */,
+				4C7BC14328073F0A001942AE /* SwiftUIShapeMakerApp.swift */,
 				4C7BC14428073F0A001942AE /* ContentView.swift */,
 				4C7BC14528073F0A001942AE /* Assets.xcassets */,
 				4C31F714280A0C8B0048DE77 /* Configuration.swift */,
@@ -130,8 +130,8 @@
 		4C7BC15A28073F0A001942AE /* Tests iOS */ = {
 			isa = PBXGroup;
 			children = (
-				4C7BC15B28073F0A001942AE /* Tests_iOS.swift */,
-				4C7BC15D28073F0A001942AE /* Tests_iOSLaunchTests.swift */,
+				4C7BC15B28073F0A001942AE /* TestsiOS.swift */,
+				4C7BC15D28073F0A001942AE /* TestsiOSLaunchTests.swift */,
 			);
 			path = "Tests iOS";
 			sourceTree = "<group>";
@@ -139,8 +139,8 @@
 		4C7BC16628073F0A001942AE /* Tests macOS */ = {
 			isa = PBXGroup;
 			children = (
-				4C7BC16728073F0A001942AE /* Tests_macOS.swift */,
-				4C7BC16928073F0A001942AE /* Tests_macOSLaunchTests.swift */,
+				4C7BC16728073F0A001942AE /* TestsMacOS.swift */,
+				4C7BC16928073F0A001942AE /* TestsMacOSLaunchTests.swift */,
 			);
 			path = "Tests macOS";
 			sourceTree = "<group>";
@@ -155,6 +155,7 @@
 				4C7BC14628073F0A001942AE /* Sources */,
 				4C7BC14728073F0A001942AE /* Frameworks */,
 				4C7BC14828073F0A001942AE /* Resources */,
+				4C31F717280AC39A0048DE77 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -172,6 +173,7 @@
 				4C7BC14C28073F0A001942AE /* Sources */,
 				4C7BC14D28073F0A001942AE /* Frameworks */,
 				4C7BC14E28073F0A001942AE /* Resources */,
+				4C31F718280AC3AD0048DE77 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -298,6 +300,43 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4C31F717280AC39A0048DE77 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		4C31F718280AC3AD0048DE77 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		4C7BC14628073F0A001942AE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -305,7 +344,7 @@
 			files = (
 				4C31F715280A0C8B0048DE77 /* Configuration.swift in Sources */,
 				4C7BC16D28073F0A001942AE /* ContentView.swift in Sources */,
-				4C7BC16B28073F0A001942AE /* SwiftUI_Shape_MakerApp.swift in Sources */,
+				4C7BC16B28073F0A001942AE /* SwiftUIShapeMakerApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,7 +354,7 @@
 			files = (
 				4C31F716280A0C8B0048DE77 /* Configuration.swift in Sources */,
 				4C7BC16E28073F0A001942AE /* ContentView.swift in Sources */,
-				4C7BC16C28073F0A001942AE /* SwiftUI_Shape_MakerApp.swift in Sources */,
+				4C7BC16C28073F0A001942AE /* SwiftUIShapeMakerApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,8 +362,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C7BC15E28073F0A001942AE /* Tests_iOSLaunchTests.swift in Sources */,
-				4C7BC15C28073F0A001942AE /* Tests_iOS.swift in Sources */,
+				4C7BC15E28073F0A001942AE /* TestsiOSLaunchTests.swift in Sources */,
+				4C7BC15C28073F0A001942AE /* TestsiOS.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,8 +371,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C7BC16A28073F0A001942AE /* Tests_macOSLaunchTests.swift in Sources */,
-				4C7BC16828073F0A001942AE /* Tests_macOS.swift in Sources */,
+				4C7BC16A28073F0A001942AE /* TestsMacOSLaunchTests.swift in Sources */,
+				4C7BC16828073F0A001942AE /* TestsMacOS.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

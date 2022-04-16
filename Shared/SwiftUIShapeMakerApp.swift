@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct SwiftUI_Shape_MakerApp: App {
+struct SwiftUIShapeMakerApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
