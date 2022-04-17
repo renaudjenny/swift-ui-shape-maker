@@ -10,6 +10,8 @@ struct ContentView: View {
     @State private var pathElements: [PathElement] = []
     @State private var selectedPathTool: PathTool = .line
     @State private var configuration = Configuration()
+    @State private var isCodeInEditionMode = false
+    @State private var hoveredOffsets = Set<Int>()
 
     var body: some View {
         VStack {
@@ -37,6 +39,7 @@ struct ContentView: View {
                     ZStack {
                         DrawingPanel(
                             pathElements: $pathElements,
+                            hoveredOffsets: $hoveredOffsets,
                             selectedPathTool: selectedPathTool,
                             configuration: configuration
                         )
@@ -47,13 +50,71 @@ struct ContentView: View {
                     }
                     .frame(width: 800, height: 800)
                     .padding()
+                }.onHover { isHovered in
+                    if isHovered {
+                        isCodeInEditionMode = false
+                    }
                 }
 
-                TextEditor(text: code)
-                    .font(.body.monospaced())
-                    .multilineTextAlignment(.leading)
-                    .frame(maxWidth: .infinity)
-                    .padding()
+                ZStack {
+                    if isCodeInEditionMode {
+                        TextEditor(text: code)
+                            .font(.body.monospaced())
+                            .multilineTextAlignment(.leading)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                    } else {
+                        ScrollView {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 0) {
+                                    Text(codeHeader.codeFormatted)
+                                    ForEach(Array(pathElements.enumerated()), id: \.offset) { offset, element in
+                                        HStack {
+                                            Text(element.code.codeFormatted(extraIndentation: 2))
+                                            if hoveredOffsets.contains(offset) {
+                                                Button("Remove", role: .destructive) {
+                                                    pathElements.remove(at: offset)
+                                                }
+                                                .padding(.horizontal)
+                                            }
+                                        }
+                                        .background {
+                                            if hoveredOffsets.contains(offset) {
+                                                RoundedRectangle(cornerRadius: 8)
+                                                    .fill(Color.white)
+                                                    .shadow(color: .black, radius: 4)
+                                            } else {
+                                                RoundedRectangle(cornerRadius: 8)
+                                                    .fill(Color.white)
+                                                    .padding()
+                                            }
+                                        }
+                                        .contentShape(Rectangle())
+                                        .onHover { isHovered in
+                                            withAnimation(.easeInOut) {
+                                                if isHovered {
+                                                    hoveredOffsets.insert(offset)
+                                                } else {
+                                                    hoveredOffsets.remove(offset)
+                                                }
+                                            }
+                                        }
+                                    }
+                                    Text(codeFooter)
+                                }
+                                .padding(.horizontal, 5)
+                                Spacer()
+                            }
+                        }
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity)
+                        .font(.body.monospaced())
+                        .background(Color.white)
+                        .padding()
+                    }
+                }.onTapGesture {
+                    isCodeInEditionMode = true
+                }
             }
         }
     }
@@ -68,280 +129,31 @@ struct ContentView: View {
 
     private var code: Binding<String> {
         Binding<String>(
-            get: { """
-            import SwiftUI
-
-            struct MyShape: Shape {
-                func path(in rect: CGRect) -> Path {
-                    var path = Path()
-                    let width = min(rect.width, rect.height)
-
-                    \(pathElements.map(\.code).joined(separator: "\n"))
-
-                    return path
-                }
-            }
-            """.codeFormatted },
+            get: { [
+                codeHeader,
+                pathElements.map(\.code).joined(separator: "\n"),
+                codeFooter,
+            ].joined(separator: "\n").codeFormatted },
             set: { _, _ in }
         )
     }
-}
 
-struct DrawingPanel: View {
-    @State private var isAdding = false
-    @State private var draggingElementOffset: Int?
-    @Binding var pathElements: [PathElement]
-    let selectedPathTool: PathTool
-    let configuration: Configuration
+    private var codeHeader: String { """
+    import SwiftUI
 
-    var body: some View {
-        ZStack {
-            Color.white
-                .gesture(
-                    DragGesture()
-                        .onChanged { value in
-                            if !isAdding {
-                                isAdding = true
-                                pathElements.append(
-                                    pathElements.count > 0
-                                    ? element(to: inBoundsPoint(value.location))
-                                    : .move(to: inBoundsPoint(value.location))
-                                )
-                            } else {
-                                pathElements[pathElements.count - 1].update(to: inBoundsPoint(value.location))
-                            }
-                        }
-                        .onEnded { value in
-                            isAdding = false
-                            let lastElement = pathElements.removeLast()
-                            pathElements.append(
-                                pathElements.count > 0
-                                ? element(to: inBoundsPoint(value.location), lastElement: lastElement)
-                                : .move(to: inBoundsPoint(value.location))
-                            )
-                        }
-                )
+    struct MyShape: Shape {
+        func path(in rect: CGRect) -> Path {
+            var path = Path()
+            let width = min(rect.width, rect.height)
+    """}
 
-            Path { path in
-                pathElements.forEach { path.addElement($0) }
-            }
-            .stroke()
-
-            if configuration.isPathIndicatorsDisplayed {
-                pathIndicators()
-            }
+    // swiftlint: disable indentation_width
+    private var codeFooter: String { """
+            return path
         }
     }
-
-    // swiftlint:disable:next function_body_length
-    private func pathIndicators() -> some View {
-        ForEach(Array(pathElements.enumerated()), id: \.offset) { offset, element in
-            switch element {
-            case let .move(to), let .line(to):
-                CircleElementView(isDragged: draggingElementOffset == offset)
-                    .position(to)
-                    .gesture(
-                        DragGesture()
-                            .onChanged { value in
-                                withAnimation(.interactiveSpring()) {
-                                    pathElements[offset].update(to: inBoundsPoint(value.location))
-                                }
-                                draggingElementOffset = offset
-                            }
-                            .onEnded { value in
-                                pathElements[offset].update(to: inBoundsPoint(value.location))
-                                withAnimation { draggingElementOffset = nil }
-                            }
-                    )
-            case let .quadCurve(to, control):
-                ZStack {
-                    CircleElementView(isDragged: draggingElementOffset == offset)
-                        .position(to)
-                        .gesture(
-                            DragGesture()
-                                .onChanged { value in
-                                    withAnimation(.interactiveSpring()) {
-                                        pathElements[offset].update(to: inBoundsPoint(value.location))
-                                    }
-                                    draggingElementOffset = offset
-                                }
-                                .onEnded { value in
-                                    pathElements[offset].update(to: inBoundsPoint(value.location))
-                                    withAnimation { draggingElementOffset = nil }
-                                }
-                        )
-                    SquareElementView(isDragged: draggingElementOffset == offset)
-                        .position(control)
-                        .gesture(
-                            DragGesture()
-                                .onChanged { value in
-                                    withAnimation(.interactiveSpring()) {
-                                        pathElements[offset].update(quadCurveControl: inBoundsPoint(value.location))
-                                    }
-                                    draggingElementOffset = offset
-                                }
-                                .onEnded { value in
-                                    pathElements[offset].update(quadCurveControl: inBoundsPoint(value.location))
-                                    withAnimation { draggingElementOffset = nil }
-                                }
-                        )
-                    Path { path in
-                        path.move(to: pathElements[offset - 1].to)
-                        path.addLine(to: control)
-                        path.addLine(to: to)
-                    }.stroke(style: .init(dash: [5], dashPhase: 1))
-                }
-            case let .curve(to, control1, control2):
-                ZStack {
-                    CircleElementView(isDragged: draggingElementOffset == offset)
-                        .position(to)
-                        .gesture(
-                            DragGesture()
-                                .onChanged { value in
-                                    withAnimation(.interactiveSpring()) {
-                                        pathElements[offset].update(to: inBoundsPoint(value.location))
-                                    }
-                                    draggingElementOffset = offset
-                                }
-                                .onEnded { value in
-                                    pathElements[offset].update(to: inBoundsPoint(value.location))
-                                    withAnimation { draggingElementOffset = nil }
-                                }
-                        )
-                    SquareElementView(isDragged: draggingElementOffset == offset)
-                        .position(control1)
-                        .gesture(
-                            DragGesture()
-                                .onChanged { value in
-                                    withAnimation(.interactiveSpring()) {
-                                        pathElements[offset].update(curveControls: (inBoundsPoint(value.location), nil))
-                                    }
-                                    draggingElementOffset = offset
-                                }
-                                .onEnded { value in
-                                    pathElements[offset].update(curveControls: (inBoundsPoint(value.location), nil))
-                                    withAnimation { draggingElementOffset = nil }
-                                }
-                        )
-                    SquareElementView(isDragged: draggingElementOffset == offset)
-                        .position(control2)
-                        .gesture(
-                            DragGesture()
-                                .onChanged { value in
-                                    withAnimation(.interactiveSpring()) {
-                                        pathElements[offset].update(curveControls: (nil, inBoundsPoint(value.location)))
-                                    }
-                                    draggingElementOffset = offset
-                                }
-                                .onEnded { value in
-                                    pathElements[offset].update(curveControls: (nil, inBoundsPoint(value.location)))
-                                    withAnimation { draggingElementOffset = nil }
-                                }
-                        )
-                    Path { path in
-                        path.move(to: pathElements[offset - 1].to)
-                        path.addLine(to: control1)
-                        path.addLine(to: control2)
-                        path.addLine(to: to)
-                    }.stroke(style: .init(dash: [5], dashPhase: 1))
-                }
-            }
-        }
-    }
-
-    private func element(to: CGPoint, lastElement: PathElement? = nil) -> PathElement {
-        switch selectedPathTool {
-        case .move: return .move(to: to)
-        case .line: return .line(to: to)
-        case .quadCurve:
-            guard let lastPoint = pathElements.last?.to else { return .line(to: to) }
-            if case let .quadCurve(_, control) = lastElement {
-                return .quadCurve(to: to, control: control)
-            }
-            let x = (to.x + lastPoint.x) / 2
-            let y = (to.y + lastPoint.y) / 2
-            let control = CGPoint(x: x - 20, y: y - 20)
-            return .quadCurve(to: to, control: control)
-        case .curve:
-            guard let lastPoint = pathElements.last?.to else { return .line(to: to) }
-            if case let .curve(_, control1, control2) = lastElement {
-                return .curve(to: to, control1: control1, control2: control2)
-            }
-            let x = (to.x + lastPoint.x) / 2
-            let y = (to.y + lastPoint.y) / 2
-            let control1 = CGPoint(x: (lastPoint.x + x) / 2 - 20, y: (lastPoint.y + y) / 2 - 20)
-            let control2 = CGPoint(x: (x + to.x) / 2 + 20, y: (y + to.y) / 2 + 20)
-            return .curve(to: to, control1: control1, control2: control2)
-        }
-    }
-
-    private func inBoundsPoint(_ point: CGPoint) -> CGPoint {
-        var inBondsPoint = point
-        if inBondsPoint.x < 0 {
-            inBondsPoint.x = 0
-        }
-        if inBondsPoint.y < 0 {
-            inBondsPoint.y = 0
-        }
-        if inBondsPoint.x > 800 {
-            inBondsPoint.x = 800
-        }
-        if inBondsPoint.y > 800 {
-            inBondsPoint.y = 800
-        }
-        return inBondsPoint
-    }
-}
-
-private struct CircleElementView: View {
-    @State private var isHovered = false
-    let isDragged: Bool
-
-    var body: some View {
-        Circle()
-            .frame(width: 5, height: 5)
-            .padding()
-            .contentShape(Rectangle())
-            .onHover { hover in
-                withAnimation(isHovered || isDragged ? nil : .easeInOut) {
-                    isHovered = hover
-                }
-            }
-            .scaleEffect(isHovered || isDragged ? 2 : 1)
-    }
-}
-
-private struct SquareElementView: View {
-    @State private var isHovered = false
-    let isDragged: Bool
-
-    var body: some View {
-        Rectangle()
-            .frame(width: 5, height: 5)
-            .padding()
-            .contentShape(Rectangle())
-            .onHover { hover in
-                withAnimation(isHovered || isDragged ? nil : .easeInOut) {
-                    isHovered = hover
-                }
-            }
-            .scaleEffect(isHovered || isDragged ? 2 : 1)
-    }
-}
-
-private extension Path {
-    mutating func addElement(_ element: PathElement) {
-        switch element {
-        case let .move(to):
-            move(to: to)
-        case let .line(to):
-            addLine(to: to)
-        case let .quadCurve(to, control):
-            addQuadCurve(to: to, control: control)
-        case let .curve(to, control1, control2):
-            addCurve(to: to, control1: control1, control2: control2)
-        }
-    }
+    """ }
+    // swiftlint: enable indentation_width
 }
 
 struct ContentView_Previews: PreviewProvider {

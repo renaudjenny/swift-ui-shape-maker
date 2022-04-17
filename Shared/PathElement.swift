@@ -83,7 +83,7 @@ extension PathElement {
 }
 
 extension String {
-    var codeFormatted: String {
+    func codeFormatted(extraIndentation: Int) -> String {
         split(separator: "\n")
             .map { $0.trimmingCharacters(in: .whitespaces) }
             .reduce([]) { lines, newLine in
@@ -100,10 +100,30 @@ extension String {
                 }
                 return [newLine]
             }
+            .map { Array(repeating: Self.indentation, count: extraIndentation).joined() + $0  }
             .joined(separator: "\n")
+    }
+
+    var codeFormatted: String {
+        codeFormatted(extraIndentation: 0)
     }
 
     private static var indentation: String { Array(repeating: " ", count: 4).joined() }
 
     private var indentation: String { String(prefix(while: { $0 == " " })) }
+}
+
+extension Path {
+    mutating func addElement(_ element: PathElement) {
+        switch element {
+        case let .move(to):
+            move(to: to)
+        case let .line(to):
+            addLine(to: to)
+        case let .quadCurve(to, control):
+            addQuadCurve(to: to, control: control)
+        case let .curve(to, control1, control2):
+            addCurve(to: to, control1: control1, control2: control2)
+        }
+    }
 }
