@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		4C31F715280A0C8B0048DE77 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F714280A0C8B0048DE77 /* Configuration.swift */; };
 		4C31F716280A0C8B0048DE77 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F714280A0C8B0048DE77 /* Configuration.swift */; };
+		4C31F71A280C27D70048DE77 /* PathTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F719280C27D70048DE77 /* PathTool.swift */; };
+		4C31F71B280C27D70048DE77 /* PathTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F719280C27D70048DE77 /* PathTool.swift */; };
+		4C31F71D280C27F20048DE77 /* PathElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F71C280C27F20048DE77 /* PathElement.swift */; };
+		4C31F71E280C27F20048DE77 /* PathElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F71C280C27F20048DE77 /* PathElement.swift */; };
 		4C7BC15C28073F0A001942AE /* TestsiOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC15B28073F0A001942AE /* TestsiOS.swift */; };
 		4C7BC15E28073F0A001942AE /* TestsiOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC15D28073F0A001942AE /* TestsiOSLaunchTests.swift */; };
 		4C7BC16828073F0A001942AE /* TestsMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC16728073F0A001942AE /* TestsMacOS.swift */; };
@@ -40,6 +44,8 @@
 
 /* Begin PBXFileReference section */
 		4C31F714280A0C8B0048DE77 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
+		4C31F719280C27D70048DE77 /* PathTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathTool.swift; sourceTree = "<group>"; };
+		4C31F71C280C27F20048DE77 /* PathElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathElement.swift; sourceTree = "<group>"; };
 		4C7BC14328073F0A001942AE /* SwiftUIShapeMakerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIShapeMakerApp.swift; sourceTree = "<group>"; };
 		4C7BC14428073F0A001942AE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		4C7BC14528073F0A001942AE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -104,6 +110,8 @@
 				4C7BC14428073F0A001942AE /* ContentView.swift */,
 				4C7BC14528073F0A001942AE /* Assets.xcassets */,
 				4C31F714280A0C8B0048DE77 /* Configuration.swift */,
+				4C31F719280C27D70048DE77 /* PathTool.swift */,
+				4C31F71C280C27F20048DE77 /* PathElement.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -342,8 +350,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C31F71A280C27D70048DE77 /* PathTool.swift in Sources */,
 				4C31F715280A0C8B0048DE77 /* Configuration.swift in Sources */,
 				4C7BC16D28073F0A001942AE /* ContentView.swift in Sources */,
+				4C31F71D280C27F20048DE77 /* PathElement.swift in Sources */,
 				4C7BC16B28073F0A001942AE /* SwiftUIShapeMakerApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -352,8 +362,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C31F71B280C27D70048DE77 /* PathTool.swift in Sources */,
 				4C31F716280A0C8B0048DE77 /* Configuration.swift in Sources */,
 				4C7BC16E28073F0A001942AE /* ContentView.swift in Sources */,
+				4C31F71E280C27F20048DE77 /* PathElement.swift in Sources */,
 				4C7BC16C28073F0A001942AE /* SwiftUIShapeMakerApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
