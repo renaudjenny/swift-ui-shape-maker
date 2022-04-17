@@ -2,7 +2,7 @@
 
 **macOS App to help you building `Shape` to be used in SwiftUI**
 
-> I love using `Shape` in SwiftUI, what I wanted overall is not an automatic converter from SVG to SwiftUI Path/Shape but directly an application that allows me to draw and provide me directly the code Swift code I can use directly into my app.
+> I love using `Shape` in SwiftUI, what I wanted overall is not an automatic converter from SVG to SwiftUI Path/Shape but directly an application that allows me to draw and provide me directly the Swift code I can use directly into my app.
 
 📲 App Store: **Not published yet**
 

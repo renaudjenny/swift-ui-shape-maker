@@ -8,6 +8,7 @@ enum PathTool: CaseIterable, Identifiable {
     case move
     case line
     case quadCurve
+    case curve
 
     var id: Int { hashValue }
 }
@@ -16,22 +17,33 @@ enum PathElement {
     case move(to: CGPoint)
     case line(to: CGPoint)
     case quadCurve(to: CGPoint, control: CGPoint)
+    case curve(to: CGPoint, control1: CGPoint, control2: CGPoint)
 
     var to: CGPoint {
         switch self {
-        case let .move(to), let .line(to), let .quadCurve(to: to, _):
+        case let .move(to), let .line(to), let .quadCurve(to: to, _), let .curve(to: to, _, _):
             return to
         }
     }
 
-    mutating func update(to newTo: CGPoint? = nil, control newControl: CGPoint? = nil) {
+    mutating func update(
+        to newTo: CGPoint? = nil,
+        quadCurveControl newQuadCurveControl: CGPoint? = nil,
+        curveControls newCurveControls: (control1: CGPoint?, control2: CGPoint?)? = nil
+    ) {
         switch self {
         case let .move(to):
             self = .move(to: newTo ?? to)
         case let .line(to):
             self = .line(to: newTo ?? to)
         case let .quadCurve(to: to, control: control):
-            self = .quadCurve(to: newTo ?? to, control: newControl ?? control)
+            self = .quadCurve(to: newTo ?? to, control: newQuadCurveControl ?? control)
+        case let .curve(to: to, control1: control1, control2: control2):
+            self = .curve(
+                to: newTo ?? to,
+                control1: newCurveControls?.control1 ?? control1,
+                control2: newCurveControls?.control2 ?? control2
+            )
         }
     }
 }
@@ -55,6 +67,7 @@ struct ContentView: View {
                         Text("Move").tag(PathTool.move)
                         Text("Line").tag(PathTool.line)
                         Text("Quad curve").tag(PathTool.quadCurve)
+                        Text("Curve").tag(PathTool.curve)
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     .frame(width: 300)
@@ -137,6 +150,14 @@ struct ContentView: View {
                     path.addQuadCurve(
                         to: \(pointForCode(to)),
                         control: \(pointForCode(control))
+                    )
+            """
+        case let .curve(to, control1, control2):
+            return """
+                    path.addCurve(
+                        to: \(pointForCode(to)),
+                        control1: \(pointForCode(control1)),
+                        control2: \(pointForCode(control2))
                     )
             """
         }
@@ -246,20 +267,73 @@ struct DrawingPanel: View {
                             DragGesture()
                                 .onChanged { value in
                                     withAnimation(.interactiveSpring()) {
-                                        pathElements[offset].update(control: inBoundsPoint(value.location))
+                                        pathElements[offset].update(quadCurveControl: inBoundsPoint(value.location))
                                     }
                                     draggingElementOffset = offset
                                 }
                                 .onEnded { value in
-                                    pathElements[offset].update(control: inBoundsPoint(value.location))
+                                    pathElements[offset].update(quadCurveControl: inBoundsPoint(value.location))
                                     withAnimation { draggingElementOffset = nil }
                                 }
                         )
                     Path { path in
-                        path.move(to: control)
+                        path.move(to: pathElements[offset - 1].to)
+                        path.addLine(to: control)
                         path.addLine(to: to)
-                        path.move(to: control)
-                        path.addLine(to: pathElements[offset - 1].to)
+                    }.stroke(style: .init(dash: [5], dashPhase: 1))
+                }
+            case let .curve(to, control1, control2):
+                ZStack {
+                    CircleElementView(isDragged: draggingElementOffset == offset)
+                        .position(to)
+                        .gesture(
+                            DragGesture()
+                                .onChanged { value in
+                                    withAnimation(.interactiveSpring()) {
+                                        pathElements[offset].update(to: inBoundsPoint(value.location))
+                                    }
+                                    draggingElementOffset = offset
+                                }
+                                .onEnded { value in
+                                    pathElements[offset].update(to: inBoundsPoint(value.location))
+                                    withAnimation { draggingElementOffset = nil }
+                                }
+                        )
+                    SquareElementView(isDragged: draggingElementOffset == offset)
+                        .position(control1)
+                        .gesture(
+                            DragGesture()
+                                .onChanged { value in
+                                    withAnimation(.interactiveSpring()) {
+                                        pathElements[offset].update(curveControls: (inBoundsPoint(value.location), nil))
+                                    }
+                                    draggingElementOffset = offset
+                                }
+                                .onEnded { value in
+                                    pathElements[offset].update(curveControls: (inBoundsPoint(value.location), nil))
+                                    withAnimation { draggingElementOffset = nil }
+                                }
+                        )
+                    SquareElementView(isDragged: draggingElementOffset == offset)
+                        .position(control2)
+                        .gesture(
+                            DragGesture()
+                                .onChanged { value in
+                                    withAnimation(.interactiveSpring()) {
+                                        pathElements[offset].update(curveControls: (nil, inBoundsPoint(value.location)))
+                                    }
+                                    draggingElementOffset = offset
+                                }
+                                .onEnded { value in
+                                    pathElements[offset].update(curveControls: (nil, inBoundsPoint(value.location)))
+                                    withAnimation { draggingElementOffset = nil }
+                                }
+                        )
+                    Path { path in
+                        path.move(to: pathElements[offset - 1].to)
+                        path.addLine(to: control1)
+                        path.addLine(to: control2)
+                        path.addLine(to: to)
                     }.stroke(style: .init(dash: [5], dashPhase: 1))
                 }
             }
@@ -279,6 +353,16 @@ struct DrawingPanel: View {
             let y = (to.y + lastPoint.y) / 2
             let control = CGPoint(x: x - 20, y: y - 20)
             return .quadCurve(to: to, control: control)
+        case .curve:
+            guard let lastPoint = pathElements.last?.to else { return .line(to: to) }
+            if case let .curve(_, control1, control2) = lastElement {
+                return .curve(to: to, control1: control1, control2: control2)
+            }
+            let x = (to.x + lastPoint.x) / 2
+            let y = (to.y + lastPoint.y) / 2
+            let control1 = CGPoint(x: (lastPoint.x + x) / 2 - 20, y: (lastPoint.y + y) / 2 - 20)
+            let control2 = CGPoint(x: (x + to.x) / 2 + 20, y: (y + to.y) / 2 + 20)
+            return .curve(to: to, control1: control1, control2: control2)
         }
     }
 
@@ -345,6 +429,8 @@ private extension Path {
             addLine(to: to)
         case let .quadCurve(to, control):
             addQuadCurve(to: to, control: control)
+        case let .curve(to, control1, control2):
+            addCurve(to: to, control1: control1, control2: control2)
         }
     }
 }
