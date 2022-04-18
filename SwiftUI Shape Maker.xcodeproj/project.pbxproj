@@ -19,6 +19,8 @@
 		4C31F724280CBEE40048DE77 /* CircleElementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F722280CBEE40048DE77 /* CircleElementView.swift */; };
 		4C31F726280CBF120048DE77 /* SquareElementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F725280CBF120048DE77 /* SquareElementView.swift */; };
 		4C31F727280CBF120048DE77 /* SquareElementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F725280CBF120048DE77 /* SquareElementView.swift */; };
+		4C31F729280D48B60048DE77 /* CodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F728280D48B60048DE77 /* CodeView.swift */; };
+		4C31F72A280D48B60048DE77 /* CodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F728280D48B60048DE77 /* CodeView.swift */; };
 		4C7BC15C28073F0A001942AE /* TestsiOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC15B28073F0A001942AE /* TestsiOS.swift */; };
 		4C7BC15E28073F0A001942AE /* TestsiOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC15D28073F0A001942AE /* TestsiOSLaunchTests.swift */; };
 		4C7BC16828073F0A001942AE /* TestsMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC16728073F0A001942AE /* TestsMacOS.swift */; };
@@ -55,6 +57,7 @@
 		4C31F71F280CBE500048DE77 /* DrawingPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingPanel.swift; sourceTree = "<group>"; };
 		4C31F722280CBEE40048DE77 /* CircleElementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleElementView.swift; sourceTree = "<group>"; };
 		4C31F725280CBF120048DE77 /* SquareElementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareElementView.swift; sourceTree = "<group>"; };
+		4C31F728280D48B60048DE77 /* CodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeView.swift; sourceTree = "<group>"; };
 		4C7BC14328073F0A001942AE /* SwiftUIShapeMakerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIShapeMakerApp.swift; sourceTree = "<group>"; };
 		4C7BC14428073F0A001942AE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		4C7BC14528073F0A001942AE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -124,6 +127,7 @@
 				4C31F71F280CBE500048DE77 /* DrawingPanel.swift */,
 				4C31F722280CBEE40048DE77 /* CircleElementView.swift */,
 				4C31F725280CBF120048DE77 /* SquareElementView.swift */,
+				4C31F728280D48B60048DE77 /* CodeView.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -362,6 +366,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C31F729280D48B60048DE77 /* CodeView.swift in Sources */,
 				4C31F726280CBF120048DE77 /* SquareElementView.swift in Sources */,
 				4C31F723280CBEE40048DE77 /* CircleElementView.swift in Sources */,
 				4C31F71A280C27D70048DE77 /* PathTool.swift in Sources */,
@@ -377,6 +382,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C31F72A280D48B60048DE77 /* CodeView.swift in Sources */,
 				4C31F727280CBF120048DE77 /* SquareElementView.swift in Sources */,
 				4C31F724280CBEE40048DE77 /* CircleElementView.swift in Sources */,
 				4C31F71B280C27D70048DE77 /* PathTool.swift in Sources */,
