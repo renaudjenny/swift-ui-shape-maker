@@ -90,12 +90,12 @@ struct DrawingPanel: View {
                             DragGesture()
                                 .onChanged { value in
                                     withAnimation(.interactiveSpring()) {
-                                        pathElements[offset].update(quadCurveControl: inBoundsPoint(value.location))
+                                        pathElements[offset].update(quadCurveControl: value.location)
                                     }
                                     draggingElementOffset = offset
                                 }
                                 .onEnded { value in
-                                    pathElements[offset].update(quadCurveControl: inBoundsPoint(value.location))
+                                    pathElements[offset].update(quadCurveControl: value.location)
                                     withAnimation { draggingElementOffset = nil }
                                 }
                         )
@@ -128,12 +128,12 @@ struct DrawingPanel: View {
                             DragGesture()
                                 .onChanged { value in
                                     withAnimation(.interactiveSpring()) {
-                                        pathElements[offset].update(curveControls: (inBoundsPoint(value.location), nil))
+                                        pathElements[offset].update(curveControls: (value.location, nil))
                                     }
                                     draggingElementOffset = offset
                                 }
                                 .onEnded { value in
-                                    pathElements[offset].update(curveControls: (inBoundsPoint(value.location), nil))
+                                    pathElements[offset].update(curveControls: (value.location, nil))
                                     withAnimation { draggingElementOffset = nil }
                                 }
                         )
@@ -143,12 +143,12 @@ struct DrawingPanel: View {
                             DragGesture()
                                 .onChanged { value in
                                     withAnimation(.interactiveSpring()) {
-                                        pathElements[offset].update(curveControls: (nil, inBoundsPoint(value.location)))
+                                        pathElements[offset].update(curveControls: (nil, value.location))
                                     }
                                     draggingElementOffset = offset
                                 }
                                 .onEnded { value in
-                                    pathElements[offset].update(curveControls: (nil, inBoundsPoint(value.location)))
+                                    pathElements[offset].update(curveControls: (nil, value.location))
                                     withAnimation { draggingElementOffset = nil }
                                 }
                         )

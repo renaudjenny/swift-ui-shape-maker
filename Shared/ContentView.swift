@@ -47,9 +47,11 @@ struct ContentView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .opacity(imageOpacity)
+                            .allowsHitTesting(false)
                     }
                     .frame(width: 800, height: 800)
-                    .padding()
+                    .padding(.horizontal, 64)
+                    .padding(.vertical, 32)
                 }.onHover { isHovered in
                     if isHovered {
                         isCodeInEditionMode = false

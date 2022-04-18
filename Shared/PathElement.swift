@@ -46,7 +46,7 @@ extension PathElement {
             """
         case let .line(to):
             return """
-            path.addPoint(
+            path.addLine(
                 to: \(pointForCode(to))
             )
             """
@@ -72,7 +72,7 @@ extension PathElement {
         let x = abs(point.x - 400) * 10/8
         let y = abs(point.y - 400) * 10/8
         let xSign = point.x > 400 ? "+" : "-"
-        let ySign = point.y > 400 ? "-" : "+"
+        let ySign = point.y < 400 ? "-" : "+"
         return """
         CGPoint(
             x: rect.midX \(xSign) width * \(Int(x.rounded()))/1000,
