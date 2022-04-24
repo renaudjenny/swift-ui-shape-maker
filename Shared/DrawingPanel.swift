@@ -5,8 +5,11 @@ struct DrawingPanel: View {
     @State private var draggingElementOffset: Int?
     @Binding var pathElements: [PathElement]
     @Binding var hoveredOffsets: Set<Int>
+    @Binding var zoomLevel: Double
     let selectedPathTool: PathTool
     let configuration: Configuration
+
+    static let defaultWidth: CGFloat = 800
 
     var body: some View {
         ZStack {
@@ -37,7 +40,7 @@ struct DrawingPanel: View {
                 )
 
             Path { path in
-                pathElements.forEach { path.addElement($0) }
+                pathElements.forEach { path.addElement($0, zoomLevel: zoomLevel) }
             }
             .stroke()
 
@@ -53,7 +56,7 @@ struct DrawingPanel: View {
             switch element {
             case let .move(to), let .line(to):
                 CircleElementView(isHovered: isHovered(offset: offset), isDragged: draggingElementOffset == offset)
-                    .position(to)
+                    .position(to.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)))
                     .gesture(
                         DragGesture()
                             .onChanged { value in
@@ -70,7 +73,7 @@ struct DrawingPanel: View {
             case let .quadCurve(to, control):
                 ZStack {
                     CircleElementView(isHovered: isHovered(offset: offset), isDragged: draggingElementOffset == offset)
-                        .position(to)
+                        .position(to.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)))
                         .gesture(
                             DragGesture()
                                 .onChanged { value in
@@ -85,7 +88,7 @@ struct DrawingPanel: View {
                                 }
                         )
                     SquareElementView(isHovered: isHovered(offset: offset), isDragged: draggingElementOffset == offset)
-                        .position(control)
+                        .position(control.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)))
                         .gesture(
                             DragGesture()
                                 .onChanged { value in
@@ -100,15 +103,17 @@ struct DrawingPanel: View {
                                 }
                         )
                     Path { path in
-                        path.move(to: pathElements[offset - 1].to)
-                        path.addLine(to: control)
-                        path.addLine(to: to)
+                        path.move(to: pathElements[offset - 1].to
+                            .applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel))
+                        )
+                        path.addLine(to: control.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)))
+                        path.addLine(to: to.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)))
                     }.stroke(style: .init(dash: [5], dashPhase: 1))
                 }
             case let .curve(to, control1, control2):
                 ZStack {
                     CircleElementView(isHovered: isHovered(offset: offset), isDragged: draggingElementOffset == offset)
-                        .position(to)
+                        .position(to.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)))
                         .gesture(
                             DragGesture()
                                 .onChanged { value in
@@ -123,7 +128,7 @@ struct DrawingPanel: View {
                                 }
                         )
                     SquareElementView(isHovered: isHovered(offset: offset), isDragged: draggingElementOffset == offset)
-                        .position(control1)
+                        .position(control1.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)))
                         .gesture(
                             DragGesture()
                                 .onChanged { value in
@@ -138,7 +143,7 @@ struct DrawingPanel: View {
                                 }
                         )
                     SquareElementView(isHovered: isHovered(offset: offset), isDragged: draggingElementOffset == offset)
-                        .position(control2)
+                        .position(control2.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)))
                         .gesture(
                             DragGesture()
                                 .onChanged { value in
@@ -153,10 +158,12 @@ struct DrawingPanel: View {
                                 }
                         )
                     Path { path in
-                        path.move(to: pathElements[offset - 1].to)
-                        path.addLine(to: control1)
-                        path.addLine(to: control2)
-                        path.addLine(to: to)
+                        path.move(to: pathElements[offset - 1].to
+                            .applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel))
+                        )
+                        path.addLine(to: control1.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)))
+                        path.addLine(to: control2.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)))
+                        path.addLine(to: to.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)))
                     }.stroke(style: .init(dash: [5], dashPhase: 1))
                 }
             }
@@ -197,11 +204,11 @@ struct DrawingPanel: View {
         if inBondsPoint.y < 0 {
             inBondsPoint.y = 0
         }
-        if inBondsPoint.x > 800 {
-            inBondsPoint.x = 800
+        if inBondsPoint.x > DrawingPanel.defaultWidth * zoomLevel {
+            inBondsPoint.x = DrawingPanel.defaultWidth * zoomLevel
         }
-        if inBondsPoint.y > 800 {
-            inBondsPoint.y = 800
+        if inBondsPoint.y > DrawingPanel.defaultWidth * zoomLevel {
+            inBondsPoint.y = DrawingPanel.defaultWidth * zoomLevel
         }
         return inBondsPoint
     }

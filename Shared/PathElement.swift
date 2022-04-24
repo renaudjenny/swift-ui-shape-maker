@@ -69,10 +69,10 @@ extension PathElement {
     }
 
     private func pointForCode(_ point: CGPoint) -> String {
-        let x = abs(point.x - 400) * 10/8
-        let y = abs(point.y - 400) * 10/8
-        let xSign = point.x > 400 ? "+" : "-"
-        let ySign = point.y < 400 ? "-" : "+"
+        let x = abs(point.x - 500)
+        let y = abs(point.y - 500)
+        let xSign = point.x > 500 ? "+" : "-"
+        let ySign = point.y < 500 ? "-" : "+"
         return """
         CGPoint(
             x: rect.midX \(xSign) width * \(Int(x.rounded()))/1000,
@@ -114,16 +114,23 @@ extension String {
 }
 
 extension Path {
-    mutating func addElement(_ element: PathElement) {
+    mutating func addElement(_ element: PathElement, zoomLevel: CGFloat) {
         switch element {
         case let .move(to):
-            move(to: to)
+            move(to: to.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)))
         case let .line(to):
-            addLine(to: to)
+            addLine(to: to.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)))
         case let .quadCurve(to, control):
-            addQuadCurve(to: to, control: control)
+            addQuadCurve(
+                to: to.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)),
+                control: control.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel))
+            )
         case let .curve(to, control1, control2):
-            addCurve(to: to, control1: control1, control2: control2)
+            addCurve(
+                to: to.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)),
+                control1: control1.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)),
+                control2: control2.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel))
+            )
         }
     }
 }

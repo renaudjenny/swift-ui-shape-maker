@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var configuration = Configuration()
     @State private var isCodeInEditionMode = false
     @State private var hoveredOffsets = Set<Int>()
+    @State private var zoomLevel: Double = 1
 
     var body: some View {
         VStack {
@@ -19,6 +20,10 @@ struct ContentView: View {
                 HStack {
                     Slider(value: $imageOpacity) { Text("Image opacity") }
                     Button("Choose an image") { openImagePicker() }
+                    HStack {
+                        Slider(value: $zoomLevel, in: 0.10...2) { Text("Zoom level") }
+                        Text("\(Int(zoomLevel * 100))%")
+                    }
                 }
                 HStack {
                     Picker("Tool", selection: $selectedPathTool) {
@@ -40,6 +45,7 @@ struct ContentView: View {
                         DrawingPanel(
                             pathElements: $pathElements,
                             hoveredOffsets: $hoveredOffsets,
+                            zoomLevel: $zoomLevel,
                             selectedPathTool: selectedPathTool,
                             configuration: configuration
                         )
@@ -49,7 +55,7 @@ struct ContentView: View {
                             .opacity(imageOpacity)
                             .allowsHitTesting(false)
                     }
-                    .frame(width: 800, height: 800)
+                    .frame(width: DrawingPanel.defaultWidth * zoomLevel, height: DrawingPanel.defaultWidth * zoomLevel)
                     .padding(.horizontal, 64)
                     .padding(.vertical, 32)
                 }.onHover { isHovered in
@@ -73,6 +79,36 @@ struct ContentView: View {
         pictureTaker?.runModal()
         pictureTaker?.outputImage().map { image = Image(nsImage: $0) }
         #endif
+    }
+
+    private func replaceElementsOnZoomChanged(_ isZoomChanged: Bool) {
+        pathElements = pathElements.map {
+            var newPathElement = $0
+            newPathElement.applyZoomLevel(zoomLevel)
+            return newPathElement
+        }
+    }
+}
+
+private extension PathElement {
+    mutating func applyZoomLevel(_ zoomLevel: CGFloat) {
+        switch self {
+        case let .move(to), let .line(to):
+            self.update(to: to.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)))
+        case let .quadCurve(to, control):
+            self.update(
+                to: to.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)),
+                quadCurveControl: control.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel))
+            )
+        case let .curve(to, control1, control2):
+            self.update(
+                to: to.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)),
+                curveControls: (
+                    control1.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)),
+                    control2.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel))
+                )
+            )
+        }
     }
 }
 
