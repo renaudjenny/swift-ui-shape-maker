@@ -69,14 +69,15 @@ extension PathElement {
     }
 
     private func pointForCode(_ point: CGPoint) -> String {
-        let x = abs(point.x - 500)
-        let y = abs(point.y - 500)
-        let xSign = point.x > 500 ? "+" : "-"
-        let ySign = point.y < 500 ? "-" : "+"
+        let width = DrawingPanel.standardWidth
+        let x = abs(point.x - width/2)
+        let y = abs(point.y - width/2)
+        let xSign = point.x > width/2 ? "+" : "-"
+        let ySign = point.y < width/2 ? "-" : "+"
         return """
         CGPoint(
-            x: rect.midX \(xSign) width * \(Int(x.rounded()))/1000,
-            y: rect.midY \(ySign) width * \(Int(y.rounded()))/1000
+            x: rect.midX \(xSign) width * \(Int(x.rounded()))/\(Int(width)),
+            y: rect.midY \(ySign) width * \(Int(y.rounded()))/\(Int(width))
         )
         """
     }
@@ -117,20 +118,26 @@ extension Path {
     mutating func addElement(_ element: PathElement, zoomLevel: CGFloat) {
         switch element {
         case let .move(to):
-            move(to: to.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)))
+            move(to: to.applyZoomLevel(zoomLevel))
         case let .line(to):
-            addLine(to: to.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)))
+            addLine(to: to.applyZoomLevel(zoomLevel))
         case let .quadCurve(to, control):
             addQuadCurve(
-                to: to.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)),
-                control: control.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel))
+                to: to.applyZoomLevel(zoomLevel),
+                control: control.applyZoomLevel(zoomLevel)
             )
         case let .curve(to, control1, control2):
             addCurve(
-                to: to.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)),
-                control1: control1.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel)),
-                control2: control2.applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel))
+                to: to.applyZoomLevel(zoomLevel),
+                control1: control1.applyZoomLevel(zoomLevel),
+                control2: control2.applyZoomLevel(zoomLevel)
             )
         }
+    }
+}
+
+extension CGPoint {
+    func applyZoomLevel(_ zoomLevel: CGFloat) -> CGPoint {
+        applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel))
     }
 }
