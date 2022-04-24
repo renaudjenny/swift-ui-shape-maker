@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var isCodeInEditionMode = false
     @State private var hoveredOffsets = Set<Int>()
     @State private var zoomLevel: Double = 1
+    @State private var lastZoomGestureDelta: CGFloat?
 
     var body: some View {
         VStack {
@@ -40,7 +41,7 @@ struct ContentView: View {
             }
             .padding()
             HStack {
-                ZStack {
+                ScrollView([.horizontal, .vertical]) {
                     ZStack {
                         DrawingPanel(
                             pathElements: $pathElements,
@@ -58,11 +59,22 @@ struct ContentView: View {
                     .frame(width: DrawingPanel.defaultWidth * zoomLevel, height: DrawingPanel.defaultWidth * zoomLevel)
                     .padding(.horizontal, 64)
                     .padding(.vertical, 32)
-                }.onHover { isHovered in
+                }
+                .onHover { isHovered in
                     if isHovered {
                         isCodeInEditionMode = false
                     }
                 }
+                .highPriorityGesture(MagnificationGesture()
+                    .onChanged { scale in
+                        let delta = scale - (lastZoomGestureDelta ?? 1)
+                        zoomLevel += delta
+                        lastZoomGestureDelta = scale
+                    }
+                    .onEnded { _ in
+                        lastZoomGestureDelta = nil
+                    }
+                )
 
                 CodeView(
                     pathElements: $pathElements,
