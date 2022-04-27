@@ -71,7 +71,14 @@ struct ContentView: View {
                 .highPriorityGesture(MagnificationGesture()
                     .onChanged { scale in
                         let delta = scale - (lastZoomGestureDelta ?? 1)
-                        zoomLevel += delta
+                        switch zoomLevel + delta {
+                        case 4...:
+                            zoomLevel = 4
+                        case ...0.10:
+                            zoomLevel = 0.10
+                        default:
+                            zoomLevel += delta
+                        }
                         lastZoomGestureDelta = scale
                     }
                     .onEnded { _ in
