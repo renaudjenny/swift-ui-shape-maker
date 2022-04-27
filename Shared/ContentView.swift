@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 
 #if os(macOS)
 import Quartz
@@ -14,6 +15,7 @@ struct ContentView: View {
     @State private var hoveredOffsets = Set<Int>()
     @State private var zoomLevel: Double = 1
     @State private var lastZoomGestureDelta: CGFloat?
+    @State private var cancellables = Set<AnyCancellable>()
 
     var body: some View {
         VStack {
@@ -71,20 +73,27 @@ struct ContentView: View {
                 .highPriorityGesture(MagnificationGesture()
                     .onChanged { scale in
                         let delta = scale - (lastZoomGestureDelta ?? 1)
-                        switch zoomLevel + delta {
-                        case 4...:
-                            zoomLevel = 4
-                        case ...0.10:
-                            zoomLevel = 0.10
-                        default:
-                            zoomLevel += delta
-                        }
+                        clampZoomLevel(add: delta)
                         lastZoomGestureDelta = scale
                     }
                     .onEnded { _ in
                         lastZoomGestureDelta = nil
                     }
                 )
+                .task {
+                    #if os(macOS)
+                    NSApp.publisher(for: \.currentEvent)
+                        .filter {
+                            $0?.type == .scrollWheel
+                            && ($0?.modifierFlags.contains(.command) ?? false)
+                        }
+                        .compactMap { $0 }
+                        .sink {
+                            clampZoomLevel(add: $0.deltaY/100)
+                        }
+                        .store(in: &cancellables)
+                    #endif
+                }
 
                 CodeView(
                     pathElements: $pathElements,
@@ -101,6 +110,17 @@ struct ContentView: View {
         pictureTaker?.runModal()
         pictureTaker?.outputImage().map { image = Image(nsImage: $0) }
         #endif
+    }
+
+    private func clampZoomLevel(add delta: CGFloat) {
+        switch zoomLevel + delta {
+        case 4...:
+            zoomLevel = 4
+        case ...0.10:
+            zoomLevel = 0.10
+        default:
+            zoomLevel += delta
+        }
     }
 }
 
