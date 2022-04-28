@@ -5,8 +5,11 @@ struct DrawingPanel: View {
     @State private var draggingElementOffset: Int?
     @Binding var pathElements: [PathElement]
     @Binding var hoveredOffsets: Set<Int>
+    @Binding var zoomLevel: Double
     let selectedPathTool: PathTool
     let configuration: Configuration
+
+    static let standardWidth: CGFloat = 1000
 
     var body: some View {
         ZStack {
@@ -18,11 +21,13 @@ struct DrawingPanel: View {
                                 isAdding = true
                                 pathElements.append(
                                     pathElements.count > 0
-                                    ? element(to: inBoundsPoint(value.location))
-                                    : .move(to: inBoundsPoint(value.location))
+                                    ? element(to: inBoundsPoint(value.location.applyZoomLevel(1/zoomLevel)))
+                                    : .move(to: inBoundsPoint(value.location.applyZoomLevel(1/zoomLevel)))
                                 )
                             } else {
-                                pathElements[pathElements.count - 1].update(to: inBoundsPoint(value.location))
+                                pathElements[pathElements.count - 1].update(
+                                    to: inBoundsPoint(value.location.applyZoomLevel(1/zoomLevel))
+                                )
                             }
                         }
                         .onEnded { value in
@@ -30,14 +35,17 @@ struct DrawingPanel: View {
                             let lastElement = pathElements.removeLast()
                             pathElements.append(
                                 pathElements.count > 0
-                                ? element(to: inBoundsPoint(value.location), lastElement: lastElement)
-                                : .move(to: inBoundsPoint(value.location))
+                                ? element(
+                                    to: inBoundsPoint(value.location.applyZoomLevel(1/zoomLevel)),
+                                    lastElement: lastElement
+                                )
+                                : .move(to: inBoundsPoint(value.location.applyZoomLevel(1/zoomLevel)))
                             )
                         }
                 )
 
             Path { path in
-                pathElements.forEach { path.addElement($0) }
+                pathElements.forEach { path.addElement($0, zoomLevel: zoomLevel) }
             }
             .stroke()
 
@@ -53,110 +61,134 @@ struct DrawingPanel: View {
             switch element {
             case let .move(to), let .line(to):
                 CircleElementView(isHovered: isHovered(offset: offset), isDragged: draggingElementOffset == offset)
-                    .position(to)
+                    .position(to.applyZoomLevel(zoomLevel))
                     .gesture(
                         DragGesture()
                             .onChanged { value in
                                 withAnimation(.interactiveSpring()) {
-                                    pathElements[offset].update(to: inBoundsPoint(value.location))
+                                    pathElements[offset].update(
+                                        to: inBoundsPoint(value.location.applyZoomLevel(1/zoomLevel))
+                                    )
                                 }
                                 draggingElementOffset = offset
                             }
                             .onEnded { value in
-                                pathElements[offset].update(to: inBoundsPoint(value.location))
+                                pathElements[offset].update(
+                                    to: inBoundsPoint(value.location.applyZoomLevel(1/zoomLevel))
+                                )
                                 withAnimation { draggingElementOffset = nil }
                             }
                     )
             case let .quadCurve(to, control):
                 ZStack {
                     CircleElementView(isHovered: isHovered(offset: offset), isDragged: draggingElementOffset == offset)
-                        .position(to)
+                        .position(to.applyZoomLevel(zoomLevel))
                         .gesture(
                             DragGesture()
                                 .onChanged { value in
                                     withAnimation(.interactiveSpring()) {
-                                        pathElements[offset].update(to: inBoundsPoint(value.location))
+                                        pathElements[offset].update(
+                                            to: inBoundsPoint(value.location.applyZoomLevel(1/zoomLevel))
+                                        )
                                     }
                                     draggingElementOffset = offset
                                 }
                                 .onEnded { value in
-                                    pathElements[offset].update(to: inBoundsPoint(value.location))
+                                    pathElements[offset].update(
+                                        to: inBoundsPoint(value.location.applyZoomLevel(1/zoomLevel))
+                                    )
                                     withAnimation { draggingElementOffset = nil }
                                 }
                         )
                     SquareElementView(isHovered: isHovered(offset: offset), isDragged: draggingElementOffset == offset)
-                        .position(control)
+                        .position(control.applyZoomLevel(zoomLevel))
                         .gesture(
                             DragGesture()
                                 .onChanged { value in
                                     withAnimation(.interactiveSpring()) {
-                                        pathElements[offset].update(quadCurveControl: value.location)
+                                        pathElements[offset].update(
+                                            quadCurveControl: value.location.applyZoomLevel(1/zoomLevel)
+                                        )
                                     }
                                     draggingElementOffset = offset
                                 }
                                 .onEnded { value in
-                                    pathElements[offset].update(quadCurveControl: value.location)
+                                    pathElements[offset].update(
+                                        quadCurveControl: value.location.applyZoomLevel(1/zoomLevel)
+                                    )
                                     withAnimation { draggingElementOffset = nil }
                                 }
                         )
                     Path { path in
-                        path.move(to: pathElements[offset - 1].to)
-                        path.addLine(to: control)
-                        path.addLine(to: to)
+                        path.move(to: pathElements[offset - 1].to.applyZoomLevel(zoomLevel))
+                        path.addLine(to: control.applyZoomLevel(zoomLevel))
+                        path.addLine(to: to.applyZoomLevel(zoomLevel))
                     }.stroke(style: .init(dash: [5], dashPhase: 1))
                 }
             case let .curve(to, control1, control2):
                 ZStack {
                     CircleElementView(isHovered: isHovered(offset: offset), isDragged: draggingElementOffset == offset)
-                        .position(to)
+                        .position(to.applyZoomLevel(zoomLevel))
                         .gesture(
                             DragGesture()
                                 .onChanged { value in
                                     withAnimation(.interactiveSpring()) {
-                                        pathElements[offset].update(to: inBoundsPoint(value.location))
+                                        pathElements[offset].update(
+                                            to: inBoundsPoint(value.location.applyZoomLevel(1/zoomLevel))
+                                        )
                                     }
                                     draggingElementOffset = offset
                                 }
                                 .onEnded { value in
-                                    pathElements[offset].update(to: inBoundsPoint(value.location))
+                                    pathElements[offset].update(
+                                        to: inBoundsPoint(value.location.applyZoomLevel(1/zoomLevel))
+                                    )
                                     withAnimation { draggingElementOffset = nil }
                                 }
                         )
                     SquareElementView(isHovered: isHovered(offset: offset), isDragged: draggingElementOffset == offset)
-                        .position(control1)
+                        .position(control1.applyZoomLevel(zoomLevel))
                         .gesture(
                             DragGesture()
                                 .onChanged { value in
                                     withAnimation(.interactiveSpring()) {
-                                        pathElements[offset].update(curveControls: (value.location, nil))
+                                        pathElements[offset].update(
+                                            curveControls: (value.location.applyZoomLevel(1/zoomLevel), nil)
+                                        )
                                     }
                                     draggingElementOffset = offset
                                 }
                                 .onEnded { value in
-                                    pathElements[offset].update(curveControls: (value.location, nil))
+                                    pathElements[offset].update(
+                                        curveControls: (value.location.applyZoomLevel(1/zoomLevel), nil)
+                                    )
                                     withAnimation { draggingElementOffset = nil }
                                 }
                         )
                     SquareElementView(isHovered: isHovered(offset: offset), isDragged: draggingElementOffset == offset)
-                        .position(control2)
+                        .position(control2.applyZoomLevel(zoomLevel))
                         .gesture(
                             DragGesture()
                                 .onChanged { value in
                                     withAnimation(.interactiveSpring()) {
-                                        pathElements[offset].update(curveControls: (nil, value.location))
+                                        pathElements[offset].update(
+                                            curveControls: (nil, value.location.applyZoomLevel(1/zoomLevel))
+                                        )
                                     }
                                     draggingElementOffset = offset
                                 }
                                 .onEnded { value in
-                                    pathElements[offset].update(curveControls: (nil, value.location))
+                                    pathElements[offset].update(
+                                        curveControls: (nil, value.location.applyZoomLevel(1/zoomLevel))
+                                    )
                                     withAnimation { draggingElementOffset = nil }
                                 }
                         )
                     Path { path in
-                        path.move(to: pathElements[offset - 1].to)
-                        path.addLine(to: control1)
-                        path.addLine(to: control2)
-                        path.addLine(to: to)
+                        path.move(to: pathElements[offset - 1].to.applyZoomLevel(zoomLevel))
+                        path.addLine(to: control1.applyZoomLevel(zoomLevel))
+                        path.addLine(to: control2.applyZoomLevel(zoomLevel))
+                        path.addLine(to: to.applyZoomLevel(zoomLevel))
                     }.stroke(style: .init(dash: [5], dashPhase: 1))
                 }
             }
@@ -197,11 +229,11 @@ struct DrawingPanel: View {
         if inBondsPoint.y < 0 {
             inBondsPoint.y = 0
         }
-        if inBondsPoint.x > 800 {
-            inBondsPoint.x = 800
+        if inBondsPoint.x > DrawingPanel.standardWidth {
+            inBondsPoint.x = DrawingPanel.standardWidth
         }
-        if inBondsPoint.y > 800 {
-            inBondsPoint.y = 800
+        if inBondsPoint.y > DrawingPanel.standardWidth {
+            inBondsPoint.y = DrawingPanel.standardWidth
         }
         return inBondsPoint
     }
