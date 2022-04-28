@@ -24,7 +24,7 @@ struct ContentView: View {
                     Slider(value: $imageOpacity) { Text("Image opacity") }
                     Button("Choose an image") { openImagePicker() }
                     HStack {
-                        Slider(value: $zoomLevel, in: 0.10...2) { Text("Zoom level") }
+                        Slider(value: $zoomLevel, in: 0.10...4) { Text("Zoom level") }
                         Text("\(Int(zoomLevel * 100))%")
                     }
                 }
