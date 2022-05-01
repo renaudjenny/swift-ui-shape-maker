@@ -85,7 +85,7 @@ extension PathElement {
 
 extension String {
     func codeFormatted(extraIndentation: Int) -> String {
-        split(separator: "\n")
+        split(omittingEmptySubsequences: false, whereSeparator: \.isNewline)
             .map { $0.trimmingCharacters(in: .whitespaces) }
             .reduce([]) { lines, newLine in
                 if let previousLine = lines.last {

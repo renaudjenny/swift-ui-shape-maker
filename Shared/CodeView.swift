@@ -17,10 +17,11 @@ struct CodeView: View {
                 ScrollView {
                     HStack {
                         VStack(alignment: .leading, spacing: 0) {
-                            Text(codeHeader.codeFormatted)
+                            Text(codeHeader.codeFormatted).opacity(0.8)
                             ForEach(Array(pathElements.enumerated()), id: \.offset) { offset, element in
                                 HStack {
                                     Text(element.code.codeFormatted(extraIndentation: 2))
+                                        .opacity(hoveredOffsets.contains(offset) ? 1 : 0.8)
                                     if hoveredOffsets.contains(offset) {
                                         Button("Remove", role: .destructive) {
                                             pathElements.remove(at: offset)
@@ -50,7 +51,7 @@ struct CodeView: View {
                                     }
                                 }
                             }
-                            Text(codeFooter)
+                            Text(codeFooter).opacity(0.8)
                         }
                         .padding(.horizontal, 5)
                         Spacer()
