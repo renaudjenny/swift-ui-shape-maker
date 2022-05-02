@@ -15,6 +15,7 @@ struct ContentView: View {
     @State private var hoveredOffsets = Set<Int>()
     @State private var zoomLevel: Double = 1
     @State private var lastZoomGestureDelta: CGFloat?
+    @State private var isDrawingPanelTargetedForImageDrop = false
     @State private var cancellables = Set<AnyCancellable>()
 
     var body: some View {
@@ -52,11 +53,19 @@ struct ContentView: View {
                             selectedPathTool: selectedPathTool,
                             configuration: configuration
                         )
+
                         image?
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .opacity(imageOpacity)
                             .allowsHitTesting(false)
+                    }
+                    .onDrop(of: [.fileURL], isTargeted: $isDrawingPanelTargetedForImageDrop) { items in
+                        _ = items.first?.loadObject(ofClass: URL.self, completionHandler: { url, error in
+                            guard error == nil, let url = url else { return }
+                            image = Image(nsImage: NSImage(byReferencing: url))
+                        })
+                        return image != nil
                     }
                     .frame(
                         width: DrawingPanel.standardWidth * zoomLevel,
