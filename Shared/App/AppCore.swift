@@ -11,3 +11,14 @@ enum AppAction: Equatable {
     case drawing(DrawingAction)
     case code(CodeAction)
 }
+
+struct AppEnvironment {}
+
+let appReducer = Reducer<AppState, AppAction, AppEnvironment>
+    .combine(
+        configurationReducer.pullback(
+            state: \.configuration,
+            action: /AppAction.configuration,
+            environment: { _ in ConfigurationEnvironement() }
+        )
+    )

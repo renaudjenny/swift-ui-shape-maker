@@ -1,56 +1,59 @@
 import SwiftUI
+import ComposableArchitecture
 
 struct DrawingPanel: View {
+    let store: Store<AppState, AppAction>
     @State private var isAdding = false
     @State private var draggingElementOffset: Int?
     @Binding var pathElements: [PathElement]
     @Binding var hoveredOffsets: Set<Int>
     @Binding var zoomLevel: Double
     let selectedPathTool: PathTool
-    let configuration: ConfigurationState
 
     static let standardWidth: CGFloat = 1000
 
     var body: some View {
-        ZStack {
-            Color.white
-                .gesture(
-                    DragGesture()
-                        .onChanged { value in
-                            if !isAdding {
-                                isAdding = true
+        WithViewStore(store) { viewStore in
+            ZStack {
+                Color.white
+                    .gesture(
+                        DragGesture()
+                            .onChanged { value in
+                                if !isAdding {
+                                    isAdding = true
+                                    pathElements.append(
+                                        pathElements.count > 0
+                                        ? element(to: inBoundsPoint(value.location.applyZoomLevel(1/zoomLevel)))
+                                        : .move(to: inBoundsPoint(value.location.applyZoomLevel(1/zoomLevel)))
+                                    )
+                                } else {
+                                    pathElements[pathElements.count - 1].update(
+                                        to: inBoundsPoint(value.location.applyZoomLevel(1/zoomLevel))
+                                    )
+                                }
+                            }
+                            .onEnded { value in
+                                isAdding = false
+                                let lastElement = pathElements.removeLast()
                                 pathElements.append(
                                     pathElements.count > 0
-                                    ? element(to: inBoundsPoint(value.location.applyZoomLevel(1/zoomLevel)))
+                                    ? element(
+                                        to: inBoundsPoint(value.location.applyZoomLevel(1/zoomLevel)),
+                                        lastElement: lastElement
+                                    )
                                     : .move(to: inBoundsPoint(value.location.applyZoomLevel(1/zoomLevel)))
                                 )
-                            } else {
-                                pathElements[pathElements.count - 1].update(
-                                    to: inBoundsPoint(value.location.applyZoomLevel(1/zoomLevel))
-                                )
                             }
-                        }
-                        .onEnded { value in
-                            isAdding = false
-                            let lastElement = pathElements.removeLast()
-                            pathElements.append(
-                                pathElements.count > 0
-                                ? element(
-                                    to: inBoundsPoint(value.location.applyZoomLevel(1/zoomLevel)),
-                                    lastElement: lastElement
-                                )
-                                : .move(to: inBoundsPoint(value.location.applyZoomLevel(1/zoomLevel)))
-                            )
-                        }
-                )
+                    )
 
-            Path { path in
-                pathElements.forEach { path.addElement($0, zoomLevel: zoomLevel) }
-            }
-            .stroke()
+                Path { path in
+                    pathElements.forEach { path.addElement($0, zoomLevel: zoomLevel) }
+                }
+                .stroke()
 
-            if configuration.isPathIndicatorsDisplayed {
-                pathIndicators()
+                if viewStore.configuration.isPathIndicatorsDisplayed {
+                    pathIndicators()
+                }
             }
         }
     }

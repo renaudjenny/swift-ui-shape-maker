@@ -5,23 +5,17 @@ struct ConfigurationState: Equatable {
 }
 
 enum ConfigurationAction: Equatable {
-    case displayPathIndicators
-    case hidePathIndicators
+    case displayPathIndicatorsToggleChanged(isOn: Bool)
 }
 
 struct ConfigurationEnvironement {}
 
 let configurationReducer = Reducer<
-    ConfigurationState,
-    ConfigurationAction,
-    ConfigurationEnvironement
+    ConfigurationState, ConfigurationAction, ConfigurationEnvironement
 > { state, action, _ in
     switch action {
-    case .displayPathIndicators:
-        state.isPathIndicatorsDisplayed = true
-        return .none
-    case .hidePathIndicators:
-        state.isPathIndicatorsDisplayed = false
+    case let .displayPathIndicatorsToggleChanged(isOn):
+        state.isPathIndicatorsDisplayed = isOn
         return .none
     }
 }

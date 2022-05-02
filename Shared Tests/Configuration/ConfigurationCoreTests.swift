@@ -10,10 +10,10 @@ final class ConfigurationCoreTests: XCTestCase {
             environment: ConfigurationEnvironement()
         )
 
-        store.send(.hidePathIndicators) {
+        store.send(.displayPathIndicatorsToggleChanged(isOn: false)) {
             $0.isPathIndicatorsDisplayed = false
         }
-        store.send(.displayPathIndicators) {
+        store.send(.displayPathIndicatorsToggleChanged(isOn: true)) {
             $0.isPathIndicatorsDisplayed = true
         }
     }
