@@ -1,6 +1,6 @@
 import SwiftUI
 
-enum PathElement {
+enum PathElement: Equatable {
     case move(to: CGPoint)
     case line(to: CGPoint)
     case quadCurve(to: CGPoint, control: CGPoint)
@@ -139,5 +139,24 @@ extension Path {
 extension CGPoint {
     func applyZoomLevel(_ zoomLevel: CGFloat) -> CGPoint {
         applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel))
+    }
+}
+
+extension Array where Element == PathElement {
+    func initialQuadCurveControl(to: CGPoint) -> CGPoint {
+        let lastPoint = last?.to ?? .zero
+        return CGPoint(
+            x: (to.x + lastPoint.x) / 2 - 20,
+            y: (to.y + lastPoint.y) / 2 - 20
+        )
+    }
+
+    func initialCurveControls(to: CGPoint) -> (CGPoint, CGPoint) {
+        let lastPoint = last?.to ?? .zero
+        let x = (to.x + lastPoint.x) / 2
+        let y = (to.y + lastPoint.y) / 2
+        let control1 = CGPoint(x: (lastPoint.x + x) / 2 - 20, y: (lastPoint.y + y) / 2 - 20)
+        let control2 = CGPoint(x: (x + to.x) / 2 + 20, y: (y + to.y) / 2 + 20)
+        return (control1, control2)
     }
 }

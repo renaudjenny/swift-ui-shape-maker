@@ -34,6 +34,12 @@
 		4C3DA6DB2820038000DE2E0E /* CodeCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA6BF281FEEC700DE2E0E /* CodeCore.swift */; };
 		4C3DA6DE2820038600DE2E0E /* ConfigurationCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F714280A0C8B0048DE77 /* ConfigurationCore.swift */; };
 		4C3DA6DF2820039B00DE2E0E /* DrawingCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA6BA281FEE6500DE2E0E /* DrawingCore.swift */; };
+		4C3DA6E228201E4700DE2E0E /* DrawingCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA6E128201E4600DE2E0E /* DrawingCoreTests.swift */; };
+		4C3DA6E328201F0C00DE2E0E /* PathElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F71C280C27F20048DE77 /* PathElement.swift */; };
+		4C3DA6E428201F2200DE2E0E /* DrawingPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F71F280CBE500048DE77 /* DrawingPanel.swift */; };
+		4C3DA6E528201F2C00DE2E0E /* PathTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F719280C27D70048DE77 /* PathTool.swift */; };
+		4C3DA6E628201F3400DE2E0E /* CircleElementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F722280CBEE40048DE77 /* CircleElementView.swift */; };
+		4C3DA6E728201F3D00DE2E0E /* SquareElementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F725280CBF120048DE77 /* SquareElementView.swift */; };
 		4C7BC15C28073F0A001942AE /* TestsiOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC15B28073F0A001942AE /* TestsiOS.swift */; };
 		4C7BC15E28073F0A001942AE /* TestsiOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC15D28073F0A001942AE /* TestsiOSLaunchTests.swift */; };
 		4C7BC16828073F0A001942AE /* TestsMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC16728073F0A001942AE /* TestsMacOS.swift */; };
@@ -83,6 +89,7 @@
 		4C3DA6BF281FEEC700DE2E0E /* CodeCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeCore.swift; sourceTree = "<group>"; };
 		4C3DA6CE2820018B00DE2E0E /* Shared Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Shared Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C3DA6D8282001FA00DE2E0E /* ConfigurationCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationCoreTests.swift; sourceTree = "<group>"; };
+		4C3DA6E128201E4600DE2E0E /* DrawingCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingCoreTests.swift; sourceTree = "<group>"; };
 		4C7BC14328073F0A001942AE /* SwiftUIShapeMakerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIShapeMakerApp.swift; sourceTree = "<group>"; };
 		4C7BC14428073F0A001942AE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		4C7BC14528073F0A001942AE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -188,6 +195,7 @@
 		4C3DA6CF2820018B00DE2E0E /* Shared Tests */ = {
 			isa = PBXGroup;
 			children = (
+				4C3DA6E028201E3400DE2E0E /* Drawing */,
 				4C3DA6D7282001C900DE2E0E /* Configuration */,
 			);
 			path = "Shared Tests";
@@ -199,6 +207,14 @@
 				4C3DA6D8282001FA00DE2E0E /* ConfigurationCoreTests.swift */,
 			);
 			path = Configuration;
+			sourceTree = "<group>";
+		};
+		4C3DA6E028201E3400DE2E0E /* Drawing */ = {
+			isa = PBXGroup;
+			children = (
+				4C3DA6E128201E4600DE2E0E /* DrawingCoreTests.swift */,
+			);
+			path = Drawing;
 			sourceTree = "<group>";
 		};
 		4C7BC13D28073F0A001942AE = {
@@ -501,11 +517,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C3DA6E328201F0C00DE2E0E /* PathElement.swift in Sources */,
+				4C3DA6E628201F3400DE2E0E /* CircleElementView.swift in Sources */,
+				4C3DA6E428201F2200DE2E0E /* DrawingPanel.swift in Sources */,
 				4C3DA6DF2820039B00DE2E0E /* DrawingCore.swift in Sources */,
 				4C3DA6DA2820037900DE2E0E /* AppCore.swift in Sources */,
+				4C3DA6E728201F3D00DE2E0E /* SquareElementView.swift in Sources */,
 				4C3DA6DB2820038000DE2E0E /* CodeCore.swift in Sources */,
 				4C3DA6D9282001FA00DE2E0E /* ConfigurationCoreTests.swift in Sources */,
 				4C3DA6DE2820038600DE2E0E /* ConfigurationCore.swift in Sources */,
+				4C3DA6E228201E4700DE2E0E /* DrawingCoreTests.swift in Sources */,
+				4C3DA6E528201F2C00DE2E0E /* PathTool.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
