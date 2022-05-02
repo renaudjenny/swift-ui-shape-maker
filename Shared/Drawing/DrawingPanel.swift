@@ -7,7 +7,7 @@ struct DrawingPanel: View {
     @Binding var hoveredOffsets: Set<Int>
     @Binding var zoomLevel: Double
     let selectedPathTool: PathTool
-    let configuration: Configuration
+    let configuration: ConfigurationState
 
     static let standardWidth: CGFloat = 1000
 

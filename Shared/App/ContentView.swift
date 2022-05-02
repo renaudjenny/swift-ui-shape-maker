@@ -10,7 +10,7 @@ struct ContentView: View {
     @State private var imageOpacity = 1.0
     @State private var pathElements: [PathElement] = []
     @State private var selectedPathTool: PathTool = .line
-    @State private var configuration = Configuration()
+    @State private var configuration = ConfigurationState()
     @State private var isCodeInEditionMode = false
     @State private var hoveredOffsets = Set<Int>()
     @State private var zoomLevel: Double = 1
