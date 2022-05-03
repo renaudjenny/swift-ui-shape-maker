@@ -165,6 +165,14 @@ final class DrawingCoreTests: XCTestCase {
             state.selectedPathTool = .curve
         }
     }
+
+    func testRemovePathElement() {
+        let store = TestStore(initialState: .test, reducer: drawingReducer, environment: DrawingEnvironement())
+
+        store.send(\.removePathElement(at: 1)) { state in
+            state.pathElements = [state.pathElements[0]]
+        }
+    }
 }
 
 private extension DrawingState {

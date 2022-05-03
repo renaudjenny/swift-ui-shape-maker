@@ -10,7 +10,6 @@ struct ContentView: View {
     let store: Store<AppState, AppAction>
     @State private var image: Image?
     @State private var imageOpacity = 1.0
-    @State private var pathElements: [PathElement] = []
     @State private var selectedPathTool: PathTool = .line
     @State private var isCodeInEditionMode = false
     @State private var hoveredOffsets = Set<Int>()
@@ -53,7 +52,6 @@ struct ContentView: View {
                         ZStack {
                             DrawingPanel(
                                 store: store,
-                                pathElements: $pathElements,
                                 hoveredOffsets: $hoveredOffsets,
                                 zoomLevel: $zoomLevel,
                                 selectedPathTool: selectedPathTool
@@ -110,7 +108,7 @@ struct ContentView: View {
                     }
 
                     CodeView(
-                        pathElements: $pathElements,
+                        store: store,
                         hoveredOffsets: $hoveredOffsets,
                         isInEditionMode: $isCodeInEditionMode
                     )
