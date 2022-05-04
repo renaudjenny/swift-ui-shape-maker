@@ -8,8 +8,8 @@ struct DrawingState: Equatable {
 }
 
 enum DrawingAction: Equatable {
-    case addPathElement(to: CGPoint)
     case movePathElement(to: CGPoint)
+    case endMove
     case updatePathElement(UpdatePathElement)
     case removePathElement(at: Int)
     case selectPathTool(PathTool)
@@ -20,24 +20,6 @@ struct DrawingEnvironement {}
 
 let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement> { state, action, _ in
     switch action {
-    case let .addPathElement(to):
-        // TODO: refactor the code with .movePathElement
-
-        let movedElement = state.pathElements.removeLast()
-        switch state.selectedPathTool {
-        case .move: state.pathElements.append(.move(to: to))
-        case .line: state.pathElements.append(.line(to: to))
-        case .quadCurve:
-            if case let .quadCurve(_, control) = movedElement {
-                state.pathElements.append(.quadCurve(to: to, control: control))
-            }
-        case .curve:
-            if case let .curve(_, control1, control2) = movedElement {
-                state.pathElements.append(.curve(to: to, control1: control1, control2: control2))
-            }
-        }
-        state.isAdding = false
-        return .none
     case let .movePathElement(to):
         if !state.isAdding {
             state.isAdding = true
@@ -77,6 +59,9 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement> {
             state.pathElements[state.pathElements.count - 1].update(to: to)
             return .none
         }
+    case .endMove:
+        state.isAdding = false
+        return .none
     case let .updatePathElement(update):
         state.pathElements[update.at].update(
             to: update.to,
@@ -94,7 +79,7 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement> {
         state.zoomLevel = zoomLevel
         return .none
     }
-}
+}.debugActions()
 
 struct UpdatePathElement: Equatable {
     let at: Int

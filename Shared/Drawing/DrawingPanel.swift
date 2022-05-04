@@ -18,7 +18,7 @@ struct DrawingPanel: View {
                     .gesture(
                         DragGesture()
                             .onChanged { viewStore.send(.drawing(.movePathElement(to: $0.location))) }
-                            .onEnded { viewStore.send(.drawing(.addPathElement(to: $0.location))) }
+                            .onEnded { _ in viewStore.send(.drawing(.endMove)) }
                     )
 
                 Path { path in

@@ -11,15 +11,23 @@ final class DrawingCoreTests: XCTestCase {
         }
 
         let firstElementPoint = CGPoint(x: 123, y: 123)
-        store.send(.addPathElement(to: firstElementPoint)) { state in
+        store.send(.movePathElement(to: firstElementPoint)) { state in
             // It's not a line that is added firstly, it's always a "move" element
             state.pathElements = [.move(to: firstElementPoint)]
+            state.isAdding = true
+        }
+        store.send(.endMove) { state in
+            state.isAdding = false
         }
 
         let secondElementPoint = CGPoint(x: 234, y: 234)
         let actualLine = PathElement.line(to: secondElementPoint)
-        store.send(.addPathElement(to: secondElementPoint)) { state in
+        store.send(.movePathElement(to: secondElementPoint)) { state in
             state.pathElements = [.move(to: firstElementPoint), actualLine]
+            state.isAdding = true
+        }
+        store.send(.endMove) { state in
+            state.isAdding = false
         }
     }
 
@@ -31,8 +39,9 @@ final class DrawingCoreTests: XCTestCase {
         }
 
         let newPoint = CGPoint(x: 456, y: 456)
-        store.send(.addPathElement(to: newPoint)) { state in
+        store.send(.movePathElement(to: newPoint)) { state in
             state.pathElements += [.move(to: newPoint)]
+            state.isAdding = true
         }
     }
 
@@ -44,13 +53,14 @@ final class DrawingCoreTests: XCTestCase {
         }
 
         let newPoint = CGPoint(x: 456, y: 456)
-        store.send(.addPathElement(to: newPoint)) { state in
+        store.send(.movePathElement(to: newPoint)) { state in
             state.pathElements += [
                 .quadCurve(
                     to: newPoint,
                     control: DrawingState.test.pathElements.initialQuadCurveControl(to: newPoint)
                 ),
             ]
+            state.isAdding = true
         }
     }
 
@@ -63,7 +73,7 @@ final class DrawingCoreTests: XCTestCase {
 
         let newPoint = CGPoint(x: 456, y: 456)
         let controls = DrawingState.test.pathElements.initialCurveControls(to: newPoint)
-        store.send(.addPathElement(to: newPoint)) { state in
+        store.send(.movePathElement(to: newPoint)) { state in
             state.pathElements += [
                 .curve(
                     to: newPoint,
@@ -71,6 +81,7 @@ final class DrawingCoreTests: XCTestCase {
                     control2: controls.1
                 ),
             ]
+            state.isAdding = true
         }
     }
 
@@ -89,16 +100,24 @@ final class DrawingCoreTests: XCTestCase {
 
         let lineToMovePoint = CGPoint(x: 123, y: 123)
         let lineToMove: PathElement = .move(to: lineToMovePoint.applying(CGAffineTransform(scaleX: scale, y: scale)))
-        store.send(.addPathElement(to: lineToMovePoint)) { state in
+        store.send(.movePathElement(to: lineToMovePoint)) { state in
             // It's not a line that is added firstly, it's always a "move" element
             state.pathElements = [lineToMove]
+            state.isAdding = true
+        }
+        store.send(.endMove) { state in
+            state.isAdding = false
         }
         pathElements += [lineToMove]
 
         let linePoint = CGPoint(x: 234, y: 234)
         let line = PathElement.line(to: linePoint.applyZoomLevel(scale))
-        store.send(.addPathElement(to: linePoint)) { state in
+        store.send(.movePathElement(to: linePoint)) { state in
             state.pathElements += [line]
+            state.isAdding = true
+        }
+        store.send(.endMove) { state in
+            state.isAdding = false
         }
         pathElements += [line]
 
@@ -107,8 +126,9 @@ final class DrawingCoreTests: XCTestCase {
         }
         let movePoint = CGPoint(x: 235, y: 235)
         let move = PathElement.move(to: movePoint.applyZoomLevel(scale))
-        store.send(.addPathElement(to: movePoint)) { state in
+        store.send(.movePathElement(to: movePoint)) { state in
             state.pathElements += [move]
+            state.isAdding = true
         }
     }
 
@@ -129,8 +149,9 @@ final class DrawingCoreTests: XCTestCase {
             to: quadCurvePoint.applyZoomLevel(scale),
             control: pathElements.initialQuadCurveControl(to: quadCurvePoint.applyZoomLevel(scale))
         )
-        store.send(.addPathElement(to: quadCurvePoint)) { state in
+        store.send(.movePathElement(to: quadCurvePoint)) { state in
             state.pathElements += [quadCurve]
+            state.isAdding = true
         }
 
         store.send(.selectPathTool(.curve)) { state in
@@ -157,8 +178,9 @@ final class DrawingCoreTests: XCTestCase {
             control1: curveControls.0,
             control2: curveControls.1
         )
-        store.send(.addPathElement(to: curvePoint)) { state in
+        store.send(.movePathElement(to: curvePoint)) { state in
             state.pathElements += [curve]
+            state.isAdding = true
         }
 
         store.send(.selectPathTool(.curve)) { state in
@@ -169,7 +191,7 @@ final class DrawingCoreTests: XCTestCase {
     func testRemovePathElement() {
         let store = TestStore(initialState: .test, reducer: drawingReducer, environment: DrawingEnvironement())
 
-        store.send(\.removePathElement(at: 1)) { state in
+        store.send(.removePathElement(at: 1)) { state in
             state.pathElements = [state.pathElements[0]]
         }
     }

@@ -20,5 +20,10 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>
             state: \.configuration,
             action: /AppAction.configuration,
             environment: { _ in ConfigurationEnvironement() }
+        ),
+        drawingReducer.pullback(
+            state: \.drawing,
+            action: /AppAction.drawing,
+            environment: { _ in DrawingEnvironement() }
         )
     )
