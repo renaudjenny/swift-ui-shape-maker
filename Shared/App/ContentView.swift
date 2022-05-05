@@ -13,22 +13,19 @@ struct ContentView: View {
     @State private var selectedPathTool: PathTool = .line
     @State private var isCodeInEditionMode = false
     @State private var hoveredOffsets = Set<Int>()
-    @State private var zoomLevel: Double = 1
     @State private var lastZoomGestureDelta: CGFloat?
     @State private var isDrawingPanelTargetedForImageDrop = false
     @State private var cancellables = Set<AnyCancellable>()
 
     var body: some View {
         WithViewStore(store) { viewStore in
+            let zoomLevel = viewStore.drawing.zoomLevel
             VStack {
                 VStack {
                     HStack {
                         Slider(value: $imageOpacity) { Text("Image opacity") }
                         Button("Choose an image") { openImagePicker() }
-                        HStack {
-                            Slider(value: $zoomLevel, in: 0.10...4) { Text("Zoom level") }
-                            Text("\(Int(zoomLevel * 100))%")
-                        }
+                        zoom(viewStore: viewStore)
                     }
                     HStack {
                         Picker("Tool", selection: $selectedPathTool) {
@@ -53,7 +50,6 @@ struct ContentView: View {
                             DrawingPanel(
                                 store: store,
                                 hoveredOffsets: $hoveredOffsets,
-                                zoomLevel: $zoomLevel,
                                 selectedPathTool: selectedPathTool
                             )
 
@@ -85,7 +81,7 @@ struct ContentView: View {
                     .highPriorityGesture(MagnificationGesture()
                         .onChanged { scale in
                             let delta = scale - (lastZoomGestureDelta ?? 1)
-                            clampZoomLevel(add: delta)
+                            clampZoomLevel(viewStore, add: delta)
                             lastZoomGestureDelta = scale
                         }
                         .onEnded { _ in
@@ -101,7 +97,7 @@ struct ContentView: View {
                             }
                             .compactMap { $0 }
                             .sink {
-                                clampZoomLevel(add: $0.deltaY/100)
+                                clampZoomLevel(viewStore, add: $0.deltaY/100)
                             }
                             .store(in: &cancellables)
                         #endif
@@ -117,6 +113,16 @@ struct ContentView: View {
         }
     }
 
+    private func zoom(viewStore: ViewStore<AppState, AppAction>) -> some View {
+        HStack {
+            Slider(
+                value: viewStore.binding(get: \.drawing.zoomLevel, send: { .drawing(.zoomLevelChanged($0)) }),
+                in: 0.10...4
+            ) { Text("Zoom level") }
+            Text("\(Int(viewStore.drawing.zoomLevel * 100))%")
+        }
+    }
+
     private func openImagePicker() {
         #if os(macOS)
         let pictureTaker = IKPictureTaker.pictureTaker()
@@ -125,14 +131,15 @@ struct ContentView: View {
         #endif
     }
 
-    private func clampZoomLevel(add delta: CGFloat) {
-        switch zoomLevel + delta {
+    private func clampZoomLevel(_ viewStore: ViewStore<AppState, AppAction>, add delta: CGFloat) {
+        let deltaAdded = viewStore.drawing.zoomLevel + delta
+        switch deltaAdded {
         case 4...:
-            zoomLevel = 4
+            viewStore.send(.drawing(.zoomLevelChanged(4)))
         case ...0.10:
-            zoomLevel = 0.10
+            viewStore.send(.drawing(.zoomLevelChanged(0.10)))
         default:
-            zoomLevel += delta
+            viewStore.send(.drawing(.zoomLevelChanged(deltaAdded)))
         }
     }
 }

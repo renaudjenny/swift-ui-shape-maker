@@ -40,6 +40,9 @@
 		4C3DA6E528201F2C00DE2E0E /* PathTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F719280C27D70048DE77 /* PathTool.swift */; };
 		4C3DA6E628201F3400DE2E0E /* CircleElementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F722280CBEE40048DE77 /* CircleElementView.swift */; };
 		4C3DA6E728201F3D00DE2E0E /* SquareElementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F725280CBF120048DE77 /* SquareElementView.swift */; };
+		4C3DA6E92824724400DE2E0E /* GuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA6E82824724400DE2E0E /* GuideView.swift */; };
+		4C3DA6EA28247DF500DE2E0E /* GuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA6E82824724400DE2E0E /* GuideView.swift */; };
+		4C3DA6EB28247DF500DE2E0E /* GuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA6E82824724400DE2E0E /* GuideView.swift */; };
 		4C7BC15C28073F0A001942AE /* TestsiOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC15B28073F0A001942AE /* TestsiOS.swift */; };
 		4C7BC15E28073F0A001942AE /* TestsiOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC15D28073F0A001942AE /* TestsiOSLaunchTests.swift */; };
 		4C7BC16828073F0A001942AE /* TestsMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC16728073F0A001942AE /* TestsMacOS.swift */; };
@@ -90,6 +93,7 @@
 		4C3DA6CE2820018B00DE2E0E /* Shared Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Shared Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C3DA6D8282001FA00DE2E0E /* ConfigurationCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationCoreTests.swift; sourceTree = "<group>"; };
 		4C3DA6E128201E4600DE2E0E /* DrawingCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingCoreTests.swift; sourceTree = "<group>"; };
+		4C3DA6E82824724400DE2E0E /* GuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideView.swift; sourceTree = "<group>"; };
 		4C7BC14328073F0A001942AE /* SwiftUIShapeMakerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIShapeMakerApp.swift; sourceTree = "<group>"; };
 		4C7BC14428073F0A001942AE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		4C7BC14528073F0A001942AE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -179,6 +183,7 @@
 				4C31F71C280C27F20048DE77 /* PathElement.swift */,
 				4C31F719280C27D70048DE77 /* PathTool.swift */,
 				4C31F725280CBF120048DE77 /* SquareElementView.swift */,
+				4C3DA6E82824724400DE2E0E /* GuideView.swift */,
 			);
 			path = Drawing;
 			sourceTree = "<group>";
@@ -520,6 +525,7 @@
 				4C3DA6E328201F0C00DE2E0E /* PathElement.swift in Sources */,
 				4C3DA6E628201F3400DE2E0E /* CircleElementView.swift in Sources */,
 				4C3DA6E428201F2200DE2E0E /* DrawingPanel.swift in Sources */,
+				4C3DA6E92824724400DE2E0E /* GuideView.swift in Sources */,
 				4C3DA6DF2820039B00DE2E0E /* DrawingCore.swift in Sources */,
 				4C3DA6DA2820037900DE2E0E /* AppCore.swift in Sources */,
 				4C3DA6E728201F3D00DE2E0E /* SquareElementView.swift in Sources */,
@@ -540,6 +546,7 @@
 				4C31F729280D48B60048DE77 /* CodeView.swift in Sources */,
 				4C31F726280CBF120048DE77 /* SquareElementView.swift in Sources */,
 				4C31F723280CBEE40048DE77 /* CircleElementView.swift in Sources */,
+				4C3DA6EA28247DF500DE2E0E /* GuideView.swift in Sources */,
 				4C31F71A280C27D70048DE77 /* PathTool.swift in Sources */,
 				4C3DA6B6281FED4000DE2E0E /* AppCore.swift in Sources */,
 				4C31F715280A0C8B0048DE77 /* ConfigurationCore.swift in Sources */,
@@ -559,6 +566,7 @@
 				4C31F72A280D48B60048DE77 /* CodeView.swift in Sources */,
 				4C31F727280CBF120048DE77 /* SquareElementView.swift in Sources */,
 				4C31F724280CBEE40048DE77 /* CircleElementView.swift in Sources */,
+				4C3DA6EB28247DF500DE2E0E /* GuideView.swift in Sources */,
 				4C31F71B280C27D70048DE77 /* PathTool.swift in Sources */,
 				4C3DA6B7281FED4000DE2E0E /* AppCore.swift in Sources */,
 				4C31F716280A0C8B0048DE77 /* ConfigurationCore.swift in Sources */,

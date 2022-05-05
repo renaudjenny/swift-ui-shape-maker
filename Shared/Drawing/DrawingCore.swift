@@ -10,7 +10,7 @@ struct DrawingState: Equatable {
 enum DrawingAction: Equatable {
     case movePathElement(to: CGPoint)
     case endMove
-    case updatePathElement(UpdatePathElement)
+    case updatePathElement(at: Int, PathElement.Guide)
     case removePathElement(at: Int)
     case selectPathTool(PathTool)
     case zoomLevelChanged(Double)
@@ -21,11 +21,10 @@ struct DrawingEnvironement {}
 let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement> { state, action, _ in
     switch action {
     case let .movePathElement(to):
+        let to = inBoundsPoint(to).applyZoomLevel(1/state.zoomLevel)
+
         if !state.isAdding {
             state.isAdding = true
-
-            // TODO: check if the zoom level should rather be 1/state.zoomLevel
-            let to = to.applyZoomLevel(state.zoomLevel)
 
             guard !state.pathElements.isEmpty else {
                 state.pathElements.append(.move(to: to))
@@ -56,18 +55,14 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement> {
             }
             return .none
         } else {
-            state.pathElements[state.pathElements.count - 1].update(to: to)
+            state.pathElements[state.pathElements.count - 1].update(guide: PathElement.Guide(type: .to, position: to))
             return .none
         }
     case .endMove:
         state.isAdding = false
         return .none
-    case let .updatePathElement(update):
-        state.pathElements[update.at].update(
-            to: update.to,
-            quadCurveControl: update.quadCurveControl,
-            curveControls: update.curveControls
-        )
+    case let .updatePathElement(offset, guide):
+        state.pathElements[offset].update(guide: guide)
         return .none
     case let .removePathElement(at: offset):
         state.pathElements.remove(at: offset)
@@ -79,15 +74,21 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement> {
         state.zoomLevel = zoomLevel
         return .none
     }
-}.debugActions()
+}
 
-struct UpdatePathElement: Equatable {
-    let at: Int
-    private(set) var to: CGPoint?
-    private(set) var quadCurveControl: CGPoint?
-    private(set) var curveControls: (control1: CGPoint?, control2: CGPoint?)?
-
-    static func == (lhs: UpdatePathElement, rhs: UpdatePathElement) -> Bool {
-        lhs.at == rhs.at
+private func inBoundsPoint(_ point: CGPoint) -> CGPoint {
+    var inBondsPoint = point
+    if inBondsPoint.x < 0 {
+        inBondsPoint.x = 0
     }
+    if inBondsPoint.y < 0 {
+        inBondsPoint.y = 0
+    }
+    if inBondsPoint.x > DrawingPanel.standardWidth {
+        inBondsPoint.x = DrawingPanel.standardWidth
+    }
+    if inBondsPoint.y > DrawingPanel.standardWidth {
+        inBondsPoint.y = DrawingPanel.standardWidth
+    }
+    return inBondsPoint
 }

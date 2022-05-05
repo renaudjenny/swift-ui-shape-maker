@@ -13,6 +13,7 @@ enum PathElement: Equatable {
         }
     }
 
+    @available(*, deprecated)
     mutating func update(
         to newTo: CGPoint? = nil,
         quadCurveControl newQuadCurveControl: CGPoint? = nil,
@@ -31,6 +32,37 @@ enum PathElement: Equatable {
                 control1: newCurveControls?.control1 ?? control1,
                 control2: newCurveControls?.control2 ?? control2
             )
+        }
+    }
+
+    mutating func update(guide: Guide) {
+        switch self {
+        case .move:
+            if guide.type == .to {
+                self = .move(to: guide.position)
+            }
+        case .line:
+            if guide.type == .to {
+                self = .line(to: guide.position)
+            }
+        case .quadCurve(let to, let control):
+            switch guide.type {
+            case .to:
+                self = .quadCurve(to: guide.position, control: control)
+            case .quadCurveControl:
+                self = .quadCurve(to: to, control: guide.position)
+            default: break
+            }
+        case .curve(let to, let control1, let control2):
+            switch guide.type {
+            case .to:
+                self = .curve(to: guide.position, control1: control1, control2: control2)
+            case .curveControl1:
+                self = .curve(to: to, control1: guide.position, control2: control2)
+            case .curveControl2:
+                self = .curve(to: to, control1: control1, control2: guide.position)
+            default: break
+            }
         }
     }
 }
@@ -80,6 +112,20 @@ extension PathElement {
             y: rect.midY \(ySign) width * \(Int(y.rounded()))/\(Int(width))
         )
         """
+    }
+}
+
+extension PathElement {
+    enum GuideType: Equatable {
+        case to
+        case quadCurveControl
+        case curveControl1
+        case curveControl2
+    }
+
+    struct Guide: Equatable {
+        let type: GuideType
+        let position: CGPoint
     }
 }
 

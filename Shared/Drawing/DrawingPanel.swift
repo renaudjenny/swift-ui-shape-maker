@@ -6,7 +6,6 @@ struct DrawingPanel: View {
     @State private var isAdding = false
     @State private var draggingElementOffset: Int?
     @Binding var hoveredOffsets: Set<Int>
-    @Binding var zoomLevel: Double
     let selectedPathTool: PathTool
 
     static let standardWidth: CGFloat = 1000
@@ -22,7 +21,9 @@ struct DrawingPanel: View {
                     )
 
                 Path { path in
-                    viewStore.drawing.pathElements.forEach { path.addElement($0, zoomLevel: zoomLevel) }
+                    viewStore.drawing.pathElements.forEach {
+                        path.addElement($0, zoomLevel: viewStore.drawing.zoomLevel)
+                    }
                 }
                 .stroke()
 
@@ -33,76 +34,38 @@ struct DrawingPanel: View {
         }
     }
 
-    // swiftlint:disable:next function_body_length
+    @ViewBuilder
     private func pathIndicators(viewStore: ViewStore<AppState, AppAction>) -> some View {
+        let zoomLevel = viewStore.drawing.zoomLevel
         ForEach(Array(viewStore.drawing.pathElements.enumerated()), id: \.offset) { offset, element in
             switch element {
             case let .move(to), let .line(to):
-                CircleElementView(isHovered: isHovered(offset: offset), isDragged: draggingElementOffset == offset)
-                    .position(to.applyZoomLevel(zoomLevel))
-                    .gesture(
-                        DragGesture()
-                            .onChanged { value in
-                                withAnimation(.interactiveSpring()) {
-                                    viewStore.send(.drawing(.updatePathElement(UpdatePathElement(
-                                        at: offset,
-                                        to: value.location
-                                    ))))
-                                }
-                                draggingElementOffset = offset
-                            }
-                            .onEnded { value in
-                                viewStore.send(.drawing(.updatePathElement(UpdatePathElement(
-                                    at: offset,
-                                    to: value.location
-                                ))))
-                                withAnimation { draggingElementOffset = nil }
-                            }
-                    )
+                GuideView(
+                    store: store.scope(state: \.drawing, action: AppAction.drawing),
+                    type: .to,
+                    position: to,
+                    offset: offset,
+                    isHovered: isHovered(offset: offset),
+                    draggingElementOffset: $draggingElementOffset
+                )
             case let .quadCurve(to, control):
                 ZStack {
-                    CircleElementView(isHovered: isHovered(offset: offset), isDragged: draggingElementOffset == offset)
-                        .position(to.applyZoomLevel(zoomLevel))
-                        .gesture(
-                            DragGesture()
-                                .onChanged { value in
-                                    withAnimation(.interactiveSpring()) {
-                                        viewStore.send(.drawing(.updatePathElement(UpdatePathElement(
-                                            at: offset,
-                                            to: value.location
-                                        ))))
-                                    }
-                                    draggingElementOffset = offset
-                                }
-                                .onEnded { value in
-                                    viewStore.send(.drawing(.updatePathElement(UpdatePathElement(
-                                        at: offset,
-                                        to: value.location
-                                    ))))
-                                    withAnimation { draggingElementOffset = nil }
-                                }
-                        )
-                    SquareElementView(isHovered: isHovered(offset: offset), isDragged: draggingElementOffset == offset)
-                        .position(control.applyZoomLevel(zoomLevel))
-                        .gesture(
-                            DragGesture()
-                                .onChanged { value in
-                                    withAnimation(.interactiveSpring()) {
-                                        viewStore.send(.drawing(.updatePathElement(UpdatePathElement(
-                                            at: offset,
-                                            quadCurveControl: value.location
-                                        ))))
-                                    }
-                                    draggingElementOffset = offset
-                                }
-                                .onEnded { value in
-                                    viewStore.send(.drawing(.updatePathElement(UpdatePathElement(
-                                        at: offset,
-                                        quadCurveControl: value.location
-                                    ))))
-                                    withAnimation { draggingElementOffset = nil }
-                                }
-                        )
+                    GuideView(
+                        store: store.scope(state: \.drawing, action: AppAction.drawing),
+                        type: .to,
+                        position: to,
+                        offset: offset,
+                        isHovered: isHovered(offset: offset),
+                        draggingElementOffset: $draggingElementOffset
+                    )
+                    GuideView(
+                        store: store.scope(state: \.drawing, action: AppAction.drawing),
+                        type: .quadCurveControl,
+                        position: control,
+                        offset: offset,
+                        isHovered: isHovered(offset: offset),
+                        draggingElementOffset: $draggingElementOffset
+                    )
                     Path { path in
                         path.move(to: viewStore.drawing.pathElements[offset - 1].to.applyZoomLevel(zoomLevel))
                         path.addLine(to: control.applyZoomLevel(zoomLevel))
@@ -111,69 +74,30 @@ struct DrawingPanel: View {
                 }
             case let .curve(to, control1, control2):
                 ZStack {
-                    CircleElementView(isHovered: isHovered(offset: offset), isDragged: draggingElementOffset == offset)
-                        .position(to.applyZoomLevel(zoomLevel))
-                        .gesture(
-                            DragGesture()
-                                .onChanged { value in
-                                    withAnimation(.interactiveSpring()) {
-                                        viewStore.send(.drawing(.updatePathElement(UpdatePathElement(
-                                            at: offset,
-                                            to: value.location
-                                        ))))
-                                    }
-                                    draggingElementOffset = offset
-                                }
-                                .onEnded { value in
-                                    viewStore.send(.drawing(.updatePathElement(UpdatePathElement(
-                                        at: offset,
-                                        to: value.location
-                                    ))))
-                                    withAnimation { draggingElementOffset = nil }
-                                }
-                        )
-                    SquareElementView(isHovered: isHovered(offset: offset), isDragged: draggingElementOffset == offset)
-                        .position(control1.applyZoomLevel(zoomLevel))
-                        .gesture(
-                            DragGesture()
-                                .onChanged { value in
-                                    withAnimation(.interactiveSpring()) {
-                                        viewStore.send(.drawing(.updatePathElement(UpdatePathElement(
-                                            at: offset,
-                                            curveControls: (value.location, nil)
-                                        ))))
-                                    }
-                                    draggingElementOffset = offset
-                                }
-                                .onEnded { value in
-                                    viewStore.send(.drawing(.updatePathElement(UpdatePathElement(
-                                        at: offset,
-                                        curveControls: (value.location, nil)
-                                    ))))
-                                    withAnimation { draggingElementOffset = nil }
-                                }
-                        )
-                    SquareElementView(isHovered: isHovered(offset: offset), isDragged: draggingElementOffset == offset)
-                        .position(control2.applyZoomLevel(zoomLevel))
-                        .gesture(
-                            DragGesture()
-                                .onChanged { value in
-                                    withAnimation(.interactiveSpring()) {
-                                        viewStore.send(.drawing(.updatePathElement(UpdatePathElement(
-                                            at: offset,
-                                            curveControls: (nil, value.location)
-                                        ))))
-                                    }
-                                    draggingElementOffset = offset
-                                }
-                                .onEnded { value in
-                                    viewStore.send(.drawing(.updatePathElement(UpdatePathElement(
-                                        at: offset,
-                                        curveControls: (nil, value.location)
-                                    ))))
-                                    withAnimation { draggingElementOffset = nil }
-                                }
-                        )
+                    GuideView(
+                        store: store.scope(state: \.drawing, action: AppAction.drawing),
+                        type: .to,
+                        position: to,
+                        offset: offset,
+                        isHovered: isHovered(offset: offset),
+                        draggingElementOffset: $draggingElementOffset
+                    )
+                    GuideView(
+                        store: store.scope(state: \.drawing, action: AppAction.drawing),
+                        type: .curveControl1,
+                        position: control1,
+                        offset: offset,
+                        isHovered: isHovered(offset: offset),
+                        draggingElementOffset: $draggingElementOffset
+                    )
+                    GuideView(
+                        store: store.scope(state: \.drawing, action: AppAction.drawing),
+                        type: .curveControl2,
+                        position: control2,
+                        offset: offset,
+                        isHovered: isHovered(offset: offset),
+                        draggingElementOffset: $draggingElementOffset
+                    )
                     Path { path in
                         path.move(to: viewStore.drawing.pathElements[offset - 1].to.applyZoomLevel(zoomLevel))
                         path.addLine(to: control1.applyZoomLevel(zoomLevel))
@@ -183,24 +107,6 @@ struct DrawingPanel: View {
                 }
             }
         }
-    }
-
-    // TODO: move this to the Core code
-    private func inBoundsPoint(_ point: CGPoint) -> CGPoint {
-        var inBondsPoint = point
-        if inBondsPoint.x < 0 {
-            inBondsPoint.x = 0
-        }
-        if inBondsPoint.y < 0 {
-            inBondsPoint.y = 0
-        }
-        if inBondsPoint.x > DrawingPanel.standardWidth {
-            inBondsPoint.x = DrawingPanel.standardWidth
-        }
-        if inBondsPoint.y > DrawingPanel.standardWidth {
-            inBondsPoint.y = DrawingPanel.standardWidth
-        }
-        return inBondsPoint
     }
 
     private func isHovered(offset: Int) -> Binding<Bool> {
