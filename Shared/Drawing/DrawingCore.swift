@@ -21,7 +21,7 @@ struct DrawingEnvironement {}
 let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement> { state, action, _ in
     switch action {
     case let .movePathElement(to):
-        let to = inBoundsPoint(to).applyZoomLevel(1/state.zoomLevel)
+        let to = inBoundsPoint(to.applyZoomLevel(1/state.zoomLevel))
 
         if !state.isAdding {
             state.isAdding = true
@@ -38,19 +38,14 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement> {
                     state.pathElements.append(.line(to: to))
                     return .none
                 }
-                let x = (to.x + lastPoint.x) / 2
-                let y = (to.y + lastPoint.y) / 2
-                let control = CGPoint(x: x - 20, y: y - 20)
+                let control = state.pathElements.initialQuadCurveControl(to: to)
                 state.pathElements.append(.quadCurve(to: to, control: control))
             case .curve:
                 guard let lastPoint = state.pathElements.last?.to else {
                     state.pathElements.append(.line(to: to))
                     return .none
                 }
-                let x = (to.x + lastPoint.x) / 2
-                let y = (to.y + lastPoint.y) / 2
-                let control1 = CGPoint(x: (lastPoint.x + x) / 2 - 20, y: (lastPoint.y + y) / 2 - 20)
-                let control2 = CGPoint(x: (x + to.x) / 2 + 20, y: (y + to.y) / 2 + 20)
+                let (control1, control2) = state.pathElements.initialCurveControls(to: to)
                 state.pathElements.append(.curve(to: to, control1: control1, control2: control2))
             }
             return .none
