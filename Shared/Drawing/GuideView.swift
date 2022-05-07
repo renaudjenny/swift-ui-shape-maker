@@ -5,9 +5,9 @@ struct GuideView: View {
     let store: Store<DrawingState, DrawingAction>
     let type: PathElement.GuideType
     let position: CGPoint
-    let offset: Int
+    let id: PathElement.ID
     @Binding var isHovered: Bool
-    @Binding var draggingElementOffset: Int?
+    @Binding var draggingID: PathElement.ID?
 
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -18,14 +18,14 @@ struct GuideView: View {
                         .onChanged { value in
                             withAnimation(.interactiveSpring()) {
                                 viewStore.send(.updatePathElement(
-                                    at: offset,
+                                    id: id,
                                     PathElement.Guide(type: type, position: value.location)
                                 ))
                             }
-                            draggingElementOffset = offset
+                            draggingID = id
                         }
                         .onEnded { _ in
-                            withAnimation { draggingElementOffset = nil }
+                            withAnimation { draggingID = nil }
                         }
                 )
         }
@@ -35,9 +35,9 @@ struct GuideView: View {
     var element: some View {
         switch type {
         case .to:
-            CircleElementView(isHovered: $isHovered, isDragged: draggingElementOffset == offset)
+            CircleElementView(isHovered: $isHovered, isDragged: draggingID == id)
         case .quadCurveControl, .curveControl1, .curveControl2:
-            SquareElementView(isHovered: $isHovered, isDragged: draggingElementOffset == offset)
+            SquareElementView(isHovered: $isHovered, isDragged: draggingID == id)
         }
     }
 }

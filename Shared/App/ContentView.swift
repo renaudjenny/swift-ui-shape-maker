@@ -12,7 +12,7 @@ struct ContentView: View {
     @State private var imageOpacity = 1.0
     @State private var selectedPathTool: PathTool = .line
     @State private var isCodeInEditionMode = false
-    @State private var hoveredOffsets = Set<Int>()
+    @State private var hoveredIDs = Set<PathElement.ID>()
     @State private var lastZoomGestureDelta: CGFloat?
     @State private var isDrawingPanelTargetedForImageDrop = false
     @State private var cancellables = Set<AnyCancellable>()
@@ -49,7 +49,7 @@ struct ContentView: View {
                         ZStack {
                             DrawingPanel(
                                 store: store,
-                                hoveredOffsets: $hoveredOffsets,
+                                hoveredIDs: $hoveredIDs,
                                 selectedPathTool: selectedPathTool
                             )
 
@@ -105,7 +105,7 @@ struct ContentView: View {
 
                     CodeView(
                         store: store,
-                        hoveredOffsets: $hoveredOffsets,
+                        hoveredIDs: $hoveredIDs,
                         isInEditionMode: $isCodeInEditionMode
                     )
                 }

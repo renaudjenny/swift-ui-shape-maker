@@ -1,7 +1,8 @@
 import ComposableArchitecture
+import IdentifiedCollections
 
 struct DrawingState: Equatable {
-    var pathElements: [PathElement] = []
+    var pathElements: IdentifiedArrayOf<PathElement> = []
     var isAdding = false
     var zoomLevel: Double = 1
     var selectedPathTool = PathTool.line
@@ -10,8 +11,8 @@ struct DrawingState: Equatable {
 enum DrawingAction: Equatable {
     case movePathElement(to: CGPoint)
     case endMove
-    case updatePathElement(at: Int, PathElement.Guide)
-    case removePathElement(at: Int)
+    case updatePathElement(id: PathElement.ID, PathElement.Guide)
+    case removePathElement(id: PathElement.ID)
     case selectPathTool(PathTool)
     case zoomLevelChanged(Double)
 }
@@ -25,43 +26,48 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement> {
 
         if !state.isAdding {
             state.isAdding = true
+            let index = state.pathElements.count
 
             guard !state.pathElements.isEmpty else {
-                state.pathElements.append(.move(to: to))
+                state.pathElements.append(PathElement(index: index, type: .move(to: to)))
                 return .none
             }
             switch state.selectedPathTool {
-            case .move: state.pathElements.append(.move(to: to))
-            case .line: state.pathElements.append(.line(to: to))
+            case .move: state.pathElements.append(PathElement(index: index, type: .move(to: to)))
+            case .line: state.pathElements.append(PathElement(index: index, type: .line(to: to)))
             case .quadCurve:
                 guard let lastPoint = state.pathElements.last?.to else {
-                    state.pathElements.append(.line(to: to))
+                    state.pathElements.append(PathElement(index: index, type: .line(to: to)))
                     return .none
                 }
                 let control = state.pathElements.initialQuadCurveControl(to: to)
-                state.pathElements.append(.quadCurve(to: to, control: control))
+                state.pathElements.append(PathElement(index: index, type: .quadCurve(to: to, control: control)))
             case .curve:
                 guard let lastPoint = state.pathElements.last?.to else {
-                    state.pathElements.append(.line(to: to))
+                    state.pathElements.append(PathElement(index: index, type: .line(to: to)))
                     return .none
                 }
                 let (control1, control2) = state.pathElements.initialCurveControls(to: to)
-                state.pathElements.append(.curve(to: to, control1: control1, control2: control2))
+                state.pathElements.append(PathElement(
+                    index: index,
+                    type: .curve(to: to, control1: control1, control2: control2)
+                ))
             }
             return .none
         } else {
-            state.pathElements[state.pathElements.count - 1].update(guide: PathElement.Guide(type: .to, position: to))
+            let lastElementID = state.pathElements[state.pathElements.count - 1].id
+            state.pathElements[id: lastElementID]?.update(guide: PathElement.Guide(type: .to, position: to))
             return .none
         }
     case .endMove:
         state.isAdding = false
         return .none
-    case let .updatePathElement(offset, guide):
+    case let .updatePathElement(id, guide):
         let newGuidePosition = inBoundsPoint(guide.position.applyZoomLevel(1/state.zoomLevel))
-        state.pathElements[offset].update(guide: PathElement.Guide(type: guide.type, position: newGuidePosition))
+        state.pathElements[id: id]?.update(guide: PathElement.Guide(type: .to, position: newGuidePosition))
         return .none
-    case let .removePathElement(at: offset):
-        state.pathElements.remove(at: offset)
+    case let .removePathElement(id):
+        state.pathElements.remove(id: id)
         return .none
     case let .selectPathTool(pathTool):
         state.selectedPathTool = pathTool

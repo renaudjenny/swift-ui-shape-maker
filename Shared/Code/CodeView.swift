@@ -1,9 +1,10 @@
 import SwiftUI
 import ComposableArchitecture
+import IdentifiedCollections
 
 struct CodeView: View {
     let store: Store<AppState, AppAction>
-    @Binding var hoveredOffsets: Set<Int>
+    @Binding var hoveredIDs: Set<PathElement.ID>
     @Binding var isInEditionMode: Bool
 
     var body: some View {
@@ -20,38 +21,8 @@ struct CodeView: View {
                         HStack {
                             VStack(alignment: .leading, spacing: 0) {
                                 Text(codeHeader.codeFormatted).opacity(0.8)
-                                ForEach(Array(viewStore.drawing.pathElements.enumerated()), id: \.offset) { offset, element in
-                                    HStack {
-                                        Text(element.code.codeFormatted(extraIndentation: 2))
-                                            .opacity(hoveredOffsets.contains(offset) ? 1 : 0.8)
-                                        if hoveredOffsets.contains(offset) {
-                                            Button("Remove", role: .destructive) {
-                                                viewStore.send(.drawing(.removePathElement(at: offset)))
-                                            }
-                                            .padding(.horizontal)
-                                        }
-                                    }
-                                    .background {
-                                        if hoveredOffsets.contains(offset) {
-                                            RoundedRectangle(cornerRadius: 8)
-                                                .fill(Color.white)
-                                                .shadow(color: .black, radius: 4)
-                                        } else {
-                                            RoundedRectangle(cornerRadius: 8)
-                                                .fill(Color.white)
-                                                .padding()
-                                        }
-                                    }
-                                    .contentShape(Rectangle())
-                                    .onHover { isHovered in
-                                        withAnimation(.easeInOut) {
-                                            if isHovered {
-                                                hoveredOffsets.insert(offset)
-                                            } else {
-                                                hoveredOffsets.remove(offset)
-                                            }
-                                        }
-                                    }
+                                ForEach(viewStore.drawing.pathElements) { element in
+                                    pathElementCode(element, viewStore: viewStore)
                                 }
                                 Text(codeFooter).opacity(0.8)
                             }
@@ -67,6 +38,41 @@ struct CodeView: View {
                 }
             }.onTapGesture {
                 isInEditionMode = true
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func pathElementCode(_ element: PathElement, viewStore: ViewStore<AppState, AppAction>) -> some View {
+        HStack {
+            Text(element.code.codeFormatted(extraIndentation: 2))
+                .opacity(hoveredIDs.contains(element.id) ? 1 : 0.8)
+            if hoveredIDs.contains(element.id) {
+                Button("Remove", role: .destructive) {
+                    viewStore.send(.drawing(.removePathElement(id: element.id)))
+                }
+                .padding(.horizontal)
+            }
+        }
+        .background {
+            if hoveredIDs.contains(element.id) {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.white)
+                    .shadow(color: .black, radius: 4)
+            } else {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.white)
+                    .padding()
+            }
+        }
+        .contentShape(Rectangle())
+        .onHover { isHovered in
+            withAnimation(.easeInOut) {
+                if isHovered {
+                    hoveredIDs.insert(element.id)
+                } else {
+                    hoveredIDs.remove(element.id)
+                }
             }
         }
     }
