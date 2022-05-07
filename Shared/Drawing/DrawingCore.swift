@@ -57,7 +57,8 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement> {
         state.isAdding = false
         return .none
     case let .updatePathElement(offset, guide):
-        state.pathElements[offset].update(guide: guide)
+        let newGuidePosition = inBoundsPoint(guide.position.applyZoomLevel(1/state.zoomLevel))
+        state.pathElements[offset].update(guide: PathElement.Guide(type: guide.type, position: newGuidePosition))
         return .none
     case let .removePathElement(at: offset):
         state.pathElements.remove(at: offset)

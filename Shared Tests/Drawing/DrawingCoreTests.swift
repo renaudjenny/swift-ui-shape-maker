@@ -328,6 +328,42 @@ final class DrawingCoreTests: XCTestCase {
         }
     }
 
+    func testUpdateGuide() throws {
+        let store = TestStore(initialState: .test, reducer: drawingReducer, environment: DrawingEnvironement())
+
+        let newPoint = CGPoint(x: 345, y: 345)
+        store.send(.updatePathElement(at: 1, PathElement.Guide(type: .to, position: newPoint))) { state in
+            state.pathElements[1] = .line(to: newPoint)
+        }
+    }
+
+    func testUpdateGuideWhenZoomLevelChanged() throws {
+        let store = TestStore(initialState: .test, reducer: drawingReducer, environment: DrawingEnvironement())
+
+        let zoomLevel: Double = 90/100
+        store.send(.zoomLevelChanged(zoomLevel)) { state in
+            state.zoomLevel = zoomLevel
+        }
+        let newPoint = CGPoint(x: 345, y: 345)
+        store.send(.updatePathElement(at: 1, PathElement.Guide(type: .to, position: newPoint))) { state in
+            state.pathElements[1] = .line(to: newPoint.applyZoomLevel(1/zoomLevel))
+        }
+    }
+
+    func testUpdateGuideWhenZoomLevelChangedAndPositionOutsidePanel() throws {
+        let store = TestStore(initialState: .test, reducer: drawingReducer, environment: DrawingEnvironement())
+
+        let zoomLevel: Double = 90/100
+        store.send(.zoomLevelChanged(zoomLevel)) { state in
+            state.zoomLevel = zoomLevel
+        }
+        let newPoint = CGPoint(x: 100, y: DrawingPanel.standardWidth + 10)
+        store.send(.updatePathElement(at: 1, PathElement.Guide(type: .to, position: newPoint))) { state in
+            let newPoint = CGPoint(x: 100 * 1/zoomLevel, y: DrawingPanel.standardWidth)
+            state.pathElements[1] = .line(to: newPoint)
+        }
+    }
+
     func testRemovePathElement() {
         let store = TestStore(initialState: .test, reducer: drawingReducer, environment: DrawingEnvironement())
 
