@@ -3,10 +3,8 @@ import ComposableArchitecture
 
 struct DrawingPanel: View {
     let store: Store<AppState, AppAction>
-    @State private var isAdding = false
     @State private var draggingID: PathElement.ID?
     @Binding var hoveredIDs: Set<PathElement.ID>
-    let selectedPathTool: PathTool
 
     static let standardWidth: CGFloat = 1000
 

@@ -10,7 +10,6 @@ struct ContentView: View {
     let store: Store<AppState, AppAction>
     @State private var image: Image?
     @State private var imageOpacity = 1.0
-    @State private var selectedPathTool: PathTool = .line
     @State private var isCodeInEditionMode = false
     @State private var hoveredIDs = Set<PathElement.ID>()
     @State private var lastZoomGestureDelta: CGFloat?
@@ -19,7 +18,6 @@ struct ContentView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            let zoomLevel = viewStore.drawing.zoomLevel
             VStack {
                 VStack {
                     HStack {
@@ -28,7 +26,10 @@ struct ContentView: View {
                         zoom(viewStore: viewStore)
                     }
                     HStack {
-                        Picker("Tool", selection: $selectedPathTool) {
+                        Picker("Tool", selection: viewStore.binding(
+                            get: \.drawing.selectedPathTool,
+                            send: { .drawing(.selectPathTool($0)) }
+                        )) {
                             Text("Move").tag(PathTool.move)
                             Text("Line").tag(PathTool.line)
                             Text("Quad curve").tag(PathTool.quadCurve)
@@ -45,63 +46,7 @@ struct ContentView: View {
                 }
                 .padding()
                 HStack {
-                    ScrollView([.horizontal, .vertical]) {
-                        ZStack {
-                            DrawingPanel(
-                                store: store,
-                                hoveredIDs: $hoveredIDs,
-                                selectedPathTool: selectedPathTool
-                            )
-
-                            image?
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .opacity(imageOpacity)
-                                .allowsHitTesting(false)
-                        }
-                        .onDrop(of: [.fileURL], isTargeted: $isDrawingPanelTargetedForImageDrop) { items in
-                            _ = items.first?.loadObject(ofClass: URL.self, completionHandler: { url, error in
-                                guard error == nil, let url = url else { return }
-                                image = Image(nsImage: NSImage(byReferencing: url))
-                            })
-                            return image != nil
-                        }
-                        .frame(
-                            width: DrawingPanel.standardWidth * zoomLevel,
-                            height: DrawingPanel.standardWidth * zoomLevel
-                        )
-                        .padding(.horizontal, 64)
-                        .padding(.vertical, 32)
-                    }
-                    .onHover { isHovered in
-                        if isHovered {
-                            isCodeInEditionMode = false
-                        }
-                    }
-                    .highPriorityGesture(MagnificationGesture()
-                        .onChanged { scale in
-                            let delta = scale - (lastZoomGestureDelta ?? 1)
-                            clampZoomLevel(viewStore, add: delta)
-                            lastZoomGestureDelta = scale
-                        }
-                        .onEnded { _ in
-                            lastZoomGestureDelta = nil
-                        }
-                    )
-                    .task {
-                        #if os(macOS)
-                        NSApp.publisher(for: \.currentEvent)
-                            .filter {
-                                $0?.type == .scrollWheel
-                                && ($0?.modifierFlags.contains(.command) ?? false)
-                            }
-                            .compactMap { $0 }
-                            .sink {
-                                clampZoomLevel(viewStore, add: $0.deltaY/100)
-                            }
-                            .store(in: &cancellables)
-                        #endif
-                    }
+                    drawingZone(viewStore: viewStore)
 
                     CodeView(
                         store: store,
@@ -110,6 +55,63 @@ struct ContentView: View {
                     )
                 }
             }
+        }
+    }
+
+    private func drawingZone(viewStore: ViewStore<AppState, AppAction>) -> some View {
+        ScrollView([.horizontal, .vertical]) {
+            ZStack {
+                DrawingPanel(store: store, hoveredIDs: $hoveredIDs)
+
+                image?
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .opacity(imageOpacity)
+                    .allowsHitTesting(false)
+            }
+            .onDrop(of: [.fileURL], isTargeted: $isDrawingPanelTargetedForImageDrop) { items in
+                _ = items.first?.loadObject(ofClass: URL.self, completionHandler: { url, error in
+                    guard error == nil, let url = url else { return }
+                    image = Image(nsImage: NSImage(byReferencing: url))
+                })
+                return image != nil
+            }
+            .frame(
+                width: DrawingPanel.standardWidth * viewStore.drawing.zoomLevel,
+                height: DrawingPanel.standardWidth * viewStore.drawing.zoomLevel
+            )
+            .padding(.horizontal, 64)
+            .padding(.vertical, 32)
+        }
+        .onHover { isHovered in
+            if isHovered {
+                isCodeInEditionMode = false
+            }
+        }
+        .highPriorityGesture(MagnificationGesture()
+            .onChanged { scale in
+                let delta = scale - (lastZoomGestureDelta ?? 1)
+                clampZoomLevel(viewStore, add: delta)
+                lastZoomGestureDelta = scale
+            }
+            .onEnded { _ in
+                lastZoomGestureDelta = nil
+            }
+        )
+        .task {
+            #if os(macOS)
+            NSApp.publisher(for: \.currentEvent)
+                .subscribe(on: DispatchQueue.main)
+                .filter {
+                    $0?.type == .scrollWheel
+                    && ($0?.modifierFlags.contains(.command) ?? false)
+                }
+                .compactMap { $0 }
+                .sink {
+                    clampZoomLevel(viewStore, add: $0.deltaY/100)
+                }
+                .store(in: &cancellables)
+            #endif
         }
     }
 

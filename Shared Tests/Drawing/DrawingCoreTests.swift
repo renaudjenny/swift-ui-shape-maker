@@ -206,6 +206,31 @@ final class DrawingCoreTests: XCTestCase {
         }
     }
 
+    func testUpdateQuadCurveControlGuide() throws {
+        let store = TestStore(initialState: .test, reducer: drawingReducer, environment: DrawingEnvironement())
+        let pathElements = DrawingState.test.pathElements
+
+        store.send(.selectPathTool(.quadCurve)) { state in
+            state.selectedPathTool = .quadCurve
+        }
+        let quadCurvePoint = CGPoint(x: 345, y: 345)
+        let quadCurveControl = pathElements.initialQuadCurveControl(to: quadCurvePoint)
+        let quadCurve = PathElement(index: 2, type: .quadCurve(to: quadCurvePoint, control: quadCurveControl))
+        store.send(.movePathElement(to: CGPoint(x: 345, y: 345))) { state in
+            state.pathElements.append(quadCurve)
+            state.isAdding = true
+        }
+        store.send(.endMove) { state in
+            state.isAdding = false
+        }
+
+        let newControl = CGPoint(x: 300, y: 300)
+        let newGuide = PathElement.Guide(type: .quadCurveControl, position: newControl)
+        store.send(.updatePathElement(id: 2, newGuide)) { state in
+            state.pathElements[id: 2] = PathElement(index: 2, type: .quadCurve(to: quadCurvePoint, control: newControl))
+        }
+    }
+
     func testRemovePathElement() {
         let store = TestStore(initialState: .test, reducer: drawingReducer, environment: DrawingEnvironement())
         let id = DrawingState.test.pathElements[1].id
