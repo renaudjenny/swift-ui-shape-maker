@@ -151,7 +151,7 @@ struct ContentView_Previews: PreviewProvider {
         ContentView(store: Store(
             initialState: AppState(),
             reducer: appReducer,
-            environment: AppEnvironment()
+            environment: AppEnvironment(uuid: UUID.init)
         ))
     }
 }

@@ -12,7 +12,9 @@ enum AppAction: Equatable {
     case code(CodeAction)
 }
 
-struct AppEnvironment {}
+struct AppEnvironment {
+    var uuid: () -> UUID
+}
 
 let appReducer = Reducer<AppState, AppAction, AppEnvironment>
     .combine(
@@ -24,6 +26,5 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>
         drawingReducer.pullback(
             state: \.drawing,
             action: /AppAction.drawing,
-            environment: { _ in DrawingEnvironement() }
-        )
+            environment: { DrawingEnvironement(uuid: $0.uuid) })
     )

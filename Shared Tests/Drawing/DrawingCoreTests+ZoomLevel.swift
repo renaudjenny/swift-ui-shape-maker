@@ -3,7 +3,7 @@ import ComposableArchitecture
 
 extension DrawingCoreTests {
     func testAddFirstElementsWhenZoomLevelChanged() throws {
-        let store = TestStore(initialState: DrawingState(), reducer: drawingReducer, environment: DrawingEnvironement())
+        let store = TestStore(initialState: DrawingState(), reducer: drawingReducer, environment: .test)
 
         var pathElements: [PathElement] = []
 
@@ -16,7 +16,10 @@ extension DrawingCoreTests {
         }
 
         let lineToMovePoint = CGPoint(x: 123, y: 123)
-        let lineToMove = PathElement(index: 0, type: .move(to: lineToMovePoint.applyZoomLevel(1/zoomLevel)))
+        let lineToMove = PathElement(
+            id: .incrementation(0),
+            type: .move(to: lineToMovePoint.applyZoomLevel(1/zoomLevel))
+        )
         store.send(.movePathElement(to: lineToMovePoint)) { state in
             // It's not a line that is added firstly, it's always a "move" element
             state.pathElements = [lineToMove]
@@ -28,7 +31,7 @@ extension DrawingCoreTests {
         pathElements += [lineToMove]
 
         let linePoint = CGPoint(x: 234, y: 234)
-        let line = PathElement(index: 1, type: .line(to: linePoint.applyZoomLevel(1/zoomLevel)))
+        let line = PathElement(id: .incrementation(1), type: .line(to: linePoint.applyZoomLevel(1/zoomLevel)))
         store.send(.movePathElement(to: linePoint)) { state in
             state.pathElements.append(line)
             state.isAdding = true
@@ -42,7 +45,7 @@ extension DrawingCoreTests {
             state.selectedPathTool = .move
         }
         let movePoint = CGPoint(x: 235, y: 235)
-        let move = PathElement(index: 2, type: .move(to: movePoint.applyZoomLevel(1/zoomLevel)))
+        let move = PathElement(id: .incrementation(2), type: .move(to: movePoint.applyZoomLevel(1/zoomLevel)))
         store.send(.movePathElement(to: movePoint)) { state in
             state.pathElements.append(move)
             state.isAdding = true
@@ -50,8 +53,9 @@ extension DrawingCoreTests {
     }
 
     func testAddQuadCurveWhenZoomChanged() throws {
-        let store = TestStore(initialState: .test, reducer: drawingReducer, environment: DrawingEnvironement())
-        let pathElements = DrawingState.test.pathElements
+        let environment = DrawingEnvironement.test
+        let initialState = DrawingState.test(environment: environment)
+        let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
 
         let zoomLevel: Double = 90/100
         store.send(.zoomLevelChanged(zoomLevel)) { state in
@@ -63,10 +67,12 @@ extension DrawingCoreTests {
         }
         let quadCurvePoint = CGPoint(x: 345, y: 345)
         let quadCurve = PathElement(
-            index: 2,
+            id: .incrementation(2),
             type: .quadCurve(
                 to: quadCurvePoint.applyZoomLevel(1/zoomLevel),
-                control: pathElements.initialQuadCurveControl(to: quadCurvePoint.applyZoomLevel(1/zoomLevel))
+                control: initialState.pathElements.initialQuadCurveControl(
+                    to: quadCurvePoint.applyZoomLevel(1/zoomLevel)
+                )
             )
         )
         store.send(.movePathElement(to: quadCurvePoint)) { state in
@@ -80,8 +86,9 @@ extension DrawingCoreTests {
     }
 
     func testAddCurveWhenZoomChanged() throws {
-        let store = TestStore(initialState: .test, reducer: drawingReducer, environment: DrawingEnvironement())
-        let pathElements = DrawingState.test.pathElements
+        let environment = DrawingEnvironement.test
+        let initialState = DrawingState.test(environment: environment)
+        let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
 
         let zoomLevel: Double = 90/100
         store.send(.zoomLevelChanged(zoomLevel)) { state in
@@ -92,9 +99,9 @@ extension DrawingCoreTests {
             state.selectedPathTool = .curve
         }
         let curvePoint = CGPoint(x: 345, y: 345)
-        let curveControls = pathElements.initialCurveControls(to: curvePoint.applyZoomLevel(1/zoomLevel))
+        let curveControls = initialState.pathElements.initialCurveControls(to: curvePoint.applyZoomLevel(1/zoomLevel))
         let curve = PathElement(
-            index: 2,
+            id: .incrementation(2),
             type: .curve(
                 to: curvePoint.applyZoomLevel(1/zoomLevel),
                 control1: curveControls.0,
@@ -112,7 +119,9 @@ extension DrawingCoreTests {
     }
 
     func testAddElementWhenOutsideOfThePanelAndZoomLevelChanged() throws {
-        let store = TestStore(initialState: .test, reducer: drawingReducer, environment: DrawingEnvironement())
+        let environment = DrawingEnvironement.test
+        let initialState = DrawingState.test(environment: environment)
+        let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
 
         let zoomLevel: Double = 90/100
         store.send(.zoomLevelChanged(zoomLevel)) { state in
@@ -123,7 +132,7 @@ extension DrawingCoreTests {
         }
         let outsidePoint = CGPoint(x: DrawingPanel.standardWidth + 10, y: DrawingPanel.standardWidth + 10)
         let line = PathElement(
-            index: 2,
+            id: .incrementation(2),
             type: .line(to: CGPoint(x: DrawingPanel.standardWidth, y: DrawingPanel.standardWidth))
         )
         store.send(.movePathElement(to: outsidePoint)) { state in
@@ -136,7 +145,7 @@ extension DrawingCoreTests {
 
         let otherPoint = CGPoint(x: 125, y: DrawingPanel.standardWidth + 10)
         let otherLine = PathElement(
-            index: 3,
+            id: .incrementation(3),
             type: .line(to: CGPoint(x: 125 * 1/zoomLevel, y: DrawingPanel.standardWidth))
         )
         store.send(.movePathElement(to: otherPoint)) { state in
@@ -146,7 +155,9 @@ extension DrawingCoreTests {
     }
 
     func testMoveLineWhenZoomLevelChanged() throws {
-        let store = TestStore(initialState: .test, reducer: drawingReducer, environment: DrawingEnvironement())
+        let environment = DrawingEnvironement.test
+        let initialState = DrawingState.test(environment: environment)
+        let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
 
         let zoomLevel: Double = 90/100
         store.send(.zoomLevelChanged(zoomLevel)) { state in
@@ -157,7 +168,7 @@ extension DrawingCoreTests {
         }
         let initialPoint = CGPoint(x: 123, y: 123)
         let line = PathElement(
-            index: 2,
+            id: .incrementation(2),
             type: .line(to: initialPoint.applyZoomLevel(1/zoomLevel))
         )
         store.send(.movePathElement(to: initialPoint)) { state in
@@ -166,7 +177,7 @@ extension DrawingCoreTests {
         }
         let nextPoint = CGPoint(x: 234, y: 234)
         let movedLine = PathElement(
-            index: 2,
+            id: .incrementation(2),
             type: .line(to: nextPoint.applyZoomLevel(1/zoomLevel))
         )
         store.send(.movePathElement(to: nextPoint)) { state in
@@ -175,34 +186,36 @@ extension DrawingCoreTests {
     }
 
     func testUpdateGuideWhenZoomLevelChanged() throws {
-        let store = TestStore(initialState: .test, reducer: drawingReducer, environment: DrawingEnvironement())
-        let pathElements = DrawingState.test.pathElements
+        let environment = DrawingEnvironement.test
+        let initialState = DrawingState.test(environment: environment)
+        let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
 
         let zoomLevel: Double = 90/100
         store.send(.zoomLevelChanged(zoomLevel)) { state in
             state.zoomLevel = zoomLevel
         }
         let newPoint = CGPoint(x: 345, y: 345)
-        let lineElementID = pathElements[1].id
-        store.send(.updatePathElement(id: lineElementID, PathElement.Guide(type: .to, position: newPoint))) { state in
-            let newPathElement = PathElement(index: 1, type: .line(to: newPoint.applyZoomLevel(1/zoomLevel)))
+        let id: UUID = .incrementation(1)
+        store.send(.updatePathElement(id: id, PathElement.Guide(type: .to, position: newPoint))) { state in
+            let newPathElement = PathElement(id: id, type: .line(to: newPoint.applyZoomLevel(1/zoomLevel)))
             state.pathElements.update(newPathElement, at: 1)
         }
     }
 
     func testUpdateGuideWhenZoomLevelChangedAndPositionOutsidePanel() throws {
-        let store = TestStore(initialState: .test, reducer: drawingReducer, environment: DrawingEnvironement())
-        let pathElements = DrawingState.test.pathElements
+        let environment = DrawingEnvironement.test
+        let initialState = DrawingState.test(environment: environment)
+        let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
 
         let zoomLevel: Double = 90/100
         store.send(.zoomLevelChanged(zoomLevel)) { state in
             state.zoomLevel = zoomLevel
         }
-        let lineElementID = pathElements[1].id
+        let id: UUID = .incrementation(1)
         let newPoint = CGPoint(x: 100, y: DrawingPanel.standardWidth + 10)
-        store.send(.updatePathElement(id: lineElementID, PathElement.Guide(type: .to, position: newPoint))) { state in
+        store.send(.updatePathElement(id: id, PathElement.Guide(type: .to, position: newPoint))) { state in
             let newPoint = CGPoint(x: 100 * 1/zoomLevel, y: DrawingPanel.standardWidth)
-            let newPathElement = PathElement(index: 1, type: .line(to: newPoint))
+            let newPathElement = PathElement(id: id, type: .line(to: newPoint))
             state.pathElements.update(newPathElement, at: 1)
         }
     }

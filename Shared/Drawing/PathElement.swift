@@ -1,7 +1,7 @@
 import SwiftUI
 import IdentifiedCollections
 
-struct PathElement: Equatable {
+struct PathElement: Equatable, Identifiable {
     enum PathElementType: Equatable {
         case move(to: CGPoint)
         case line(to: CGPoint)
@@ -9,7 +9,7 @@ struct PathElement: Equatable {
         case curve(to: CGPoint, control1: CGPoint, control2: CGPoint)
     }
 
-    let index: Int
+    private(set) var id: UUID
     private(set) var type: PathElementType
 
     var to: CGPoint {
@@ -122,10 +122,6 @@ extension PathElement {
         let type: GuideType
         let position: CGPoint
     }
-}
-
-extension PathElement: Identifiable {
-    var id: Int { index }
 }
 
 extension String {

@@ -17,39 +17,43 @@ enum DrawingAction: Equatable {
     case zoomLevelChanged(Double)
 }
 
-struct DrawingEnvironement {}
+struct DrawingEnvironement {
+    var uuid: () -> UUID
+}
 
-let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement> { state, action, _ in
+let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement> { state, action, environment in
     switch action {
     case let .movePathElement(to):
         let to = inBoundsPoint(to.applyZoomLevel(1/state.zoomLevel))
 
         if !state.isAdding {
             state.isAdding = true
-            let index = state.pathElements.count
 
             guard !state.pathElements.isEmpty else {
-                state.pathElements.append(PathElement(index: index, type: .move(to: to)))
+                state.pathElements.append(PathElement(id: environment.uuid(), type: .move(to: to)))
                 return .none
             }
             switch state.selectedPathTool {
-            case .move: state.pathElements.append(PathElement(index: index, type: .move(to: to)))
-            case .line: state.pathElements.append(PathElement(index: index, type: .line(to: to)))
+            case .move: state.pathElements.append(PathElement(id: environment.uuid(), type: .move(to: to)))
+            case .line: state.pathElements.append(PathElement(id: environment.uuid(), type: .line(to: to)))
             case .quadCurve:
                 guard let lastPoint = state.pathElements.last?.to else {
-                    state.pathElements.append(PathElement(index: index, type: .line(to: to)))
+                    state.pathElements.append(PathElement(id: environment.uuid(), type: .line(to: to)))
                     return .none
                 }
                 let control = state.pathElements.initialQuadCurveControl(to: to)
-                state.pathElements.append(PathElement(index: index, type: .quadCurve(to: to, control: control)))
+                state.pathElements.append(PathElement(
+                    id: environment.uuid(),
+                    type: .quadCurve(to: to, control: control)
+                ))
             case .curve:
                 guard let lastPoint = state.pathElements.last?.to else {
-                    state.pathElements.append(PathElement(index: index, type: .line(to: to)))
+                    state.pathElements.append(PathElement(id: environment.uuid(), type: .line(to: to)))
                     return .none
                 }
                 let (control1, control2) = state.pathElements.initialCurveControls(to: to)
                 state.pathElements.append(PathElement(
-                    index: index,
+                    id: environment.uuid(),
                     type: .curve(to: to, control1: control1, control2: control2)
                 ))
             }

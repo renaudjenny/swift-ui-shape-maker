@@ -44,7 +44,8 @@
 		4C3DA6EA28247DF500DE2E0E /* GuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA6E82824724400DE2E0E /* GuideView.swift */; };
 		4C3DA6EB28247DF500DE2E0E /* GuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA6E82824724400DE2E0E /* GuideView.swift */; };
 		4C3DA6ED2826B29E00DE2E0E /* DrawingCoreTests+ZoomLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA6EC2826B29E00DE2E0E /* DrawingCoreTests+ZoomLevel.swift */; };
-		4C3DA6EF2826B34200DE2E0E /* DrawingState+Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA6EE2826B34100DE2E0E /* DrawingState+Tests.swift */; };
+		4C3DA6EF2826B34200DE2E0E /* DrawingCore+Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA6EE2826B34100DE2E0E /* DrawingCore+Tests.swift */; };
+		4C3DA6F228284C9700DE2E0E /* UUID+Incrementing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA6F128284C9700DE2E0E /* UUID+Incrementing.swift */; };
 		4C7BC15C28073F0A001942AE /* TestsiOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC15B28073F0A001942AE /* TestsiOS.swift */; };
 		4C7BC15E28073F0A001942AE /* TestsiOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC15D28073F0A001942AE /* TestsiOSLaunchTests.swift */; };
 		4C7BC16828073F0A001942AE /* TestsMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC16728073F0A001942AE /* TestsMacOS.swift */; };
@@ -97,7 +98,8 @@
 		4C3DA6E128201E4600DE2E0E /* DrawingCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingCoreTests.swift; sourceTree = "<group>"; };
 		4C3DA6E82824724400DE2E0E /* GuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideView.swift; sourceTree = "<group>"; };
 		4C3DA6EC2826B29E00DE2E0E /* DrawingCoreTests+ZoomLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DrawingCoreTests+ZoomLevel.swift"; sourceTree = "<group>"; };
-		4C3DA6EE2826B34100DE2E0E /* DrawingState+Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DrawingState+Tests.swift"; sourceTree = "<group>"; };
+		4C3DA6EE2826B34100DE2E0E /* DrawingCore+Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DrawingCore+Tests.swift"; sourceTree = "<group>"; };
+		4C3DA6F128284C9700DE2E0E /* UUID+Incrementing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UUID+Incrementing.swift"; sourceTree = "<group>"; };
 		4C7BC14328073F0A001942AE /* SwiftUIShapeMakerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIShapeMakerApp.swift; sourceTree = "<group>"; };
 		4C7BC14428073F0A001942AE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		4C7BC14528073F0A001942AE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 		4C3DA6CF2820018B00DE2E0E /* Shared Tests */ = {
 			isa = PBXGroup;
 			children = (
+				4C3DA6F028284C8A00DE2E0E /* Extensions */,
 				4C3DA6E028201E3400DE2E0E /* Drawing */,
 				4C3DA6D7282001C900DE2E0E /* Configuration */,
 			);
@@ -223,9 +226,17 @@
 			children = (
 				4C3DA6E128201E4600DE2E0E /* DrawingCoreTests.swift */,
 				4C3DA6EC2826B29E00DE2E0E /* DrawingCoreTests+ZoomLevel.swift */,
-				4C3DA6EE2826B34100DE2E0E /* DrawingState+Tests.swift */,
+				4C3DA6EE2826B34100DE2E0E /* DrawingCore+Tests.swift */,
 			);
 			path = Drawing;
+			sourceTree = "<group>";
+		};
+		4C3DA6F028284C8A00DE2E0E /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				4C3DA6F128284C9700DE2E0E /* UUID+Incrementing.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		4C7BC13D28073F0A001942AE = {
@@ -532,8 +543,9 @@
 				4C3DA6E628201F3400DE2E0E /* CircleElementView.swift in Sources */,
 				4C3DA6E428201F2200DE2E0E /* DrawingPanel.swift in Sources */,
 				4C3DA6E92824724400DE2E0E /* GuideView.swift in Sources */,
-				4C3DA6EF2826B34200DE2E0E /* DrawingState+Tests.swift in Sources */,
+				4C3DA6EF2826B34200DE2E0E /* DrawingCore+Tests.swift in Sources */,
 				4C3DA6DF2820039B00DE2E0E /* DrawingCore.swift in Sources */,
+				4C3DA6F228284C9700DE2E0E /* UUID+Incrementing.swift in Sources */,
 				4C3DA6DA2820037900DE2E0E /* AppCore.swift in Sources */,
 				4C3DA6E728201F3D00DE2E0E /* SquareElementView.swift in Sources */,
 				4C3DA6DB2820038000DE2E0E /* CodeCore.swift in Sources */,
