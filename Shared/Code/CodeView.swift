@@ -3,8 +3,7 @@ import ComposableArchitecture
 import IdentifiedCollections
 
 struct CodeView: View {
-    let store: Store<AppState, AppAction>
-    @Binding var hoveredIDs: Set<PathElement.ID>
+    let store: Store<DrawingState, DrawingAction>
     @Binding var isInEditionMode: Bool
 
     var body: some View {
@@ -21,7 +20,7 @@ struct CodeView: View {
                         HStack {
                             VStack(alignment: .leading, spacing: 0) {
                                 Text(codeHeader.codeFormatted).opacity(0.8)
-                                ForEach(viewStore.drawing.pathElements) { element in
+                                ForEach(viewStore.pathElements) { element in
                                     pathElementCode(element, viewStore: viewStore)
                                 }
                                 Text(codeFooter).opacity(0.8)
@@ -43,19 +42,22 @@ struct CodeView: View {
     }
 
     @ViewBuilder
-    private func pathElementCode(_ element: PathElement, viewStore: ViewStore<AppState, AppAction>) -> some View {
+    private func pathElementCode(
+        _ element: PathElement,
+        viewStore: ViewStore<DrawingState, DrawingAction>
+    ) -> some View {
         HStack {
             Text(element.code.codeFormatted(extraIndentation: 2))
-                .opacity(hoveredIDs.contains(element.id) ? 1 : 0.8)
-            if hoveredIDs.contains(element.id) {
+                .opacity(viewStore.hoveredPathElementID == element.id ? 1 : 0.8)
+            if viewStore.hoveredPathElementID == element.id {
                 Button("Remove", role: .destructive) {
-                    viewStore.send(.drawing(.removePathElement(id: element.id)))
+                    viewStore.send(.removePathElement(id: element.id))
                 }
                 .padding(.horizontal)
             }
         }
         .background {
-            if hoveredIDs.contains(element.id) {
+            if viewStore.hoveredPathElementID == element.id {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(Color.white)
                     .shadow(color: .black, radius: 4)
@@ -69,19 +71,19 @@ struct CodeView: View {
         .onHover { isHovered in
             withAnimation(.easeInOut) {
                 if isHovered {
-                    hoveredIDs.insert(element.id)
+                    viewStore.send(.updateHoveredPathElement(id: element.id))
                 } else {
-                    hoveredIDs.remove(element.id)
+                    viewStore.send(.updateHoveredPathElement(id: nil))
                 }
             }
         }
     }
 
-    private func code(viewStore: ViewStore<AppState, AppAction>) -> Binding<String> {
+    private func code(viewStore: ViewStore<DrawingState, DrawingAction>) -> Binding<String> {
         Binding<String>(
             get: { [
                 codeHeader,
-                viewStore.drawing.pathElements.map(\.code).joined(separator: "\n"),
+                viewStore.pathElements.map(\.code).joined(separator: "\n"),
                 codeFooter,
             ].joined(separator: "\n").codeFormatted },
             set: { _, _ in }

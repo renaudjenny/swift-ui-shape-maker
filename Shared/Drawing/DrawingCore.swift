@@ -3,6 +3,7 @@ import IdentifiedCollections
 
 struct DrawingState: Equatable {
     var pathElements: IdentifiedArrayOf<PathElement> = []
+    var hoveredPathElementID: PathElement.ID?
     var isAdding = false
     var zoomLevel: Double = 1
     var selectedPathTool = PathTool.line
@@ -15,6 +16,7 @@ enum DrawingAction: Equatable {
     case removePathElement(id: PathElement.ID)
     case selectPathTool(PathTool)
     case zoomLevelChanged(Double)
+    case updateHoveredPathElement(id: PathElement.ID?)
 }
 
 struct DrawingEnvironement {
@@ -61,10 +63,11 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement> {
         } else {
             let lastElementID = state.pathElements[state.pathElements.count - 1].id
             state.pathElements[id: lastElementID]?.update(guide: PathElement.Guide(type: .to, position: to))
-            return .none
+            return Effect(value: .updateHoveredPathElement(id: lastElementID))
         }
     case .endMove:
         state.isAdding = false
+        state.hoveredPathElementID = nil
         return .none
     case let .updatePathElement(id, guide):
         let newGuidePosition = inBoundsPoint(guide.position.applyZoomLevel(1/state.zoomLevel))
@@ -78,6 +81,9 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement> {
         return .none
     case let .zoomLevelChanged(zoomLevel):
         state.zoomLevel = zoomLevel
+        return .none
+    case let .updateHoveredPathElement(id):
+        state.hoveredPathElementID = id
         return .none
     }
 }

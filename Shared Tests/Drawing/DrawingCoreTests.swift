@@ -147,6 +147,9 @@ final class DrawingCoreTests: XCTestCase {
         store.send(.movePathElement(to: nextPoint)) { state in
             state.pathElements.update(movedLine, at: 2)
         }
+        store.receive(.updateHoveredPathElement(id: .incrementation(2))) { state in
+            state.hoveredPathElementID = .incrementation(2)
+        }
     }
 
     func testMoveLineOutsideOfThePanel() throws {
@@ -173,6 +176,9 @@ final class DrawingCoreTests: XCTestCase {
         )
         store.send(.movePathElement(to: nextPoint)) { state in
             state.pathElements.update(movedLine, at: 2)
+        }
+        store.receive(.updateHoveredPathElement(id: .incrementation(2))) { state in
+            state.hoveredPathElementID = .incrementation(2)
         }
     }
 
@@ -204,6 +210,9 @@ final class DrawingCoreTests: XCTestCase {
         )
         store.send(.movePathElement(to: nextPoint)) { state in
             state.pathElements.update(movedLine, at: 2)
+        }
+        store.receive(.updateHoveredPathElement(id: .incrementation(2))) { state in
+            state.hoveredPathElementID = .incrementation(2)
         }
     }
 
@@ -257,6 +266,16 @@ final class DrawingCoreTests: XCTestCase {
 
         store.send(.removePathElement(id: id)) { state in
             state.pathElements.remove(id: id)
+        }
+    }
+
+    func testUpdateHoveredPathElement() {
+        let environment = DrawingEnvironement.test
+        let initialState = DrawingState.test(environment: environment)
+        let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
+
+        store.send(.updateHoveredPathElement(id: .incrementation(1))) { state in
+            state.hoveredPathElementID = .incrementation(1)
         }
     }
 }

@@ -11,7 +11,6 @@ struct ContentView: View {
     @State private var image: Image?
     @State private var imageOpacity = 1.0
     @State private var isCodeInEditionMode = false
-    @State private var hoveredIDs = Set<PathElement.ID>()
     @State private var lastZoomGestureDelta: CGFloat?
     @State private var isDrawingPanelTargetedForImageDrop = false
     @State private var cancellables = Set<AnyCancellable>()
@@ -49,8 +48,7 @@ struct ContentView: View {
                     drawingZone(viewStore: viewStore)
 
                     CodeView(
-                        store: store,
-                        hoveredIDs: $hoveredIDs,
+                        store: store.scope(state: \.drawing, action: AppAction.drawing),
                         isInEditionMode: $isCodeInEditionMode
                     )
                 }
@@ -61,7 +59,7 @@ struct ContentView: View {
     private func drawingZone(viewStore: ViewStore<AppState, AppAction>) -> some View {
         ScrollView([.horizontal, .vertical]) {
             ZStack {
-                DrawingPanel(store: store, hoveredIDs: $hoveredIDs)
+                DrawingPanel(store: store)
 
                 image?
                     .resizable()

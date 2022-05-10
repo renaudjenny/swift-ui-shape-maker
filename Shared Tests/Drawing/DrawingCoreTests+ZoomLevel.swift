@@ -183,6 +183,9 @@ extension DrawingCoreTests {
         store.send(.movePathElement(to: nextPoint)) { state in
             state.pathElements.update(movedLine, at: 2)
         }
+        store.receive(.updateHoveredPathElement(id: .incrementation(2))) { state in
+            state.hoveredPathElementID = .incrementation(2)
+        }
     }
 
     func testUpdateGuideWhenZoomLevelChanged() throws {

@@ -4,7 +4,6 @@ import ComposableArchitecture
 struct DrawingPanel: View {
     let store: Store<AppState, AppAction>
     @State private var draggingID: PathElement.ID?
-    @Binding var hoveredIDs: Set<PathElement.ID>
 
     static let standardWidth: CGFloat = 1000
 
@@ -36,7 +35,7 @@ struct DrawingPanel: View {
         ForEach(viewStore.drawing.pathElements) { element in
             switch element.type {
             case let .move(to), let .line(to):
-                moveAndLineGuide(to: to, id: element.id)
+                moveAndLineGuide(to: to, id: element.id, viewStore: viewStore)
             case let .quadCurve(to, control):
                 quadCurveGuides(to: to, control: control, id: element.id, viewStore: viewStore)
             case let .curve(to, control1, control2):
@@ -45,13 +44,17 @@ struct DrawingPanel: View {
         }
     }
 
-    private func moveAndLineGuide(to: CGPoint, id: PathElement.ID) -> some View {
+    private func moveAndLineGuide(
+        to: CGPoint,
+        id: PathElement.ID,
+        viewStore: ViewStore<AppState, AppAction>
+    ) -> some View {
         GuideView(
             store: store.scope(state: \.drawing, action: AppAction.drawing),
             type: .to,
             position: to,
             id: id,
-            isHovered: isHovered(id: id),
+            isHovered: isHovered(id: id, viewStore: viewStore),
             draggingID: $draggingID
         )
     }
@@ -71,7 +74,7 @@ struct DrawingPanel: View {
                 type: .to,
                 position: to,
                 id: id,
-                isHovered: isHovered(id: id),
+                isHovered: isHovered(id: id, viewStore: viewStore),
                 draggingID: $draggingID
             )
             GuideView(
@@ -79,7 +82,7 @@ struct DrawingPanel: View {
                 type: .quadCurveControl,
                 position: control,
                 id: id,
-                isHovered: isHovered(id: id),
+                isHovered: isHovered(id: id, viewStore: viewStore),
                 draggingID: $draggingID
             )
             Path { path in
@@ -106,7 +109,7 @@ struct DrawingPanel: View {
                 type: .to,
                 position: to,
                 id: id,
-                isHovered: isHovered(id: id),
+                isHovered: isHovered(id: id, viewStore: viewStore),
                 draggingID: $draggingID
             )
             GuideView(
@@ -114,7 +117,7 @@ struct DrawingPanel: View {
                 type: .curveControl1,
                 position: control1,
                 id: id,
-                isHovered: isHovered(id: id),
+                isHovered: isHovered(id: id, viewStore: viewStore),
                 draggingID: $draggingID
             )
             GuideView(
@@ -122,7 +125,7 @@ struct DrawingPanel: View {
                 type: .curveControl2,
                 position: control2,
                 id: id,
-                isHovered: isHovered(id: id),
+                isHovered: isHovered(id: id, viewStore: viewStore),
                 draggingID: $draggingID
             )
             Path { path in
@@ -134,14 +137,14 @@ struct DrawingPanel: View {
         }
     }
 
-    private func isHovered(id: PathElement.ID) -> Binding<Bool> {
+    private func isHovered(id: PathElement.ID, viewStore: ViewStore<AppState, AppAction>) -> Binding<Bool> {
         Binding<Bool>(
-            get: { hoveredIDs.contains(id) },
+            get: { viewStore.drawing.hoveredPathElementID == id },
             set: { isHovered, _ in
                 if isHovered {
-                    hoveredIDs.insert(id)
+                    viewStore.send(.drawing(.updateHoveredPathElement(id: id)))
                 } else {
-                    hoveredIDs.remove(id)
+                    viewStore.send(.drawing(.updateHoveredPathElement(id: nil)))
                 }
             }
         )
