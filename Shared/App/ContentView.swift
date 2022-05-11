@@ -8,7 +8,6 @@ import Quartz
 
 struct ContentView: View {
     let store: Store<AppState, AppAction>
-    @State private var image: Image?
     @State private var imageOpacity = 1.0
     @State private var isCodeInEditionMode = false
     @State private var lastZoomGestureDelta: CGFloat?
@@ -21,7 +20,7 @@ struct ContentView: View {
                 VStack {
                     HStack {
                         Slider(value: $imageOpacity) { Text("Image opacity") }
-                        Button("Choose an image") { openImagePicker() }
+                        Button("Choose an image") { openImagePicker(viewStore: viewStore) }
                         zoom(viewStore: viewStore)
                     }
                     HStack {
@@ -61,7 +60,7 @@ struct ContentView: View {
             ZStack {
                 DrawingPanel(store: store)
 
-                image?
+                viewStore.image?
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .opacity(imageOpacity)
@@ -69,10 +68,10 @@ struct ContentView: View {
             }
             .onDrop(of: [.fileURL], isTargeted: $isDrawingPanelTargetedForImageDrop) { items in
                 _ = items.first?.loadObject(ofClass: URL.self, completionHandler: { url, error in
-                    guard error == nil, let url = url else { return }
-                    image = Image(nsImage: NSImage(byReferencing: url))
+                    guard error == nil, let url = url, let data = try? Data(contentsOf: url) else { return }
+                    viewStore.send(.updateImageData(data))
                 })
-                return image != nil
+                return viewStore.imageData != nil
             }
             .frame(
                 width: DrawingPanel.standardWidth * viewStore.drawing.zoomLevel,
@@ -123,11 +122,11 @@ struct ContentView: View {
         }
     }
 
-    private func openImagePicker() {
+    private func openImagePicker(viewStore: ViewStore<AppState, AppAction>) {
         #if os(macOS)
         let pictureTaker = IKPictureTaker.pictureTaker()
         pictureTaker?.runModal()
-        pictureTaker?.outputImage().map { image = Image(nsImage: $0) }
+        pictureTaker?.outputImage().map { $0.tiffRepresentation.map { viewStore.send(.updateImageData($0)) } }
         #endif
     }
 
@@ -141,6 +140,14 @@ struct ContentView: View {
         default:
             viewStore.send(.drawing(.zoomLevelChanged(deltaAdded)))
         }
+    }
+}
+
+private extension AppState {
+    var image: Image? {
+        #if os(macOS)
+        imageData.flatMap { NSImage(data: $0).map { Image(nsImage: $0) } }
+        #endif
     }
 }
 
