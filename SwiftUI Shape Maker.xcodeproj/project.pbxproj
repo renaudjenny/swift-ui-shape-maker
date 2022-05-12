@@ -185,13 +185,10 @@
 		4C3DA6B3281FEC7900DE2E0E /* Drawing */ = {
 			isa = PBXGroup;
 			children = (
-				4C31F722280CBEE40048DE77 /* CircleElementView.swift */,
+				4C3DA6F6282DA21900DE2E0E /* PathElement */,
 				4C3DA6BA281FEE6500DE2E0E /* DrawingCore.swift */,
 				4C31F71F280CBE500048DE77 /* DrawingPanel.swift */,
-				4C31F71C280C27F20048DE77 /* PathElement.swift */,
 				4C31F719280C27D70048DE77 /* PathTool.swift */,
-				4C31F725280CBF120048DE77 /* SquareElementView.swift */,
-				4C3DA6E82824724400DE2E0E /* GuideView.swift */,
 			);
 			path = Drawing;
 			sourceTree = "<group>";
@@ -248,6 +245,17 @@
 				4C3DA6F4282C1EE600DE2E0E /* AppCoreTests.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		4C3DA6F6282DA21900DE2E0E /* PathElement */ = {
+			isa = PBXGroup;
+			children = (
+				4C31F722280CBEE40048DE77 /* CircleElementView.swift */,
+				4C31F71C280C27F20048DE77 /* PathElement.swift */,
+				4C31F725280CBF120048DE77 /* SquareElementView.swift */,
+				4C3DA6E82824724400DE2E0E /* GuideView.swift */,
+			);
+			path = PathElement;
 			sourceTree = "<group>";
 		};
 		4C7BC13D28073F0A001942AE = {

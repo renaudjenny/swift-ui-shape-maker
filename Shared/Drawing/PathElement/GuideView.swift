@@ -7,7 +7,6 @@ struct GuideView: View {
     let position: CGPoint
     let id: PathElement.ID
     @Binding var isHovered: Bool
-    @Binding var draggingID: PathElement.ID?
 
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -22,10 +21,6 @@ struct GuideView: View {
                                     PathElement.Guide(type: type, position: value.location)
                                 ))
                             }
-                            draggingID = id
-                        }
-                        .onEnded { _ in
-                            withAnimation { draggingID = nil }
                         }
                 )
         }
@@ -35,9 +30,9 @@ struct GuideView: View {
     var element: some View {
         switch type {
         case .to:
-            CircleElementView(isHovered: $isHovered, isDragged: draggingID == id)
+            CircleElementView(isHovered: $isHovered)
         case .quadCurveControl, .curveControl1, .curveControl2:
-            SquareElementView(isHovered: $isHovered, isDragged: draggingID == id)
+            SquareElementView(isHovered: $isHovered)
         }
     }
 }

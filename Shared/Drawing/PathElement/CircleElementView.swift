@@ -2,7 +2,6 @@ import SwiftUI
 
 struct CircleElementView: View {
     @Binding var isHovered: Bool
-    let isDragged: Bool
 
     var body: some View {
         Circle()
@@ -10,10 +9,10 @@ struct CircleElementView: View {
             .padding()
             .contentShape(Rectangle())
             .onHover { hover in
-                withAnimation(isHovered || isDragged ? nil : .easeInOut) {
+                withAnimation(isHovered ? nil : .easeInOut) {
                     isHovered = hover
                 }
             }
-            .scaleEffect(isHovered || isDragged ? 2 : 1)
+            .scaleEffect(isHovered ? 2 : 1)
     }
 }

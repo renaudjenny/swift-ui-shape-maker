@@ -54,8 +54,7 @@ struct DrawingPanel: View {
             type: .to,
             position: to,
             id: id,
-            isHovered: isHovered(id: id, viewStore: viewStore),
-            draggingID: $draggingID
+            isHovered: isHovered(id: id, viewStore: viewStore)
         )
     }
 
@@ -74,16 +73,14 @@ struct DrawingPanel: View {
                 type: .to,
                 position: to,
                 id: id,
-                isHovered: isHovered(id: id, viewStore: viewStore),
-                draggingID: $draggingID
+                isHovered: isHovered(id: id, viewStore: viewStore)
             )
             GuideView(
                 store: store.scope(state: \.drawing, action: AppAction.drawing),
                 type: .quadCurveControl,
                 position: control,
                 id: id,
-                isHovered: isHovered(id: id, viewStore: viewStore),
-                draggingID: $draggingID
+                isHovered: isHovered(id: id, viewStore: viewStore)
             )
             Path { path in
                 path.move(to: previousTo.applyZoomLevel(zoomLevel))
@@ -109,24 +106,21 @@ struct DrawingPanel: View {
                 type: .to,
                 position: to,
                 id: id,
-                isHovered: isHovered(id: id, viewStore: viewStore),
-                draggingID: $draggingID
+                isHovered: isHovered(id: id, viewStore: viewStore)
             )
             GuideView(
                 store: store.scope(state: \.drawing, action: AppAction.drawing),
                 type: .curveControl1,
                 position: control1,
                 id: id,
-                isHovered: isHovered(id: id, viewStore: viewStore),
-                draggingID: $draggingID
+                isHovered: isHovered(id: id, viewStore: viewStore)
             )
             GuideView(
                 store: store.scope(state: \.drawing, action: AppAction.drawing),
                 type: .curveControl2,
                 position: control2,
                 id: id,
-                isHovered: isHovered(id: id, viewStore: viewStore),
-                draggingID: $draggingID
+                isHovered: isHovered(id: id, viewStore: viewStore)
             )
             Path { path in
                 path.move(to: previousTo.applyZoomLevel(zoomLevel))
