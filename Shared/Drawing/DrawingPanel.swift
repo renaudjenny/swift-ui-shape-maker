@@ -32,14 +32,16 @@ struct DrawingPanel: View {
     }
 
     private func pathIndicators(viewStore: ViewStore<AppState, AppAction>) -> some View {
-        ForEach(viewStore.drawing.pathElements) { element in
-            switch element.type {
-            case let .move(to), let .line(to):
-                moveAndLineGuide(to: to, id: element.id, viewStore: viewStore)
-            case let .quadCurve(to, control):
-                quadCurveGuides(to: to, control: control, id: element.id, viewStore: viewStore)
-            case let .curve(to, control1, control2):
-                curveGuides(to: to, control1: control1, control2: control2, id: element.id, viewStore: viewStore)
+        ForEachStore(store.scope(state: \.drawing.pathElements, action: /AppAction.drawing(.pathElement))) { store in
+            WithViewStore(store) { viewStore in
+                switch viewStore.element.type {
+                case let .move(to), let .line(to):
+                    moveAndLineGuide(to: to, id: viewStore.id, viewStore: viewStore)
+                case let .quadCurve(to, control):
+                    quadCurveGuides(to: to, control: control, id: viewStore.id, viewStore: viewStore)
+                case let .curve(to, control1, control2):
+                    curveGuides(to: to, control1: control1, control2: control2, id: viewStore.id, viewStore: viewStore)
+                }
             }
         }
     }

@@ -2,11 +2,9 @@ import ComposableArchitecture
 import SwiftUI
 
 struct GuideView: View {
-    let store: Store<DrawingState, DrawingAction>
+    let store: Store<PathElementState, PathElementAction>
     let type: PathElement.GuideType
     let position: CGPoint
-    let id: PathElement.ID
-    @Binding var isHovered: Bool
 
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -16,10 +14,7 @@ struct GuideView: View {
                     DragGesture()
                         .onChanged { value in
                             withAnimation(.interactiveSpring()) {
-                                viewStore.send(.updatePathElement(
-                                    id: id,
-                                    PathElement.Guide(type: type, position: value.location)
-                                ))
+                                viewStore.send(.update(guide: PathElement.Guide(type: type, position: value.location)))
                             }
                         }
                 )
@@ -30,9 +25,9 @@ struct GuideView: View {
     var element: some View {
         switch type {
         case .to:
-            CircleElementView(isHovered: $isHovered)
+            CircleElementView(store: store)
         case .quadCurveControl, .curveControl1, .curveControl2:
-            SquareElementView(isHovered: $isHovered)
+            SquareElementView(store: store)
         }
     }
 }
