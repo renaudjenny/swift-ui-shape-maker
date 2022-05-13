@@ -20,9 +20,10 @@ struct CodeView: View {
                         HStack {
                             VStack(alignment: .leading, spacing: 0) {
                                 Text(codeHeader.codeFormatted).opacity(0.8)
-                                ForEach(viewStore.pathElements) { element in
-                                    pathElementCode(element, viewStore: viewStore)
-                                }
+                                ForEachStore(
+                                    store.scope(state: \.pathElements, action: DrawingAction.pathElement(id:action:)),
+                                    content: pathElementCode(store:)
+                                )
                                 Text(codeFooter).opacity(0.8)
                             }
                             .padding(.horizontal, 5)
@@ -42,38 +43,34 @@ struct CodeView: View {
     }
 
     @ViewBuilder
-    private func pathElementCode(
-        _ element: PathElement,
-        viewStore: ViewStore<DrawingState, DrawingAction>
-    ) -> some View {
-        HStack {
-            Text(element.code.codeFormatted(extraIndentation: 2))
-                .opacity(viewStore.hoveredPathElementID == element.id ? 1 : 0.8)
-            if viewStore.hoveredPathElementID == element.id {
-                Button("Remove", role: .destructive) {
-                    viewStore.send(.removePathElement(id: element.id))
+    private func pathElementCode(store: Store<PathElementState, PathElementAction>) -> some View {
+        WithViewStore(store) { viewStore in
+            HStack {
+                Text(viewStore.element.code.codeFormatted(extraIndentation: 2))
+                    .opacity(viewStore.isHovered ? 1 : 0.8)
+                if viewStore.isHovered {
+                    Button("Remove", role: .destructive) {
+                        // TODO: remove the element
+//                        viewStore.send(.removePathElement(id: element.id))
+                    }
+                    .padding(.horizontal)
                 }
-                .padding(.horizontal)
             }
-        }
-        .background {
-            if viewStore.hoveredPathElementID == element.id {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color.white)
-                    .shadow(color: .black, radius: 4)
-            } else {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color.white)
-                    .padding()
-            }
-        }
-        .contentShape(Rectangle())
-        .onHover { isHovered in
-            withAnimation(.easeInOut) {
-                if isHovered {
-                    viewStore.send(.updateHoveredPathElement(id: element.id))
+            .background {
+                if viewStore.isHovered {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.white)
+                        .shadow(color: .black, radius: 4)
                 } else {
-                    viewStore.send(.updateHoveredPathElement(id: nil))
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.white)
+                        .padding()
+                }
+            }
+            .contentShape(Rectangle())
+            .onHover { isHovered in
+                withAnimation(.easeInOut) {
+                    viewStore.send(.hoverChanged(isHovered))
                 }
             }
         }
@@ -83,7 +80,7 @@ struct CodeView: View {
         Binding<String>(
             get: { [
                 codeHeader,
-                viewStore.pathElements.map(\.code).joined(separator: "\n"),
+                viewStore.pathElements.map(\.element.code).joined(separator: "\n"),
                 codeFooter,
             ].joined(separator: "\n").codeFormatted },
             set: { _, _ in }

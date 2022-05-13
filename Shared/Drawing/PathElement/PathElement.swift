@@ -183,9 +183,9 @@ extension CGPoint {
     }
 }
 
-extension IdentifiedArray where ID == PathElement.ID, Element == PathElement {
+extension IdentifiedArray where ID == PathElement.ID, Element == PathElementState {
     func initialQuadCurveControl(to: CGPoint) -> CGPoint {
-        let lastPoint = last?.to ?? .zero
+        let lastPoint = last?.element.to ?? .zero
         return CGPoint(
             x: (to.x + lastPoint.x) / 2 - 20,
             y: (to.y + lastPoint.y) / 2 - 20
@@ -193,7 +193,7 @@ extension IdentifiedArray where ID == PathElement.ID, Element == PathElement {
     }
 
     func initialCurveControls(to: CGPoint) -> (CGPoint, CGPoint) {
-        let lastPoint = last?.to ?? .zero
+        let lastPoint = last?.element.to ?? .zero
         let x = (to.x + lastPoint.x) / 2
         let y = (to.y + lastPoint.y) / 2
         let control1 = CGPoint(x: (lastPoint.x + x) / 2 - 20, y: (lastPoint.y + y) / 2 - 20)
