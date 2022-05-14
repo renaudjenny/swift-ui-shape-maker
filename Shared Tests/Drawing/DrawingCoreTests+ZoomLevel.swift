@@ -21,7 +21,9 @@ extension DrawingCoreTests {
                 id: .incrementation(0),
                 type: .move(to: lineToMovePoint.applyZoomLevel(1/zoomLevel))
             ),
-            previousTo: lineToMovePoint
+            isHovered: true,
+            zoomLevel: zoomLevel,
+            previousTo: lineToMovePoint.applyZoomLevel(1/zoomLevel)
         )
         store.send(.addOrMovePathElement(to: lineToMovePoint)) { state in
             // It's not a line that is added firstly, it's always a "move" element
@@ -36,7 +38,9 @@ extension DrawingCoreTests {
         let linePoint = CGPoint(x: 234, y: 234)
         let line = PathElementState(
             element: PathElement(id: .incrementation(1), type: .line(to: linePoint.applyZoomLevel(1/zoomLevel))),
-            previousTo: lineToMovePoint
+            isHovered: true,
+            zoomLevel: zoomLevel,
+            previousTo: lineToMovePoint.applyZoomLevel(1/zoomLevel)
         )
         store.send(.addOrMovePathElement(to: linePoint)) { state in
             state.pathElements.append(line)
@@ -53,7 +57,9 @@ extension DrawingCoreTests {
         let movePoint = CGPoint(x: 235, y: 235)
         let move = PathElementState(
             element: PathElement(id: .incrementation(2), type: .move(to: movePoint.applyZoomLevel(1/zoomLevel))),
-            previousTo: linePoint
+            isHovered: true,
+            zoomLevel: zoomLevel,
+            previousTo: linePoint.applyZoomLevel(1/zoomLevel)
         )
         store.send(.addOrMovePathElement(to: movePoint)) { state in
             state.pathElements.append(move)
@@ -69,6 +75,7 @@ extension DrawingCoreTests {
         let zoomLevel: Double = 90/100
         store.send(.zoomLevelChanged(zoomLevel)) { state in
             state.zoomLevel = zoomLevel
+            state.updatePathElementsZoomLevel(zoomLevel)
         }
 
         store.send(.selectPathTool(.quadCurve)) { state in
@@ -85,6 +92,8 @@ extension DrawingCoreTests {
                     )
                 )
             ),
+            isHovered: true,
+            zoomLevel: zoomLevel,
             previousTo: initialState.pathElements[1].element.to
         )
         store.send(.addOrMovePathElement(to: quadCurvePoint)) { state in
@@ -105,6 +114,7 @@ extension DrawingCoreTests {
         let zoomLevel: Double = 90/100
         store.send(.zoomLevelChanged(zoomLevel)) { state in
             state.zoomLevel = zoomLevel
+            state.updatePathElementsZoomLevel(zoomLevel)
         }
 
         store.send(.selectPathTool(.curve)) { state in
@@ -121,6 +131,8 @@ extension DrawingCoreTests {
                     control2: curveControls.1
                 )
             ),
+            isHovered: true,
+            zoomLevel: zoomLevel,
             previousTo: initialState.pathElements[1].element.to
         )
         store.send(.addOrMovePathElement(to: curvePoint)) { state in
@@ -141,6 +153,7 @@ extension DrawingCoreTests {
         let zoomLevel: Double = 90/100
         store.send(.zoomLevelChanged(zoomLevel)) { state in
             state.zoomLevel = zoomLevel
+            state.updatePathElementsZoomLevel(zoomLevel)
         }
         store.send(.selectPathTool(.line)) { state in
             state.selectedPathTool = .line
@@ -151,6 +164,8 @@ extension DrawingCoreTests {
                 id: .incrementation(2),
                 type: .line(to: CGPoint(x: DrawingPanel.standardWidth, y: DrawingPanel.standardWidth))
             ),
+            isHovered: true,
+            zoomLevel: zoomLevel,
             previousTo: initialState.pathElements[1].element.to
         )
         store.send(.addOrMovePathElement(to: outsidePoint)) { state in
@@ -167,6 +182,8 @@ extension DrawingCoreTests {
                 id: .incrementation(3),
                 type: .line(to: CGPoint(x: 125 * 1/zoomLevel, y: DrawingPanel.standardWidth))
             ),
+            isHovered: true,
+            zoomLevel: zoomLevel,
             previousTo: CGPoint(x: DrawingPanel.standardWidth, y: DrawingPanel.standardWidth)
         )
         store.send(.addOrMovePathElement(to: otherPoint)) { state in
@@ -183,6 +200,7 @@ extension DrawingCoreTests {
         let zoomLevel: Double = 90/100
         store.send(.zoomLevelChanged(zoomLevel)) { state in
             state.zoomLevel = zoomLevel
+            state.updatePathElementsZoomLevel(zoomLevel)
         }
         store.send(.selectPathTool(.line)) { state in
             state.selectedPathTool = .line
@@ -193,6 +211,8 @@ extension DrawingCoreTests {
                 id: .incrementation(2),
                 type: .line(to: initialPoint.applyZoomLevel(1/zoomLevel))
             ),
+            isHovered: true,
+            zoomLevel: zoomLevel,
             previousTo: initialState.pathElements[1].element.to
         )
         store.send(.addOrMovePathElement(to: initialPoint)) { state in
@@ -200,18 +220,19 @@ extension DrawingCoreTests {
             state.isAdding = true
         }
         let nextPoint = CGPoint(x: 234, y: 234)
-        let movedLine = PathElementState(
-            element: PathElement(
-                id: .incrementation(2),
-                type: .line(to: nextPoint.applyZoomLevel(1/zoomLevel))
-            ),
-            previousTo: initialState.pathElements[1].element.to
-        )
-        store.send(.addOrMovePathElement(to: nextPoint)) { state in
-            state.pathElements.update(movedLine, at: 2)
+        let guide = PathElement.Guide(type: .to, position: nextPoint)
+        store.send(.addOrMovePathElement(to: nextPoint))
+        store.receive(.pathElement(id: .incrementation(2), action: .update(guide: guide))) { state in
+            let amendedGuide = PathElement.Guide(type: .to, position: nextPoint.applyZoomLevel(1/zoomLevel))
+            state.pathElements[id: .incrementation(2)]?.element.update(guide: amendedGuide)
         }
-        store.receive(.pathElement(id: .incrementation(2), action: .hoverChanged(true))) { state in
-            state.pathElements[id: .incrementation(2)]?.isHovered = true
+    }
+}
+
+private extension DrawingState {
+    mutating func updatePathElementsZoomLevel(_ zoomLevel: Double) {
+        pathElements.map(\.id).forEach {
+            pathElements[id: $0]?.zoomLevel = zoomLevel
         }
     }
 }

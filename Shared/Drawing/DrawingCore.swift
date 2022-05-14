@@ -37,6 +37,7 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement>.c
             }
 
             state.isAdding = true
+            let to = DrawingPanel.inBoundsPoint(to.applyZoomLevel(1/state.zoomLevel))
 
             guard !state.pathElements.isEmpty else {
                 let pathElementState = PathElementState(

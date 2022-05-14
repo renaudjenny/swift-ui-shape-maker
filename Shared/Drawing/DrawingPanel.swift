@@ -87,3 +87,22 @@ struct DrawingPanel: View {
         }
     }
 }
+
+extension DrawingPanel {
+    static func inBoundsPoint(_ point: CGPoint) -> CGPoint {
+        var inBondsPoint = point
+        if inBondsPoint.x < 0 {
+            inBondsPoint.x = 0
+        }
+        if inBondsPoint.y < 0 {
+            inBondsPoint.y = 0
+        }
+        if inBondsPoint.x > DrawingPanel.standardWidth {
+            inBondsPoint.x = DrawingPanel.standardWidth
+        }
+        if inBondsPoint.y > DrawingPanel.standardWidth {
+            inBondsPoint.y = DrawingPanel.standardWidth
+        }
+        return inBondsPoint
+    }
+}

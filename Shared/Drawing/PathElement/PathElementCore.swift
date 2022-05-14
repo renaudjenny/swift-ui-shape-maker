@@ -18,7 +18,7 @@ let pathElementReducer = Reducer<PathElementState, PathElementAction, PathElemen
     switch action {
     case let .update(guide):
         // TODO: test
-        let newGuidePosition = inBoundsPoint(guide.position.applyZoomLevel(1/state.zoomLevel))
+        let newGuidePosition = DrawingPanel.inBoundsPoint(guide.position.applyZoomLevel(1/state.zoomLevel))
         state.element.update(guide: PathElement.Guide(type: guide.type, position: newGuidePosition))
         return .none
     case let .hoverChanged(isHovered):
@@ -29,21 +29,4 @@ let pathElementReducer = Reducer<PathElementState, PathElementAction, PathElemen
 
 extension PathElementState: Identifiable {
     var id: PathElement.ID { element.id }
-}
-
-private func inBoundsPoint(_ point: CGPoint) -> CGPoint {
-    var inBondsPoint = point
-    if inBondsPoint.x < 0 {
-        inBondsPoint.x = 0
-    }
-    if inBondsPoint.y < 0 {
-        inBondsPoint.y = 0
-    }
-    if inBondsPoint.x > DrawingPanel.standardWidth {
-        inBondsPoint.x = DrawingPanel.standardWidth
-    }
-    if inBondsPoint.y > DrawingPanel.standardWidth {
-        inBondsPoint.y = DrawingPanel.standardWidth
-    }
-    return inBondsPoint
 }
