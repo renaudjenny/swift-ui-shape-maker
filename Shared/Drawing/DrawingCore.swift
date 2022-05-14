@@ -101,6 +101,9 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement>.c
                 state.pathElements[id: $0]?.zoomLevel = zoomLevel
             }
             return .none
+        case .pathElement(id: let id, action: .update(guide: _)):
+            // TODO: update the next element "previousTo"
+            return .none
         case .pathElement:
             return .none
         }
