@@ -12,7 +12,6 @@ enum DrawingAction: Equatable {
     case pathElement(id: PathElement.ID, action: PathElementAction)
     case addOrMovePathElement(to: CGPoint)
     case endMove
-    case removePathElement(id: PathElement.ID)
     case selectPathTool(PathTool)
     case zoomLevelChanged(Double)
 }
@@ -90,9 +89,6 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement>.c
         case .endMove:
             state.isAdding = false
             return .none
-        case let .removePathElement(id):
-            state.pathElements.remove(id: id)
-            return .none
         case let .selectPathTool(pathTool):
             state.selectedPathTool = pathTool
             return .none
@@ -102,8 +98,17 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement>.c
                 state.pathElements[id: $0]?.zoomLevel = zoomLevel
             }
             return .none
-        case .pathElement(id: let id, action: .update(guide: _)):
-            // TODO: update the next element "previousTo"
+        case let .pathElement(id, action: .update(guide)):
+            guard
+                guide.type == .to,
+                let currentElementIndex = state.pathElements.index(id: id),
+                state.pathElements.count - 1 > currentElementIndex
+            else { return .none }
+            let nextElementID = state.pathElements[currentElementIndex + 1].id
+            state.pathElements[id: nextElementID]?.previousTo = guide.position
+            return .none
+        case .pathElement(id: let id, action: .remove):
+            state.pathElements.remove(id: id)
             return .none
         case .pathElement:
             return .none

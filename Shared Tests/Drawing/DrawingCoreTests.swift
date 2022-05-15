@@ -254,8 +254,23 @@ final class DrawingCoreTests: XCTestCase {
         let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
         let id: UUID = .incrementation(1)
 
-        store.send(.removePathElement(id: id)) { state in
+        store.send(.pathElement(id: id, action: .remove)) { state in
             state.pathElements.remove(id: id)
+        }
+    }
+
+    func testUpdatePathElementGuideUpdateTheNextPreviousTo() {
+        let environment = DrawingEnvironement.test
+        let initialState = DrawingState.test(environment: environment)
+        let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
+        let id: UUID = .incrementation(0)
+
+        let newPosition = CGPoint(x: 101, y: 101)
+        let guide = PathElement.Guide(type: .to, position: newPosition)
+        store.send(.pathElement(id: id, action: .update(guide: guide))) { state in
+            state.pathElements[id: id]?.element.update(guide: guide)
+            let nextElementID: UUID = .incrementation(1)
+            state.pathElements[id: nextElementID]?.previousTo = newPosition
         }
     }
 }

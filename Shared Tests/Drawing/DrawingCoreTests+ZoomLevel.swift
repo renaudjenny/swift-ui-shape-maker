@@ -2,6 +2,7 @@ import ComposableArchitecture
 @testable import SwiftUI_Shape_Maker
 
 extension DrawingCoreTests {
+    // swiftlint:disable:next function_body_length
     func testAddFirstElementsWhenZoomLevelChanged() throws {
         let store = TestStore(initialState: DrawingState(), reducer: drawingReducer, environment: .test)
 

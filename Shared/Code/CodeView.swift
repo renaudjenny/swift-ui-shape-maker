@@ -50,8 +50,7 @@ struct CodeView: View {
                     .opacity(viewStore.isHovered ? 1 : 0.8)
                 if viewStore.isHovered {
                     Button("Remove", role: .destructive) {
-                        // TODO: remove the element
-//                        viewStore.send(.removePathElement(id: element.id))
+                        viewStore.send(.remove)
                     }
                     .padding(.horizontal)
                 }
