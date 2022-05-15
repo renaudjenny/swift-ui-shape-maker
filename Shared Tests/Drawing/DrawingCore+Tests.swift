@@ -14,6 +14,12 @@ extension DrawingState {
             ),
         ])
     }
+
+    mutating func updatePathElementsZoomLevel(_ zoomLevel: Double) {
+        pathElements.map(\.id).forEach {
+            pathElements[id: $0]?.zoomLevel = zoomLevel
+        }
+    }
 }
 
 extension DrawingEnvironement {
