@@ -28,4 +28,31 @@ final class AppCoreTests: XCTestCase {
             state.imageOpacity = value
         }
     }
+
+    func testUpdateDrawingPanelTargetedForDrop() {
+        let store = TestStore(
+            initialState: AppState(),
+            reducer: appReducer,
+            environment: AppEnvironment(uuid: UUID.incrementing)
+        )
+
+        store.send(.drawingPanelTargetedForDropChanged(true)) { state in
+            state.isDrawingPanelTargetedForImageDrop = true
+        }
+    }
+
+    func testUpdateLastZoomGestureDelta() {
+        let store = TestStore(
+            initialState: AppState(),
+            reducer: appReducer,
+            environment: AppEnvironment(uuid: UUID.incrementing)
+        )
+
+        store.send(.lastZoomGestureDeltaChanged(123)) { state in
+            state.lastZoomGestureDelta = 123
+        }
+        store.send(.lastZoomGestureDeltaChanged(nil)) { state in
+            state.lastZoomGestureDelta = nil
+        }
+    }
 }

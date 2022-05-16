@@ -61,6 +61,8 @@
 		4C7BC16E28073F0A001942AE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC14428073F0A001942AE /* ContentView.swift */; };
 		4C7BC16F28073F0A001942AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C7BC14528073F0A001942AE /* Assets.xcassets */; };
 		4C7BC17028073F0A001942AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C7BC14528073F0A001942AE /* Assets.xcassets */; };
+		4CFF09752832DF1F007B4A5B /* DrawingZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF09732832DE8F007B4A5B /* DrawingZone.swift */; };
+		4CFF09762832DF1F007B4A5B /* DrawingZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF09732832DE8F007B4A5B /* DrawingZone.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,6 +122,7 @@
 		4C7BC16328073F0A001942AE /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C7BC16728073F0A001942AE /* TestsMacOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsMacOS.swift; sourceTree = "<group>"; };
 		4C7BC16928073F0A001942AE /* TestsMacOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsMacOSLaunchTests.swift; sourceTree = "<group>"; };
+		4CFF09732832DE8F007B4A5B /* DrawingZone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingZone.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +179,7 @@
 				4C3DA6B5281FED4000DE2E0E /* AppCore.swift */,
 				4C7BC14428073F0A001942AE /* ContentView.swift */,
 				4C7BC14328073F0A001942AE /* SwiftUIShapeMakerApp.swift */,
+				4CFF09732832DE8F007B4A5B /* DrawingZone.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -600,6 +604,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C3DA6BB281FEE6500DE2E0E /* DrawingCore.swift in Sources */,
+				4CFF09762832DF1F007B4A5B /* DrawingZone.swift in Sources */,
 				4C3DA6C0281FEEC700DE2E0E /* CodeCore.swift in Sources */,
 				4C3DA6FA282DA99300DE2E0E /* PathElementCore.swift in Sources */,
 				4C31F729280D48B60048DE77 /* CodeView.swift in Sources */,
@@ -621,6 +626,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C3DA6BC281FEE6500DE2E0E /* DrawingCore.swift in Sources */,
+				4CFF09752832DF1F007B4A5B /* DrawingZone.swift in Sources */,
 				4C3DA6C1281FEEC700DE2E0E /* CodeCore.swift in Sources */,
 				4C3DA6F9282DA99200DE2E0E /* PathElementCore.swift in Sources */,
 				4C31F72A280D48B60048DE77 /* CodeView.swift in Sources */,

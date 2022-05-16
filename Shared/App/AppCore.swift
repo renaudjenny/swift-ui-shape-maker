@@ -6,6 +6,8 @@ struct AppState: Equatable {
     var code = CodeState()
     var imageData: Data?
     var imageOpacity = 1.0
+    var isDrawingPanelTargetedForImageDrop = false
+    var lastZoomGestureDelta: Double?
 }
 
 enum AppAction: Equatable {
@@ -14,6 +16,8 @@ enum AppAction: Equatable {
     case code(CodeAction)
     case updateImageData(Data)
     case imageOpacityChanged(Double)
+    case drawingPanelTargetedForDropChanged(Bool)
+    case lastZoomGestureDeltaChanged(Double?)
 }
 
 struct AppEnvironment {
@@ -32,6 +36,8 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>
             action: /AppAction.drawing,
             environment: { DrawingEnvironement(uuid: $0.uuid) }),
         Reducer<AppState, AppAction, AppEnvironment> { state, action, _ in
+            enum ScrollWheelChangedNotificationID {}
+
             switch action {
             case .configuration:
                 return .none
@@ -44,6 +50,12 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>
                 return .none
             case let .imageOpacityChanged(value):
                 state.imageOpacity = value
+                return .none
+            case let .drawingPanelTargetedForDropChanged(isTargeted):
+                state.isDrawingPanelTargetedForImageDrop = isTargeted
+                return .none
+            case let .lastZoomGestureDeltaChanged(value):
+                state.lastZoomGestureDelta = value
                 return .none
             }
         }

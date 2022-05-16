@@ -1,5 +1,4 @@
 import SwiftUI
-import Combine
 import ComposableArchitecture
 
 #if os(macOS)
@@ -9,9 +8,6 @@ import Quartz
 struct ContentView: View {
     let store: Store<AppState, AppAction>
     @State private var isCodeInEditionMode = false
-    @State private var lastZoomGestureDelta: CGFloat?
-    @State private var isDrawingPanelTargetedForImageDrop = false
-    @State private var cancellables = Set<AnyCancellable>()
 
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -46,71 +42,13 @@ struct ContentView: View {
                 }
                 .padding()
                 HStack {
-                    drawingZone(viewStore: viewStore)
-
+                    DrawingZone(store: store)
                     CodeView(
                         store: store.scope(state: \.drawing, action: AppAction.drawing),
                         isInEditionMode: $isCodeInEditionMode
                     )
                 }
             }
-        }
-    }
-
-    private func drawingZone(viewStore: ViewStore<AppState, AppAction>) -> some View {
-        ScrollView([.horizontal, .vertical]) {
-            ZStack {
-                DrawingPanel(store: store)
-
-                viewStore.image?
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .opacity(viewStore.imageOpacity)
-                    .allowsHitTesting(false)
-            }
-            .onDrop(of: [.fileURL], isTargeted: $isDrawingPanelTargetedForImageDrop) { items in
-                _ = items.first?.loadObject(ofClass: URL.self, completionHandler: { url, error in
-                    guard error == nil, let url = url, let data = try? Data(contentsOf: url) else { return }
-                    viewStore.send(.updateImageData(data))
-                })
-                return viewStore.imageData != nil
-            }
-            .frame(
-                width: DrawingPanel.standardWidth * viewStore.drawing.zoomLevel,
-                height: DrawingPanel.standardWidth * viewStore.drawing.zoomLevel
-            )
-            .padding(.horizontal, 64)
-            .padding(.vertical, 32)
-        }
-        .onHover { isHovered in
-            if isHovered {
-                isCodeInEditionMode = false
-            }
-        }
-        .highPriorityGesture(MagnificationGesture()
-            .onChanged { scale in
-                let delta = scale - (lastZoomGestureDelta ?? 1)
-                clampZoomLevel(viewStore, add: delta)
-                lastZoomGestureDelta = scale
-            }
-            .onEnded { _ in
-                lastZoomGestureDelta = nil
-            }
-        )
-        .task {
-            #if os(macOS)
-            NSApp.publisher(for: \.currentEvent)
-                .subscribe(on: DispatchQueue.main)
-                .filter {
-                    $0?.type == .scrollWheel
-                    && ($0?.modifierFlags.contains(.command) ?? false)
-                }
-                .compactMap { $0 }
-                .sink {
-                    clampZoomLevel(viewStore, add: $0.deltaY/100)
-                }
-                .store(in: &cancellables)
-            #endif
         }
     }
 
@@ -129,26 +67,6 @@ struct ContentView: View {
         let pictureTaker = IKPictureTaker.pictureTaker()
         pictureTaker?.runModal()
         pictureTaker?.outputImage().map { $0.tiffRepresentation.map { viewStore.send(.updateImageData($0)) } }
-        #endif
-    }
-
-    private func clampZoomLevel(_ viewStore: ViewStore<AppState, AppAction>, add delta: CGFloat) {
-        let deltaAdded = viewStore.drawing.zoomLevel + delta
-        switch deltaAdded {
-        case 4...:
-            viewStore.send(.drawing(.zoomLevelChanged(4)))
-        case ...0.10:
-            viewStore.send(.drawing(.zoomLevelChanged(0.10)))
-        default:
-            viewStore.send(.drawing(.zoomLevelChanged(deltaAdded)))
-        }
-    }
-}
-
-private extension AppState {
-    var image: Image? {
-        #if os(macOS)
-        imageData.flatMap { NSImage(data: $0).map { Image(nsImage: $0) } }
         #endif
     }
 }
