@@ -15,4 +15,17 @@ final class AppCoreTests: XCTestCase {
             state.imageData = data
         }
     }
+
+    func testUpdateImageOpacity() {
+        let store = TestStore(
+            initialState: AppState(),
+            reducer: appReducer,
+            environment: AppEnvironment(uuid: UUID.incrementing)
+        )
+
+        let value = 0.6
+        store.send(.imageOpacityChanged(value)) { state in
+            state.imageOpacity = value
+        }
+    }
 }

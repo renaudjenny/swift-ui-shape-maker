@@ -3,7 +3,6 @@ import ComposableArchitecture
 
 struct DrawingPanel: View {
     let store: Store<AppState, AppAction>
-    @State private var draggingID: PathElement.ID?
 
     static let standardWidth: CGFloat = 1000
 

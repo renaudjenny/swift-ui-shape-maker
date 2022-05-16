@@ -8,7 +8,6 @@ import Quartz
 
 struct ContentView: View {
     let store: Store<AppState, AppAction>
-    @State private var imageOpacity = 1.0
     @State private var isCodeInEditionMode = false
     @State private var lastZoomGestureDelta: CGFloat?
     @State private var isDrawingPanelTargetedForImageDrop = false
@@ -19,7 +18,10 @@ struct ContentView: View {
             VStack {
                 VStack {
                     HStack {
-                        Slider(value: $imageOpacity) { Text("Image opacity") }
+                        Slider(value: viewStore.binding(
+                            get: \.imageOpacity,
+                            send: AppAction.imageOpacityChanged
+                        )) { Text("Image opacity") }
                         Button("Choose an image") { openImagePicker(viewStore: viewStore) }
                         zoom(viewStore: viewStore)
                     }
@@ -63,7 +65,7 @@ struct ContentView: View {
                 viewStore.image?
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .opacity(imageOpacity)
+                    .opacity(viewStore.imageOpacity)
                     .allowsHitTesting(false)
             }
             .onDrop(of: [.fileURL], isTargeted: $isDrawingPanelTargetedForImageDrop) { items in

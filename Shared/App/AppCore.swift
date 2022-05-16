@@ -5,6 +5,7 @@ struct AppState: Equatable {
     var drawing = DrawingState()
     var code = CodeState()
     var imageData: Data?
+    var imageOpacity = 1.0
 }
 
 enum AppAction: Equatable {
@@ -12,6 +13,7 @@ enum AppAction: Equatable {
     case drawing(DrawingAction)
     case code(CodeAction)
     case updateImageData(Data)
+    case imageOpacityChanged(Double)
 }
 
 struct AppEnvironment {
@@ -39,6 +41,9 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>
                 return .none
             case let .updateImageData(data):
                 state.imageData = data
+                return .none
+            case let .imageOpacityChanged(value):
+                state.imageOpacity = value
                 return .none
             }
         }
