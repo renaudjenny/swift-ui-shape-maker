@@ -55,8 +55,23 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>
                 state.isDrawingPanelTargetedForImageDrop = isTargeted
                 return .none
             case let .lastZoomGestureDeltaChanged(value):
+                guard let value = value else {
+                    state.lastZoomGestureDelta = nil
+                    return .none
+                }
+                // TODO: Test
+                let delta = value - (state.lastZoomGestureDelta ?? 1)
+
+                let deltaAdded = state.drawing.zoomLevel + delta
+                let clampedDeltaValue: Double
+                switch deltaAdded {
+                case 4...: clampedDeltaValue = 4
+                case ...0.10: clampedDeltaValue = 0.10
+                default: clampedDeltaValue = deltaAdded
+                }
+
                 state.lastZoomGestureDelta = value
-                return .none
+                return Effect(value: .drawing(.zoomLevelChanged(clampedDeltaValue)))
             }
         }
     )

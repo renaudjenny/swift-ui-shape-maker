@@ -43,28 +43,9 @@ struct DrawingZone: View {
                 }
             }
             .highPriorityGesture(MagnificationGesture()
-                .onChanged { scale in
-                    // TODO: optimise this to put the logic in the store and test it
-                    let delta = scale - (viewStore.lastZoomGestureDelta ?? 1)
-                    clampZoomLevel(viewStore, add: delta)
-                    viewStore.send(.lastZoomGestureDeltaChanged(scale))
-                }
-                .onEnded { _ in
-                    viewStore.send(.lastZoomGestureDeltaChanged(nil))
-                }
+                .onChanged { scale in viewStore.send(.lastZoomGestureDeltaChanged(scale)) }
+                .onEnded { _ in viewStore.send(.lastZoomGestureDeltaChanged(nil)) }
             )
-        }
-    }
-
-    private func clampZoomLevel(_ viewStore: ViewStore<AppState, AppAction>, add delta: CGFloat) {
-        let deltaAdded = viewStore.drawing.zoomLevel + delta
-        switch deltaAdded {
-        case 4...:
-            viewStore.send(.drawing(.zoomLevelChanged(4)))
-        case ...0.10:
-            viewStore.send(.drawing(.zoomLevelChanged(0.10)))
-        default:
-            viewStore.send(.drawing(.zoomLevelChanged(deltaAdded)))
         }
     }
 }
