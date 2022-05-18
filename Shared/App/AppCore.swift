@@ -59,7 +59,6 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>
                     state.lastZoomGestureDelta = nil
                     return .none
                 }
-                // TODO: Test
                 let delta = value - (state.lastZoomGestureDelta ?? 1)
 
                 let deltaAdded = state.drawing.zoomLevel + delta
