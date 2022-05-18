@@ -1,0 +1,37 @@
+{
+  "configurations" : [
+    {
+      "id" : "55626780-40F1-4851-90A6-5D838F04B051",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:SwiftUI Shape Maker.xcodeproj",
+      "identifier" : "4C7BC14F28073F0A001942AE",
+      "name" : "SwiftUI Shape Maker (macOS)"
+    }
+  },
+  "testTargets" : [
+    {
+      "enabled" : false,
+      "target" : {
+        "containerPath" : "container:SwiftUI Shape Maker.xcodeproj",
+        "identifier" : "4C7BC16228073F0A001942AE",
+        "name" : "Tests macOS"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:SwiftUI Shape Maker.xcodeproj",
+        "identifier" : "4C3DA6CD2820018B00DE2E0E",
+        "name" : "Shared Tests"
+      }
+    }
+  ],
+  "version" : 1
+}
