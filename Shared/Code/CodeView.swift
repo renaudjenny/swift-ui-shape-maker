@@ -3,13 +3,12 @@ import ComposableArchitecture
 import IdentifiedCollections
 
 struct CodeView: View {
-    let store: Store<DrawingState, DrawingAction>
-    @Binding var isInEditionMode: Bool
+    let store: Store<AppState, AppAction>
 
     var body: some View {
         WithViewStore(store) { viewStore in
             ZStack {
-                if isInEditionMode {
+                if viewStore.code.isEditing {
                     TextEditor(text: code(viewStore: viewStore))
                         .font(.body.monospaced())
                         .multilineTextAlignment(.leading)
@@ -21,7 +20,10 @@ struct CodeView: View {
                             VStack(alignment: .leading, spacing: 0) {
                                 Text(codeHeader.codeFormatted).opacity(0.8)
                                 ForEachStore(
-                                    store.scope(state: \.pathElements, action: DrawingAction.pathElement(id:action:)),
+                                    store.scope(
+                                        state: \.drawing.pathElements,
+                                        action: { AppAction.drawing(.pathElement(id: $0.0, action: $0.1)) }
+                                    ),
                                     content: pathElementCode(store:)
                                 )
                                 Text(codeFooter).opacity(0.8)
@@ -37,7 +39,7 @@ struct CodeView: View {
                     .padding()
                 }
             }.onTapGesture {
-                isInEditionMode = true
+                viewStore.send(.code(.editChanged(true)))
             }
         }
     }
@@ -75,11 +77,11 @@ struct CodeView: View {
         }
     }
 
-    private func code(viewStore: ViewStore<DrawingState, DrawingAction>) -> Binding<String> {
+    private func code(viewStore: ViewStore<AppState, AppAction>) -> Binding<String> {
         Binding<String>(
             get: { [
                 codeHeader,
-                viewStore.pathElements.map(\.element.code).joined(separator: "\n"),
+                viewStore.drawing.pathElements.map(\.element.code).joined(separator: "\n"),
                 codeFooter,
             ].joined(separator: "\n").codeFormatted },
             set: { _, _ in }

@@ -35,6 +35,11 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>
             state: \.drawing,
             action: /AppAction.drawing,
             environment: { DrawingEnvironement(uuid: $0.uuid) }),
+        codeReducer.pullback(
+            state: \.code,
+            action: /AppAction.code,
+            environment: { _ in CodeEnvironment() }
+        ),
         Reducer<AppState, AppAction, AppEnvironment> { state, action, _ in
             enum ScrollWheelChangedNotificationID {}
 

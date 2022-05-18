@@ -7,7 +7,6 @@ import Quartz
 
 struct ContentView: View {
     let store: Store<AppState, AppAction>
-    @State private var isCodeInEditionMode = false
 
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -43,10 +42,7 @@ struct ContentView: View {
                 .padding()
                 HStack {
                     DrawingZone(store: store)
-                    CodeView(
-                        store: store.scope(state: \.drawing, action: AppAction.drawing),
-                        isInEditionMode: $isCodeInEditionMode
-                    )
+                    CodeView(store: store)
                 }
             }
         }

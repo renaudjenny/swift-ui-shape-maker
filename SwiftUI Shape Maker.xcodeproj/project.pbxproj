@@ -61,6 +61,7 @@
 		4C7BC16E28073F0A001942AE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC14428073F0A001942AE /* ContentView.swift */; };
 		4C7BC16F28073F0A001942AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C7BC14528073F0A001942AE /* Assets.xcassets */; };
 		4C7BC17028073F0A001942AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C7BC14528073F0A001942AE /* Assets.xcassets */; };
+		4C7E0E5D2835B82600CF712B /* CodeCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7E0E5C2835B7C800CF712B /* CodeCoreTests.swift */; };
 		4CFF09752832DF1F007B4A5B /* DrawingZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF09732832DE8F007B4A5B /* DrawingZone.swift */; };
 		4CFF09762832DF1F007B4A5B /* DrawingZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF09732832DE8F007B4A5B /* DrawingZone.swift */; };
 /* End PBXBuildFile section */
@@ -123,6 +124,7 @@
 		4C7BC16728073F0A001942AE /* TestsMacOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsMacOS.swift; sourceTree = "<group>"; };
 		4C7BC16928073F0A001942AE /* TestsMacOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsMacOSLaunchTests.swift; sourceTree = "<group>"; };
 		4C7E0E562835977900CF712B /* SwiftUI Shape Maker.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "SwiftUI Shape Maker.xctestplan"; sourceTree = "<group>"; };
+		4C7E0E5C2835B7C800CF712B /* CodeCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeCoreTests.swift; sourceTree = "<group>"; };
 		4CFF09732832DE8F007B4A5B /* DrawingZone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingZone.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -217,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				4C3DA6F3282C1ED600DE2E0E /* App */,
+				4C7E0E5B2835B7B000CF712B /* Code */,
 				4C3DA6D7282001C900DE2E0E /* Configuration */,
 				4C3DA6E028201E3400DE2E0E /* Drawing */,
 				4C3DA6F028284C8A00DE2E0E /* Extensions */,
@@ -341,6 +344,14 @@
 				4C7BC16928073F0A001942AE /* TestsMacOSLaunchTests.swift */,
 			);
 			path = "Tests macOS";
+			sourceTree = "<group>";
+		};
+		4C7E0E5B2835B7B000CF712B /* Code */ = {
+			isa = PBXGroup;
+			children = (
+				4C7E0E5C2835B7C800CF712B /* CodeCoreTests.swift */,
+			);
+			path = Code;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -596,6 +607,7 @@
 				4C3DA6ED2826B29E00DE2E0E /* DrawingCoreTests+ZoomLevel.swift in Sources */,
 				4C3DA6DE2820038600DE2E0E /* ConfigurationCore.swift in Sources */,
 				4C3DA6E228201E4700DE2E0E /* DrawingCoreTests.swift in Sources */,
+				4C7E0E5D2835B82600CF712B /* CodeCoreTests.swift in Sources */,
 				4C3DA6FD282DACEC00DE2E0E /* PathElementCoreTests.swift in Sources */,
 				4C3DA6E528201F2C00DE2E0E /* PathTool.swift in Sources */,
 			);

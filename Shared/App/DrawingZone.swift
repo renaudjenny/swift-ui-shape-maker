@@ -38,8 +38,7 @@ struct DrawingZone: View {
             }
             .onHover { isHovered in
                 if isHovered {
-                    // TODO: fix
-                    // isCodeInEditionMode = false
+                    viewStore.send(.code(.editChanged(false)))
                 }
             }
             .highPriorityGesture(MagnificationGesture()
