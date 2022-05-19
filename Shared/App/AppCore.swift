@@ -3,11 +3,18 @@ import ComposableArchitecture
 struct AppState: Equatable {
     var configuration = ConfigurationState()
     var drawing = DrawingState()
-    var code = CodeState()
+    var code: CodeState {
+        get { CodeState(pathElements: drawing.pathElements, isEditing: isEditingCode) }
+        set {
+            drawing.pathElements = newValue.pathElements
+            isEditingCode = newValue.isEditing
+        }
+    }
     var imageData: Data?
     var imageOpacity = 1.0
     var isDrawingPanelTargetedForImageDrop = false
     var lastZoomGestureDelta: Double?
+    var isEditingCode = false
 }
 
 enum AppAction: Equatable {

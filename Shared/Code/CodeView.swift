@@ -3,12 +3,12 @@ import ComposableArchitecture
 import IdentifiedCollections
 
 struct CodeView: View {
-    let store: Store<AppState, AppAction>
+    let store: Store<CodeState, CodeAction>
 
     var body: some View {
         WithViewStore(store) { viewStore in
             ZStack {
-                if viewStore.code.isEditing {
+                if viewStore.isEditing {
                     TextEditor(text: code(viewStore: viewStore))
                         .font(.body.monospaced())
                         .multilineTextAlignment(.leading)
@@ -21,8 +21,8 @@ struct CodeView: View {
                                 Text(codeHeader.codeFormatted).opacity(0.8)
                                 ForEachStore(
                                     store.scope(
-                                        state: \.drawing.pathElements,
-                                        action: { AppAction.drawing(.pathElement(id: $0.0, action: $0.1)) }
+                                        state: \.pathElements,
+                                        action: CodeAction.pathElement(id:action:)
                                     ),
                                     content: pathElementCode(store:)
                                 )
@@ -39,7 +39,7 @@ struct CodeView: View {
                     .padding()
                 }
             }.onTapGesture {
-                viewStore.send(.code(.editChanged(true)))
+                viewStore.send(.editChanged(true))
             }
         }
     }
@@ -77,11 +77,11 @@ struct CodeView: View {
         }
     }
 
-    private func code(viewStore: ViewStore<AppState, AppAction>) -> Binding<String> {
+    private func code(viewStore: ViewStore<CodeState, CodeAction>) -> Binding<String> {
         Binding<String>(
             get: { [
                 codeHeader,
-                viewStore.drawing.pathElements.map(\.element.code).joined(separator: "\n"),
+                viewStore.pathElements.map(\.element.code).joined(separator: "\n"),
                 codeFooter,
             ].joined(separator: "\n").codeFormatted },
             set: { _, _ in }

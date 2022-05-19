@@ -42,7 +42,7 @@ struct ContentView: View {
                 .padding()
                 HStack {
                     DrawingZone(store: store)
-                    CodeView(store: store)
+                    CodeView(store: store.scope(state: \.code, action: AppAction.code))
                 }
             }
         }
