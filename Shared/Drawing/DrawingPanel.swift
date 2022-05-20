@@ -16,17 +16,22 @@ struct DrawingPanel: View {
                             .onEnded { _ in viewStore.send(.drawing(.endMove)) }
                     )
 
-                Path { path in
-                    viewStore.drawing.pathElements.forEach {
-                        path.addElement($0, zoomLevel: viewStore.drawing.zoomLevel)
-                    }
-                }
-                .stroke()
+                path(store: store.scope(state: \.drawing, action: AppAction.drawing))
 
                 if viewStore.configuration.isPathIndicatorsDisplayed {
                     pathIndicators(store: store.scope(state: \.drawing, action: AppAction.drawing))
                 }
             }
+        }
+    }
+
+    private func path(store: Store<DrawingState, DrawingAction>) -> some View {
+        WithViewStore(store) { viewStore in
+            Path { path in
+                viewStore.pathElements.forEach {
+                    path.addElement($0, zoomLevel: viewStore.zoomLevel)
+                }
+            }.stroke()
         }
     }
 
