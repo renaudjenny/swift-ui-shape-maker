@@ -158,28 +158,6 @@ extension String {
     private var indentation: String { String(prefix(while: { $0 == " " })) }
 }
 
-extension Path {
-    mutating func addElement(_ element: PathElement, zoomLevel: CGFloat) {
-        switch element.type {
-        case let .move(to):
-            move(to: to.applyZoomLevel(zoomLevel))
-        case let .line(to):
-            addLine(to: to.applyZoomLevel(zoomLevel))
-        case let .quadCurve(to, control):
-            addQuadCurve(
-                to: to.applyZoomLevel(zoomLevel),
-                control: control.applyZoomLevel(zoomLevel)
-            )
-        case let .curve(to, control1, control2):
-            addCurve(
-                to: to.applyZoomLevel(zoomLevel),
-                control1: control1.applyZoomLevel(zoomLevel),
-                control2: control2.applyZoomLevel(zoomLevel)
-            )
-        }
-    }
-}
-
 extension CGPoint {
     func applyZoomLevel(_ zoomLevel: CGFloat) -> CGPoint {
         applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel))

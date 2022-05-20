@@ -5,11 +5,13 @@ extension DrawingState {
     static func test(environment: DrawingEnvironement) -> Self {
         DrawingState(pathElements: [
             PathElement(
-                element: PathElement(id: environment.uuid(), type: .move(to: CGPoint(x: 123, y: 123))),
+                id: environment.uuid(),
+                type: .move(to: CGPoint(x: 123, y: 123)),
                 previousTo: CGPoint(x: 123, y: 123)
             ),
             PathElement(
-                element: PathElement(id: environment.uuid(), type: .line(to: CGPoint(x: 234, y: 234))),
+                id: environment.uuid(),
+                type: .line(to: CGPoint(x: 234, y: 234)),
                 previousTo: CGPoint(x: 123, y: 123)
             ),
         ])

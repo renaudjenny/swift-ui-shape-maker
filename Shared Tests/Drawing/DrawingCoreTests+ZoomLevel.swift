@@ -18,10 +18,8 @@ extension DrawingCoreTests {
 
         let lineToMovePoint = CGPoint(x: 123, y: 123)
         let lineToMove = PathElement(
-            element: PathElement(
-                id: .incrementation(0),
-                type: .move(to: lineToMovePoint.applyZoomLevel(1/zoomLevel))
-            ),
+            id: .incrementation(0),
+            type: .move(to: lineToMovePoint.applyZoomLevel(1/zoomLevel)),
             isHovered: true,
             zoomLevel: zoomLevel,
             previousTo: lineToMovePoint.applyZoomLevel(1/zoomLevel)
@@ -38,7 +36,8 @@ extension DrawingCoreTests {
 
         let linePoint = CGPoint(x: 234, y: 234)
         let line = PathElement(
-            element: PathElement(id: .incrementation(1), type: .line(to: linePoint.applyZoomLevel(1/zoomLevel))),
+            id: .incrementation(1),
+            type: .line(to: linePoint.applyZoomLevel(1/zoomLevel)),
             isHovered: true,
             zoomLevel: zoomLevel,
             previousTo: lineToMovePoint.applyZoomLevel(1/zoomLevel)
@@ -57,7 +56,8 @@ extension DrawingCoreTests {
         }
         let movePoint = CGPoint(x: 235, y: 235)
         let move = PathElement(
-            element: PathElement(id: .incrementation(2), type: .move(to: movePoint.applyZoomLevel(1/zoomLevel))),
+            id: .incrementation(2),
+            type: .move(to: movePoint.applyZoomLevel(1/zoomLevel)),
             isHovered: true,
             zoomLevel: zoomLevel,
             previousTo: linePoint.applyZoomLevel(1/zoomLevel)
@@ -84,18 +84,16 @@ extension DrawingCoreTests {
         }
         let quadCurvePoint = CGPoint(x: 345, y: 345)
         let quadCurve = PathElement(
-            element: PathElement(
-                id: .incrementation(2),
-                type: .quadCurve(
-                    to: quadCurvePoint.applyZoomLevel(1/zoomLevel),
-                    control: initialState.pathElements.initialQuadCurveControl(
-                        to: quadCurvePoint.applyZoomLevel(1/zoomLevel)
-                    )
+            id: .incrementation(2),
+            type: .quadCurve(
+                to: quadCurvePoint.applyZoomLevel(1/zoomLevel),
+                control: initialState.pathElements.initialQuadCurveControl(
+                    to: quadCurvePoint.applyZoomLevel(1/zoomLevel)
                 )
             ),
             isHovered: true,
             zoomLevel: zoomLevel,
-            previousTo: initialState.pathElements[1].element.to
+            previousTo: initialState.pathElements[1].to
         )
         store.send(.addOrMovePathElement(to: quadCurvePoint)) { state in
             state.pathElements.append(quadCurve)
@@ -124,17 +122,15 @@ extension DrawingCoreTests {
         let curvePoint = CGPoint(x: 345, y: 345)
         let curveControls = initialState.pathElements.initialCurveControls(to: curvePoint.applyZoomLevel(1/zoomLevel))
         let curve = PathElement(
-            element: PathElement(
-                id: .incrementation(2),
-                type: .curve(
-                    to: curvePoint.applyZoomLevel(1/zoomLevel),
-                    control1: curveControls.0,
-                    control2: curveControls.1
-                )
+            id: .incrementation(2),
+            type: .curve(
+                to: curvePoint.applyZoomLevel(1/zoomLevel),
+                control1: curveControls.0,
+                control2: curveControls.1
             ),
             isHovered: true,
             zoomLevel: zoomLevel,
-            previousTo: initialState.pathElements[1].element.to
+            previousTo: initialState.pathElements[1].to
         )
         store.send(.addOrMovePathElement(to: curvePoint)) { state in
             state.pathElements.append(curve)
@@ -161,13 +157,11 @@ extension DrawingCoreTests {
         }
         let outsidePoint = CGPoint(x: DrawingPanel.standardWidth + 10, y: DrawingPanel.standardWidth + 10)
         let line = PathElement(
-            element: PathElement(
-                id: .incrementation(2),
-                type: .line(to: CGPoint(x: DrawingPanel.standardWidth, y: DrawingPanel.standardWidth))
-            ),
+            id: .incrementation(2),
+            type: .line(to: CGPoint(x: DrawingPanel.standardWidth, y: DrawingPanel.standardWidth)),
             isHovered: true,
             zoomLevel: zoomLevel,
-            previousTo: initialState.pathElements[1].element.to
+            previousTo: initialState.pathElements[1].to
         )
         store.send(.addOrMovePathElement(to: outsidePoint)) { state in
             state.pathElements.append(line)
@@ -179,10 +173,8 @@ extension DrawingCoreTests {
 
         let otherPoint = CGPoint(x: 125, y: DrawingPanel.standardWidth + 10)
         let otherLine = PathElement(
-            element: PathElement(
-                id: .incrementation(3),
-                type: .line(to: CGPoint(x: 125 * 1/zoomLevel, y: DrawingPanel.standardWidth))
-            ),
+            id: .incrementation(3),
+            type: .line(to: CGPoint(x: 125 * 1/zoomLevel, y: DrawingPanel.standardWidth)),
             isHovered: true,
             zoomLevel: zoomLevel,
             previousTo: CGPoint(x: DrawingPanel.standardWidth, y: DrawingPanel.standardWidth)
@@ -208,13 +200,11 @@ extension DrawingCoreTests {
         }
         let initialPoint = CGPoint(x: 123, y: 123)
         let line = PathElement(
-            element: PathElement(
-                id: .incrementation(2),
-                type: .line(to: initialPoint.applyZoomLevel(1/zoomLevel))
-            ),
+            id: .incrementation(2),
+            type: .line(to: initialPoint.applyZoomLevel(1/zoomLevel)),
             isHovered: true,
             zoomLevel: zoomLevel,
-            previousTo: initialState.pathElements[1].element.to
+            previousTo: initialState.pathElements[1].to
         )
         store.send(.addOrMovePathElement(to: initialPoint)) { state in
             state.pathElements.append(line)
@@ -225,7 +215,7 @@ extension DrawingCoreTests {
         store.send(.addOrMovePathElement(to: nextPoint))
         store.receive(.pathElement(id: .incrementation(2), action: .update(guide: guide))) { state in
             let amendedGuide = PathElement.Guide(type: .to, position: nextPoint.applyZoomLevel(1/zoomLevel))
-            state.pathElements[id: .incrementation(2)]?.element.update(guide: amendedGuide)
+            state.pathElements[id: .incrementation(2)]?.update(guide: amendedGuide)
         }
     }
 }

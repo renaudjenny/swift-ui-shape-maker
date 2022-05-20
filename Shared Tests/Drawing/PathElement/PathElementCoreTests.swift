@@ -17,7 +17,7 @@ final class PathElementCoreTests: XCTestCase {
         let newPoint = CGPoint(x: 345, y: 345)
         let guide = PathElement.Guide(type: .to, position: newPoint)
         store.send(.update(guide: guide)) { state in
-            state.element.update(guide: guide)
+            state.update(guide: guide)
         }
     }
 
@@ -31,7 +31,7 @@ final class PathElementCoreTests: XCTestCase {
         let control = CGPoint(x: 300, y: 300)
         let guide = PathElement.Guide(type: .quadCurveControl, position: control)
         store.send(.update(guide: guide)) { state in
-            state.element.update(guide: guide)
+            state.update(guide: guide)
         }
     }
 
@@ -48,7 +48,7 @@ final class PathElementCoreTests: XCTestCase {
         let newPoint = CGPoint(x: 345, y: 345)
         let guide = PathElement.Guide(type: .to, position: newPoint)
         store.send(.update(guide: guide)) { state in
-            state.element.update(guide: PathElement.Guide(type: .to, position: newPoint.applyZoomLevel(1/zoomLevel)))
+            state.update(guide: PathElement.Guide(type: .to, position: newPoint.applyZoomLevel(1/zoomLevel)))
         }
     }
 
@@ -66,7 +66,7 @@ final class PathElementCoreTests: XCTestCase {
         store.send(.update(guide: guide)) { state in
             let newPoint = CGPoint(x: 100 * 1/zoomLevel, y: DrawingPanel.standardWidth)
             let amendedGuide = PathElement.Guide(type: .to, position: newPoint)
-            state.element.update(guide: amendedGuide)
+            state.update(guide: amendedGuide)
         }
     }
 }
@@ -81,11 +81,9 @@ private extension PathElement {
         let quadCurvePoint = CGPoint(x: 345, y: 345)
         let quadCurveControl = drawingState.pathElements.initialQuadCurveControl(to: quadCurvePoint)
         return PathElement(
-            element: PathElement(
-                id: .incrementation(2),
-                type: .quadCurve(to: quadCurvePoint, control: quadCurveControl)
-            ),
-            previousTo: drawingState.pathElements[1].element.to
+            id: .incrementation(2),
+            type: .quadCurve(to: quadCurvePoint, control: quadCurveControl),
+            previousTo: drawingState.pathElements[1].to
         )
     }
 }
