@@ -29,7 +29,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:SwiftUI Shape Maker.xcodeproj/SwiftUI Shape Maker.xctestplan"
+            reference = "container:Shared Tests/SwiftUI Shape Maker.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
