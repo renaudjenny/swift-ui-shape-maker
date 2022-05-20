@@ -61,7 +61,7 @@ struct DrawingPanel: View {
                 GuideView(store: store, type: .to, position: to)
                 GuideView(store: store, type: .quadCurveControl, position: control)
                 Path { path in
-                    path.move(to: viewStore.previousTo.applyZoomLevel(viewStore.zoomLevel))
+                    path.move(to: viewStore.startPoint.applyZoomLevel(viewStore.zoomLevel))
                     path.addLine(to: control.applyZoomLevel(viewStore.zoomLevel))
                     path.addLine(to: to.applyZoomLevel(viewStore.zoomLevel))
                 }.stroke(style: .init(dash: [5], dashPhase: 1))
@@ -82,7 +82,7 @@ struct DrawingPanel: View {
                 GuideView(store: store, type: .curveControl1, position: control1)
                 GuideView(store: store, type: .curveControl2, position: control2)
                 Path { path in
-                    path.move(to: viewStore.previousTo.applyZoomLevel(viewStore.zoomLevel))
+                    path.move(to: viewStore.startPoint.applyZoomLevel(viewStore.zoomLevel))
                     path.addLine(to: control1.applyZoomLevel(viewStore.zoomLevel))
                     path.addLine(to: control2.applyZoomLevel(viewStore.zoomLevel))
                     path.addLine(to: to.applyZoomLevel(viewStore.zoomLevel))

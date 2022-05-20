@@ -42,9 +42,9 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement>.c
                 state.pathElements.append(PathElement(
                     id: environment.uuid(),
                     type: .move(to: to),
+                    startPoint: to,
                     isHovered: true,
-                    zoomLevel: state.zoomLevel,
-                    previousTo: to
+                    zoomLevel: state.zoomLevel
                 ))
                 return .none
             }
@@ -54,35 +54,35 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement>.c
                 pathElement = PathElement(
                     id: environment.uuid(),
                     type: .move(to: to),
+                    startPoint: state.pathElements.last?.to ?? .zero,
                     isHovered: true,
-                    zoomLevel: state.zoomLevel,
-                    previousTo: state.pathElements.last?.to ?? .zero
+                    zoomLevel: state.zoomLevel
                 )
             case .line:
                 pathElement = PathElement(
                     id: environment.uuid(),
                     type: .line(to: to),
+                    startPoint: state.pathElements.last?.to ?? .zero,
                     isHovered: true,
-                    zoomLevel: state.zoomLevel,
-                    previousTo: state.pathElements.last?.to ?? .zero
+                    zoomLevel: state.zoomLevel
                 )
             case .quadCurve:
                 let control = state.pathElements.initialQuadCurveControl(to: to)
                 pathElement = PathElement(
                     id: environment.uuid(),
                     type: .quadCurve(to: to, control: control),
+                    startPoint: state.pathElements.last?.to ?? .zero,
                     isHovered: true,
-                    zoomLevel: state.zoomLevel,
-                    previousTo: state.pathElements.last?.to ?? .zero
+                    zoomLevel: state.zoomLevel
                 )
             case .curve:
                 let (control1, control2) = state.pathElements.initialCurveControls(to: to)
                 pathElement = PathElement(
                     id: environment.uuid(),
                     type: .curve(to: to, control1: control1, control2: control2),
+                    startPoint: state.pathElements.last?.to ?? .zero,
                     isHovered: true,
-                    zoomLevel: state.zoomLevel,
-                    previousTo: state.pathElements.last?.to ?? .zero
+                    zoomLevel: state.zoomLevel
                 )
             }
             state.pathElements.append(pathElement)
@@ -106,7 +106,7 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement>.c
                 state.pathElements.count - 1 > currentElementIndex
             else { return .none }
             let nextElementID = state.pathElements[currentElementIndex + 1].id
-            state.pathElements[id: nextElementID]?.previousTo = guide.position
+            state.pathElements[id: nextElementID]?.startPoint = guide.position
             return .none
         case .pathElement(id: let id, action: .remove):
             state.pathElements.remove(id: id)

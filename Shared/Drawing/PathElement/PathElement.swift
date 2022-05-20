@@ -11,9 +11,9 @@ struct PathElement: Equatable, Identifiable {
 
     var id: UUID
     var type: PathElementType
+    var startPoint: CGPoint
     var isHovered = false
     var zoomLevel: Double = 1
-    var previousTo: CGPoint
 
     var to: CGPoint {
         switch self.type {

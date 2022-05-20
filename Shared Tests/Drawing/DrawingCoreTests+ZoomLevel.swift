@@ -20,9 +20,9 @@ extension DrawingCoreTests {
         let lineToMove = PathElement(
             id: .incrementation(0),
             type: .move(to: lineToMovePoint.applyZoomLevel(1/zoomLevel)),
+            startPoint: lineToMovePoint.applyZoomLevel(1/zoomLevel),
             isHovered: true,
-            zoomLevel: zoomLevel,
-            previousTo: lineToMovePoint.applyZoomLevel(1/zoomLevel)
+            zoomLevel: zoomLevel
         )
         store.send(.addOrMovePathElement(to: lineToMovePoint)) { state in
             // It's not a line that is added firstly, it's always a "move" element
@@ -38,9 +38,9 @@ extension DrawingCoreTests {
         let line = PathElement(
             id: .incrementation(1),
             type: .line(to: linePoint.applyZoomLevel(1/zoomLevel)),
+            startPoint: lineToMovePoint.applyZoomLevel(1/zoomLevel),
             isHovered: true,
-            zoomLevel: zoomLevel,
-            previousTo: lineToMovePoint.applyZoomLevel(1/zoomLevel)
+            zoomLevel: zoomLevel
         )
         store.send(.addOrMovePathElement(to: linePoint)) { state in
             state.pathElements.append(line)
@@ -58,9 +58,9 @@ extension DrawingCoreTests {
         let move = PathElement(
             id: .incrementation(2),
             type: .move(to: movePoint.applyZoomLevel(1/zoomLevel)),
+            startPoint: linePoint.applyZoomLevel(1/zoomLevel),
             isHovered: true,
-            zoomLevel: zoomLevel,
-            previousTo: linePoint.applyZoomLevel(1/zoomLevel)
+            zoomLevel: zoomLevel
         )
         store.send(.addOrMovePathElement(to: movePoint)) { state in
             state.pathElements.append(move)
@@ -91,9 +91,9 @@ extension DrawingCoreTests {
                     to: quadCurvePoint.applyZoomLevel(1/zoomLevel)
                 )
             ),
+            startPoint: initialState.pathElements[1].to,
             isHovered: true,
-            zoomLevel: zoomLevel,
-            previousTo: initialState.pathElements[1].to
+            zoomLevel: zoomLevel
         )
         store.send(.addOrMovePathElement(to: quadCurvePoint)) { state in
             state.pathElements.append(quadCurve)
@@ -128,9 +128,9 @@ extension DrawingCoreTests {
                 control1: curveControls.0,
                 control2: curveControls.1
             ),
+            startPoint: initialState.pathElements[1].to,
             isHovered: true,
-            zoomLevel: zoomLevel,
-            previousTo: initialState.pathElements[1].to
+            zoomLevel: zoomLevel
         )
         store.send(.addOrMovePathElement(to: curvePoint)) { state in
             state.pathElements.append(curve)
@@ -159,9 +159,9 @@ extension DrawingCoreTests {
         let line = PathElement(
             id: .incrementation(2),
             type: .line(to: CGPoint(x: DrawingPanel.standardWidth, y: DrawingPanel.standardWidth)),
+            startPoint: initialState.pathElements[1].to,
             isHovered: true,
-            zoomLevel: zoomLevel,
-            previousTo: initialState.pathElements[1].to
+            zoomLevel: zoomLevel
         )
         store.send(.addOrMovePathElement(to: outsidePoint)) { state in
             state.pathElements.append(line)
@@ -175,9 +175,9 @@ extension DrawingCoreTests {
         let otherLine = PathElement(
             id: .incrementation(3),
             type: .line(to: CGPoint(x: 125 * 1/zoomLevel, y: DrawingPanel.standardWidth)),
+            startPoint: CGPoint(x: DrawingPanel.standardWidth, y: DrawingPanel.standardWidth),
             isHovered: true,
-            zoomLevel: zoomLevel,
-            previousTo: CGPoint(x: DrawingPanel.standardWidth, y: DrawingPanel.standardWidth)
+            zoomLevel: zoomLevel
         )
         store.send(.addOrMovePathElement(to: otherPoint)) { state in
             state.pathElements.append(otherLine)
@@ -202,9 +202,9 @@ extension DrawingCoreTests {
         let line = PathElement(
             id: .incrementation(2),
             type: .line(to: initialPoint.applyZoomLevel(1/zoomLevel)),
+            startPoint: initialState.pathElements[1].to,
             isHovered: true,
-            zoomLevel: zoomLevel,
-            previousTo: initialState.pathElements[1].to
+            zoomLevel: zoomLevel
         )
         store.send(.addOrMovePathElement(to: initialPoint)) { state in
             state.pathElements.append(line)

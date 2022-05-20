@@ -83,7 +83,7 @@ private extension PathElement {
         return PathElement(
             id: .incrementation(2),
             type: .quadCurve(to: quadCurvePoint, control: quadCurveControl),
-            previousTo: drawingState.pathElements[1].to
+            startPoint: drawingState.pathElements[1].to
         )
     }
 }
