@@ -45,10 +45,10 @@ struct CodeView: View {
     }
 
     @ViewBuilder
-    private func pathElementCode(store: Store<PathElementState, PathElementAction>) -> some View {
+    private func pathElementCode(store: Store<PathElement, PathElementAction>) -> some View {
         WithViewStore(store) { viewStore in
             HStack {
-                Text(viewStore.element.code.codeFormatted(extraIndentation: 2))
+                Text(viewStore.code.codeFormatted(extraIndentation: 2))
                     .opacity(viewStore.isHovered ? 1 : 0.8)
                 if viewStore.isHovered {
                     Button("Remove", role: .destructive) {
@@ -81,7 +81,7 @@ struct CodeView: View {
         Binding<String>(
             get: { [
                 codeHeader,
-                viewStore.pathElements.map(\.element.code).joined(separator: "\n"),
+                viewStore.pathElements.map(\.code).joined(separator: "\n"),
                 codeFooter,
             ].joined(separator: "\n").codeFormatted },
             set: { _, _ in }

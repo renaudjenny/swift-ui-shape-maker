@@ -2,7 +2,7 @@ import ComposableArchitecture
 import SwiftUI
 
 struct GuideView: View {
-    let store: Store<PathElementState, PathElementAction>
+    let store: Store<PathElement, PathElementAction>
     let type: PathElement.GuideType
     let position: CGPoint
 

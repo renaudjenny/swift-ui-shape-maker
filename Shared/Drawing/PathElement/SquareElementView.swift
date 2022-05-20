@@ -2,7 +2,7 @@ import ComposableArchitecture
 import SwiftUI
 
 struct SquareElementView: View {
-    let store: Store<PathElementState, PathElementAction>
+    let store: Store<PathElement, PathElementAction>
 
     var body: some View {
         WithViewStore(store) { viewStore in

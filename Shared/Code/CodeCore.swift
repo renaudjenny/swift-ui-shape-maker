@@ -1,7 +1,7 @@
 import ComposableArchitecture
 
 struct CodeState: Equatable {
-    var pathElements: IdentifiedArrayOf<PathElementState>
+    var pathElements: IdentifiedArrayOf<PathElement>
     var isEditing: Bool
 }
 

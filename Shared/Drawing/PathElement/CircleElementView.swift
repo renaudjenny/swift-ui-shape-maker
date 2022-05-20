@@ -2,7 +2,7 @@ import ComposableArchitecture
 import SwiftUI
 
 struct CircleElementView: View {
-    let store: Store<PathElementState, PathElementAction>
+    let store: Store<PathElement, PathElementAction>
 
     var body: some View {
         WithViewStore(store) { viewStore in

@@ -17,7 +17,7 @@ struct DrawingPanel: View {
                     )
 
                 Path { path in
-                    viewStore.drawing.pathElements.map(\.element).forEach {
+                    viewStore.drawing.pathElements.forEach {
                         path.addElement($0, zoomLevel: viewStore.drawing.zoomLevel)
                     }
                 }
@@ -34,7 +34,7 @@ struct DrawingPanel: View {
     private func pathIndicators(store: Store<DrawingState, DrawingAction>) -> some View {
         ForEachStore(store.scope(state: \.pathElements, action: DrawingAction.pathElement(id:action:))) { store in
             WithViewStore(store) { viewStore in
-                switch viewStore.element.type {
+                switch viewStore.type {
                 case let .move(to), let .line(to):
                     GuideView(store: store, type: .to, position: to)
                 case let .quadCurve(to, control):
@@ -47,7 +47,7 @@ struct DrawingPanel: View {
     }
 
     private func quadCurveGuides(
-        store: Store<PathElementState, PathElementAction>,
+        store: Store<PathElement, PathElementAction>,
         to: CGPoint,
         control: CGPoint
     ) -> some View {
@@ -66,7 +66,7 @@ struct DrawingPanel: View {
 
     @ViewBuilder
     private func curveGuides(
-        store: Store<PathElementState, PathElementAction>,
+        store: Store<PathElement, PathElementAction>,
         to: CGPoint,
         control1: CGPoint,
         control2: CGPoint

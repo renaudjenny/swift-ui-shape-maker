@@ -2,7 +2,7 @@ import ComposableArchitecture
 import IdentifiedCollections
 
 struct DrawingState: Equatable {
-    var pathElements: IdentifiedArrayOf<PathElementState> = []
+    var pathElements: IdentifiedArrayOf<PathElement> = []
     var isAdding = false
     var zoomLevel: Double = 1
     var selectedPathTool = PathTool.line
@@ -39,52 +39,53 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement>.c
             let to = DrawingPanel.inBoundsPoint(to.applyZoomLevel(1/state.zoomLevel))
 
             guard !state.pathElements.isEmpty else {
-                let pathElementState = PathElementState(
-                    element: PathElement(id: environment.uuid(), type: .move(to: to)),
+                state.pathElements.append(PathElement(
+                    id: environment.uuid(),
+                    type: .move(to: to),
                     isHovered: true,
                     zoomLevel: state.zoomLevel,
                     previousTo: to
-                )
-                state.pathElements.append(pathElementState)
+                ))
                 return .none
             }
-            let pathElementState: PathElementState
+            let pathElement: PathElement
             switch state.selectedPathTool {
             case .move:
-                pathElementState = PathElementState(
-                    element: PathElement(id: environment.uuid(), type: .move(to: to)),
+                pathElement = PathElement(
+                    id: environment.uuid(),
+                    type: .move(to: to),
                     isHovered: true,
                     zoomLevel: state.zoomLevel,
-                    previousTo: state.pathElements.last?.element.to ?? .zero
+                    previousTo: state.pathElements.last?.to ?? .zero
                 )
             case .line:
-                pathElementState = PathElementState(
-                    element: PathElement(id: environment.uuid(), type: .line(to: to)),
+                pathElement = PathElement(
+                    id: environment.uuid(),
+                    type: .line(to: to),
                     isHovered: true,
                     zoomLevel: state.zoomLevel,
-                    previousTo: state.pathElements.last?.element.to ?? .zero
+                    previousTo: state.pathElements.last?.to ?? .zero
                 )
             case .quadCurve:
                 let control = state.pathElements.initialQuadCurveControl(to: to)
-                pathElementState = PathElementState(
-                    element: PathElement(id: environment.uuid(), type: .quadCurve(to: to, control: control)),
+                pathElement = PathElement(
+                    id: environment.uuid(),
+                    type: .quadCurve(to: to, control: control),
                     isHovered: true,
                     zoomLevel: state.zoomLevel,
-                    previousTo: state.pathElements.last?.element.to ?? .zero
+                    previousTo: state.pathElements.last?.to ?? .zero
                 )
             case .curve:
                 let (control1, control2) = state.pathElements.initialCurveControls(to: to)
-                pathElementState = PathElementState(
-                    element: PathElement(
-                        id: environment.uuid(),
-                        type: .curve(to: to, control1: control1, control2: control2)
-                    ),
+                pathElement = PathElement(
+                    id: environment.uuid(),
+                    type: .curve(to: to, control1: control1, control2: control2),
                     isHovered: true,
                     zoomLevel: state.zoomLevel,
-                    previousTo: state.pathElements.last?.element.to ?? .zero
+                    previousTo: state.pathElements.last?.to ?? .zero
                 )
             }
-            state.pathElements.append(pathElementState)
+            state.pathElements.append(pathElement)
             return .none
         case .endMove:
             state.isAdding = false

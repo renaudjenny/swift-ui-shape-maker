@@ -37,7 +37,7 @@ final class PathElementCoreTests: XCTestCase {
 
     func testUpdateGuideWhenZoomLevelChanged() throws {
         let zoomLevel: Double = 90/100
-        var initialState: PathElementState = .test
+        var initialState: PathElement = .test
         initialState.zoomLevel = zoomLevel
         let store = TestStore(
             initialState: initialState,
@@ -54,7 +54,7 @@ final class PathElementCoreTests: XCTestCase {
 
     func testUpdateGuideWhenZoomLevelChangedAndPositionOutsidePanel() throws {
         let zoomLevel: Double = 90/100
-        var initialState: PathElementState = .test
+        var initialState: PathElement = .test
         initialState.zoomLevel = zoomLevel
         let store = TestStore(
             initialState: initialState,
@@ -71,7 +71,7 @@ final class PathElementCoreTests: XCTestCase {
     }
 }
 
-private extension PathElementState {
+private extension PathElement {
     static var test: Self {
         DrawingState.test(environment: .test).pathElements[1]
     }
@@ -80,7 +80,7 @@ private extension PathElementState {
         let drawingState = DrawingState.test(environment: .test)
         let quadCurvePoint = CGPoint(x: 345, y: 345)
         let quadCurveControl = drawingState.pathElements.initialQuadCurveControl(to: quadCurvePoint)
-        return PathElementState(
+        return PathElement(
             element: PathElement(
                 id: .incrementation(2),
                 type: .quadCurve(to: quadCurvePoint, control: quadCurveControl)

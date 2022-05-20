@@ -9,8 +9,11 @@ struct PathElement: Equatable, Identifiable {
         case curve(to: CGPoint, control1: CGPoint, control2: CGPoint)
     }
 
-    private(set) var id: UUID
-    private(set) var type: PathElementType
+    var id: UUID
+    var type: PathElementType
+    var isHovered = false
+    var zoomLevel: Double = 1
+    var previousTo: CGPoint
 
     var to: CGPoint {
         switch self.type {
@@ -183,9 +186,9 @@ extension CGPoint {
     }
 }
 
-extension IdentifiedArray where ID == PathElement.ID, Element == PathElementState {
+extension IdentifiedArray where ID == PathElement.ID, Element == PathElement {
     func initialQuadCurveControl(to: CGPoint) -> CGPoint {
-        let lastPoint = last?.element.to ?? .zero
+        let lastPoint = last?.to ?? .zero
         return CGPoint(
             x: (to.x + lastPoint.x) / 2 - 20,
             y: (to.y + lastPoint.y) / 2 - 20
@@ -193,7 +196,7 @@ extension IdentifiedArray where ID == PathElement.ID, Element == PathElementStat
     }
 
     func initialCurveControls(to: CGPoint) -> (CGPoint, CGPoint) {
-        let lastPoint = last?.element.to ?? .zero
+        let lastPoint = last?.to ?? .zero
         let x = (to.x + lastPoint.x) / 2
         let y = (to.y + lastPoint.y) / 2
         let control1 = CGPoint(x: (lastPoint.x + x) / 2 - 20, y: (lastPoint.y + y) / 2 - 20)

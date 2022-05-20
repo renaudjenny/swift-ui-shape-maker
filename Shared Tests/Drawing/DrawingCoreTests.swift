@@ -13,7 +13,7 @@ final class DrawingCoreTests: XCTestCase {
         let firstElementPoint = CGPoint(x: 123, y: 123)
         store.send(.addOrMovePathElement(to: firstElementPoint)) { state in
             // It's not a line that is added firstly, it's always a "move" element
-            state.pathElements.append(PathElementState(
+            state.pathElements.append(PathElement(
                 element: PathElement(id: .incrementation(0), type: .move(to: firstElementPoint)),
                 isHovered: true,
                 previousTo: firstElementPoint
@@ -25,7 +25,7 @@ final class DrawingCoreTests: XCTestCase {
         }
 
         let secondElementPoint = CGPoint(x: 234, y: 234)
-        let actualLine = PathElementState(
+        let actualLine = PathElement(
             element: PathElement(id: .incrementation(1), type: .line(to: secondElementPoint)),
             isHovered: true,
             previousTo: firstElementPoint
@@ -50,7 +50,7 @@ final class DrawingCoreTests: XCTestCase {
 
         let newPoint = CGPoint(x: 456, y: 456)
         store.send(.addOrMovePathElement(to: newPoint)) { state in
-            state.pathElements.append(PathElementState(
+            state.pathElements.append(PathElement(
                 element: PathElement(id: .incrementation(2), type: .move(to: newPoint)),
                 isHovered: true,
                 previousTo: initialState.pathElements[1].element.to
@@ -70,7 +70,7 @@ final class DrawingCoreTests: XCTestCase {
 
         let newPoint = CGPoint(x: 456, y: 456)
         store.send(.addOrMovePathElement(to: newPoint)) { state in
-            state.pathElements.append(PathElementState(
+            state.pathElements.append(PathElement(
                 element: PathElement(id: .incrementation(2), type: .quadCurve(
                     to: newPoint,
                     control: initialState.pathElements.initialQuadCurveControl(to: newPoint)
@@ -94,7 +94,7 @@ final class DrawingCoreTests: XCTestCase {
         let newPoint = CGPoint(x: 456, y: 456)
         let controls = initialState.pathElements.initialCurveControls(to: newPoint)
         store.send(.addOrMovePathElement(to: newPoint)) { state in
-            state.pathElements.append(PathElementState(
+            state.pathElements.append(PathElement(
                 element: PathElement(
                     id: .incrementation(2),
                     type: .curve(
@@ -119,7 +119,7 @@ final class DrawingCoreTests: XCTestCase {
             state.selectedPathTool = .line
         }
         let outsidePoint = CGPoint(x: DrawingPanel.standardWidth + 10, y: DrawingPanel.standardWidth + 10)
-        let line = PathElementState(
+        let line = PathElement(
             element: PathElement(
                 id: .incrementation(2),
                 type: .line(to: CGPoint(x: DrawingPanel.standardWidth, y: DrawingPanel.standardWidth))
@@ -136,7 +136,7 @@ final class DrawingCoreTests: XCTestCase {
         }
 
         let otherPoint = CGPoint(x: 123, y: DrawingPanel.standardWidth + 10)
-        let otherLine = PathElementState(
+        let otherLine = PathElement(
             element: PathElement(
                 id: .incrementation(3),
                 type: .line(to: CGPoint(x: 123, y: DrawingPanel.standardWidth))
@@ -159,7 +159,7 @@ final class DrawingCoreTests: XCTestCase {
             state.selectedPathTool = .line
         }
         let initialPoint = CGPoint(x: 123, y: 123)
-        let line = PathElementState(
+        let line = PathElement(
             element: PathElement(
                 id: .incrementation(2),
                 type: .line(to: initialPoint)
@@ -188,7 +188,7 @@ final class DrawingCoreTests: XCTestCase {
             state.selectedPathTool = .line
         }
         let initialPoint = CGPoint(x: 123, y: 123)
-        let line = PathElementState(
+        let line = PathElement(
             element: PathElement(
                 id: .incrementation(2),
                 type: .line(to: initialPoint)
@@ -223,7 +223,7 @@ final class DrawingCoreTests: XCTestCase {
             state.selectedPathTool = .line
         }
         let initialPoint = CGPoint(x: 123, y: 123)
-        let line = PathElementState(
+        let line = PathElement(
             element: PathElement(
                 id: .incrementation(2),
                 type: .line(to: initialPoint.applyZoomLevel(1/zoomLevel))
