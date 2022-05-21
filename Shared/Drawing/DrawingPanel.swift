@@ -40,12 +40,12 @@ struct DrawingPanel: View {
         ForEachStore(store.scope(state: \.pathElements, action: DrawingAction.pathElement(id:action:))) { store in
             WithViewStore(store) { viewStore in
                 switch viewStore.type {
-                case let .move(to), let .line(to):
-                    GuideView(store: store, type: .to, position: to)
-                case let .quadCurve(to, control):
-                    quadCurveGuides(store: store, to: to, control: control)
-                case let .curve(to, control1, control2):
-                    curveGuides(store: store, to: to, control1: control1, control2: control2)
+                case .move, .line:
+                    GuideView(store: store, type: .to, position: viewStore.endPoint)
+                case let .quadCurve(control):
+                    quadCurveGuides(store: store, to: viewStore.endPoint, control: control)
+                case let .curve(control1, control2):
+                    curveGuides(store: store, to: viewStore.endPoint, control1: control1, control2: control2)
                 }
             }
         }
@@ -114,18 +114,18 @@ extension DrawingPanel {
 private extension Path {
     mutating func addElement(_ element: PathElement, zoomLevel: CGFloat) {
         switch element.type {
-        case let .move(to):
-            move(to: to.applyZoomLevel(zoomLevel))
-        case let .line(to):
-            addLine(to: to.applyZoomLevel(zoomLevel))
-        case let .quadCurve(to, control):
+        case .move:
+            move(to: element.endPoint.applyZoomLevel(zoomLevel))
+        case .line:
+            addLine(to: element.endPoint.applyZoomLevel(zoomLevel))
+        case let .quadCurve(control):
             addQuadCurve(
-                to: to.applyZoomLevel(zoomLevel),
+                to: element.endPoint.applyZoomLevel(zoomLevel),
                 control: control.applyZoomLevel(zoomLevel)
             )
-        case let .curve(to, control1, control2):
+        case let .curve(control1, control2):
             addCurve(
-                to: to.applyZoomLevel(zoomLevel),
+                to: element.endPoint.applyZoomLevel(zoomLevel),
                 control1: control1.applyZoomLevel(zoomLevel),
                 control2: control2.applyZoomLevel(zoomLevel)
             )

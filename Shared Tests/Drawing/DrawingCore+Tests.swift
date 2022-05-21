@@ -6,13 +6,15 @@ extension DrawingState {
         DrawingState(pathElements: [
             PathElement(
                 id: environment.uuid(),
-                type: .move(to: CGPoint(x: 123, y: 123)),
-                startPoint: CGPoint(x: 123, y: 123)
+                type: .move,
+                startPoint: CGPoint(x: 123, y: 123),
+                endPoint: CGPoint(x: 123, y: 123)
             ),
             PathElement(
                 id: environment.uuid(),
-                type: .line(to: CGPoint(x: 234, y: 234)),
-                startPoint: CGPoint(x: 123, y: 123)
+                type: .line,
+                startPoint: CGPoint(x: 123, y: 123),
+                endPoint: CGPoint(x: 234, y: 234)
             ),
         ])
     }

@@ -19,8 +19,9 @@ extension DrawingCoreTests {
         let lineToMovePoint = CGPoint(x: 123, y: 123)
         let lineToMove = PathElement(
             id: .incrementation(0),
-            type: .move(to: lineToMovePoint.applyZoomLevel(1/zoomLevel)),
+            type: .move,
             startPoint: lineToMovePoint.applyZoomLevel(1/zoomLevel),
+            endPoint: lineToMovePoint.applyZoomLevel(1/zoomLevel),
             isHovered: true,
             zoomLevel: zoomLevel
         )
@@ -37,8 +38,9 @@ extension DrawingCoreTests {
         let linePoint = CGPoint(x: 234, y: 234)
         let line = PathElement(
             id: .incrementation(1),
-            type: .line(to: linePoint.applyZoomLevel(1/zoomLevel)),
+            type: .line,
             startPoint: lineToMovePoint.applyZoomLevel(1/zoomLevel),
+            endPoint: linePoint.applyZoomLevel(1/zoomLevel),
             isHovered: true,
             zoomLevel: zoomLevel
         )
@@ -57,8 +59,9 @@ extension DrawingCoreTests {
         let movePoint = CGPoint(x: 235, y: 235)
         let move = PathElement(
             id: .incrementation(2),
-            type: .move(to: movePoint.applyZoomLevel(1/zoomLevel)),
+            type: .move,
             startPoint: linePoint.applyZoomLevel(1/zoomLevel),
+            endPoint: movePoint.applyZoomLevel(1/zoomLevel),
             isHovered: true,
             zoomLevel: zoomLevel
         )
@@ -85,13 +88,11 @@ extension DrawingCoreTests {
         let quadCurvePoint = CGPoint(x: 345, y: 345)
         let quadCurve = PathElement(
             id: .incrementation(2),
-            type: .quadCurve(
-                to: quadCurvePoint.applyZoomLevel(1/zoomLevel),
-                control: initialState.pathElements.initialQuadCurveControl(
-                    to: quadCurvePoint.applyZoomLevel(1/zoomLevel)
-                )
-            ),
-            startPoint: initialState.pathElements[1].to,
+            type: .quadCurve(control: initialState.pathElements.initialQuadCurveControl(
+                to: quadCurvePoint.applyZoomLevel(1/zoomLevel)
+            )),
+            startPoint: initialState.pathElements[1].endPoint,
+            endPoint: quadCurvePoint.applyZoomLevel(1/zoomLevel),
             isHovered: true,
             zoomLevel: zoomLevel
         )
@@ -123,12 +124,9 @@ extension DrawingCoreTests {
         let curveControls = initialState.pathElements.initialCurveControls(to: curvePoint.applyZoomLevel(1/zoomLevel))
         let curve = PathElement(
             id: .incrementation(2),
-            type: .curve(
-                to: curvePoint.applyZoomLevel(1/zoomLevel),
-                control1: curveControls.0,
-                control2: curveControls.1
-            ),
-            startPoint: initialState.pathElements[1].to,
+            type: .curve(control1: curveControls.0, control2: curveControls.1),
+            startPoint: initialState.pathElements[1].endPoint,
+            endPoint: curvePoint.applyZoomLevel(1/zoomLevel),
             isHovered: true,
             zoomLevel: zoomLevel
         )
@@ -158,8 +156,9 @@ extension DrawingCoreTests {
         let outsidePoint = CGPoint(x: DrawingPanel.standardWidth + 10, y: DrawingPanel.standardWidth + 10)
         let line = PathElement(
             id: .incrementation(2),
-            type: .line(to: CGPoint(x: DrawingPanel.standardWidth, y: DrawingPanel.standardWidth)),
-            startPoint: initialState.pathElements[1].to,
+            type: .line,
+            startPoint: initialState.pathElements[1].endPoint,
+            endPoint: CGPoint(x: DrawingPanel.standardWidth, y: DrawingPanel.standardWidth),
             isHovered: true,
             zoomLevel: zoomLevel
         )
@@ -174,8 +173,9 @@ extension DrawingCoreTests {
         let otherPoint = CGPoint(x: 125, y: DrawingPanel.standardWidth + 10)
         let otherLine = PathElement(
             id: .incrementation(3),
-            type: .line(to: CGPoint(x: 125 * 1/zoomLevel, y: DrawingPanel.standardWidth)),
+            type: .line,
             startPoint: CGPoint(x: DrawingPanel.standardWidth, y: DrawingPanel.standardWidth),
+            endPoint: CGPoint(x: 125 * 1/zoomLevel, y: DrawingPanel.standardWidth),
             isHovered: true,
             zoomLevel: zoomLevel
         )
@@ -201,8 +201,9 @@ extension DrawingCoreTests {
         let initialPoint = CGPoint(x: 123, y: 123)
         let line = PathElement(
             id: .incrementation(2),
-            type: .line(to: initialPoint.applyZoomLevel(1/zoomLevel)),
-            startPoint: initialState.pathElements[1].to,
+            type: .line,
+            startPoint: initialState.pathElements[1].endPoint,
+            endPoint: initialPoint.applyZoomLevel(1/zoomLevel),
             isHovered: true,
             zoomLevel: zoomLevel
         )

@@ -82,8 +82,9 @@ private extension PathElement {
         let quadCurveControl = drawingState.pathElements.initialQuadCurveControl(to: quadCurvePoint)
         return PathElement(
             id: .incrementation(2),
-            type: .quadCurve(to: quadCurvePoint, control: quadCurveControl),
-            startPoint: drawingState.pathElements[1].to
+            type: .quadCurve(control: quadCurveControl),
+            startPoint: drawingState.pathElements[1].endPoint,
+            endPoint: quadCurvePoint
         )
     }
 }
