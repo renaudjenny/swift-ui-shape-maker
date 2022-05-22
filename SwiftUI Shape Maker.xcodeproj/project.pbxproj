@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C2BACC6283ADB8A006DC737 /* Collection+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C2BACC5283ADB8A006DC737 /* Collection+Safe.swift */; };
+		4C2BACC7283ADB8A006DC737 /* Collection+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C2BACC5283ADB8A006DC737 /* Collection+Safe.swift */; };
+		4C2BACC8283ADC58006DC737 /* Collection+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C2BACC5283ADB8A006DC737 /* Collection+Safe.swift */; };
 		4C31F715280A0C8B0048DE77 /* ConfigurationCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F714280A0C8B0048DE77 /* ConfigurationCore.swift */; };
 		4C31F716280A0C8B0048DE77 /* ConfigurationCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F714280A0C8B0048DE77 /* ConfigurationCore.swift */; };
 		4C31F71A280C27D70048DE77 /* PathTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F719280C27D70048DE77 /* PathTool.swift */; };
@@ -91,6 +94,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C2BACC5283ADB8A006DC737 /* Collection+Safe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Safe.swift"; sourceTree = "<group>"; };
 		4C31F714280A0C8B0048DE77 /* ConfigurationCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationCore.swift; sourceTree = "<group>"; };
 		4C31F719280C27D70048DE77 /* PathTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathTool.swift; sourceTree = "<group>"; };
 		4C31F71C280C27F20048DE77 /* PathElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathElement.swift; sourceTree = "<group>"; };
@@ -169,6 +173,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C2BACC4283ADB73006DC737 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				4C2BACC5283ADB8A006DC737 /* Collection+Safe.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		4C3DA6AD281FEC2400DE2E0E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -299,6 +311,7 @@
 		4C7BC14228073F0A001942AE /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				4C2BACC4283ADB73006DC737 /* Extensions */,
 				4C3DA6B0281FEC3600DE2E0E /* App */,
 				4C7BC14528073F0A001942AE /* Assets.xcassets */,
 				4C3DA6B4281FEC9E00DE2E0E /* Code */,
@@ -605,6 +618,7 @@
 				4C3DA6F5282C1EE600DE2E0E /* AppCoreTests.swift in Sources */,
 				4C3DA6D9282001FA00DE2E0E /* ConfigurationCoreTests.swift in Sources */,
 				4C3DA6ED2826B29E00DE2E0E /* DrawingCoreTests+ZoomLevel.swift in Sources */,
+				4C2BACC8283ADC58006DC737 /* Collection+Safe.swift in Sources */,
 				4C3DA6DE2820038600DE2E0E /* ConfigurationCore.swift in Sources */,
 				4C3DA6E228201E4700DE2E0E /* DrawingCoreTests.swift in Sources */,
 				4C7E0E5D2835B82600CF712B /* CodeCoreTests.swift in Sources */,
@@ -623,6 +637,7 @@
 				4C3DA6FA282DA99300DE2E0E /* PathElementCore.swift in Sources */,
 				4C31F729280D48B60048DE77 /* CodeView.swift in Sources */,
 				4C31F726280CBF120048DE77 /* SquareElementView.swift in Sources */,
+				4C2BACC6283ADB8A006DC737 /* Collection+Safe.swift in Sources */,
 				4C31F723280CBEE40048DE77 /* CircleElementView.swift in Sources */,
 				4C3DA6EA28247DF500DE2E0E /* GuideView.swift in Sources */,
 				4C31F71A280C27D70048DE77 /* PathTool.swift in Sources */,
@@ -645,6 +660,7 @@
 				4C3DA6F9282DA99200DE2E0E /* PathElementCore.swift in Sources */,
 				4C31F72A280D48B60048DE77 /* CodeView.swift in Sources */,
 				4C31F727280CBF120048DE77 /* SquareElementView.swift in Sources */,
+				4C2BACC7283ADB8A006DC737 /* Collection+Safe.swift in Sources */,
 				4C31F724280CBEE40048DE77 /* CircleElementView.swift in Sources */,
 				4C3DA6EB28247DF500DE2E0E /* GuideView.swift in Sources */,
 				4C31F71B280C27D70048DE77 /* PathTool.swift in Sources */,

@@ -33,6 +33,32 @@ struct AppEnvironment {
 
 let appReducer = Reducer<AppState, AppAction, AppEnvironment>
     .combine(
+        Reducer<AppState, AppAction, AppEnvironment> { state, action, _ in
+            switch action {
+            case .configuration:
+                return .none
+            case .drawing:
+                return .none
+            case .updateImageData:
+                return .none
+            case .imageOpacityChanged:
+                return .none
+            case .drawingPanelTargetedForDropChanged:
+                return .none
+            case .lastZoomGestureDeltaChanged:
+                return .none
+            case let .code(.pathElement(id, action: .remove)):
+                guard
+                    let removedIndex = state.drawing.pathElements.index(id: id),
+                    let nextID = state.drawing.pathElements[safe: removedIndex + 1]?.id,
+                    let newStartPoint = state.drawing.pathElements[safe: removedIndex - 1]?.endPoint
+                else { return .none }
+                state.drawing.pathElements[id: nextID]?.startPoint = newStartPoint
+                return .none
+            case .code:
+                return .none
+            }
+        },
         configurationReducer.pullback(
             state: \.configuration,
             action: /AppAction.configuration,

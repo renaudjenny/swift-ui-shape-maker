@@ -107,10 +107,9 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement>.c
         case let .pathElement(id, action: .update(guide)):
             guard
                 guide.type == .to,
-                let currentElementIndex = state.pathElements.index(id: id),
-                state.pathElements.count - 1 > currentElementIndex
+                let index = state.pathElements.index(id: id),
+                let nextElementID = state.pathElements[safe: index + 1]?.id
             else { return .none }
-            let nextElementID = state.pathElements[currentElementIndex + 1].id
             state.pathElements[id: nextElementID]?.startPoint = guide.position
             return .none
         case .pathElement:

@@ -88,4 +88,31 @@ final class AppCoreTests: XCTestCase {
             state.drawing.zoomLevel = 0.10
         }
     }
+
+    func testRemovePathElementFromCode() throws {
+        let uuid = UUID.incrementing
+        let initialState = AppState(drawing: .test(environment: .init(uuid: uuid)))
+        let store = TestStore(initialState: initialState, reducer: appReducer, environment: AppEnvironment(uuid: uuid))
+        let startPoint = try XCTUnwrap(initialState.drawing.pathElements.last?.endPoint)
+        let newPoint = CGPoint(x: 111, y: 111)
+        store.send(.drawing(.addOrMovePathElement(to: newPoint))) { state in
+            state.drawing.pathElements.append(PathElement(
+                id: .incrementation(2),
+                type: .line,
+                startPoint: startPoint,
+                endPoint: newPoint,
+                isHovered: true
+            ))
+            state.drawing.isAdding = true
+        }
+        store.send(.drawing(.endMove)) { state in
+            state.drawing.isAdding = false
+        }
+
+        store.send(.code(.pathElement(id: .incrementation(1), action: .remove))) { state in
+            state.drawing.pathElements.remove(id: .incrementation(1))
+            let newStartPoint = try XCTUnwrap(state.drawing.pathElements[id: .incrementation(0)]?.endPoint)
+            state.drawing.pathElements[id: .incrementation(2)]?.startPoint = newStartPoint
+        }
+    }
 }
