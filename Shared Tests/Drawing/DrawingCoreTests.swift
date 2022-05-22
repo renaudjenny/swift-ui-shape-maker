@@ -243,17 +243,6 @@ final class DrawingCoreTests: XCTestCase {
         }
     }
 
-    func testRemovePathElement() {
-        let environment = DrawingEnvironement.test
-        let initialState = DrawingState.test(environment: environment)
-        let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
-        let id: UUID = .incrementation(1)
-
-        store.send(.pathElement(id: id, action: .remove)) { state in
-            state.pathElements.remove(id: id)
-        }
-    }
-
     func testUpdatePathElementGuideUpdateTheNextstartPoint() {
         let environment = DrawingEnvironement.test
         let initialState = DrawingState.test(environment: environment)

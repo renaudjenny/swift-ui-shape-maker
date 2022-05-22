@@ -113,9 +113,6 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement>.c
             let nextElementID = state.pathElements[currentElementIndex + 1].id
             state.pathElements[id: nextElementID]?.startPoint = guide.position
             return .none
-        case .pathElement(id: let id, action: .remove):
-            state.pathElements.remove(id: id)
-            return .none
         case .pathElement:
             return .none
         }

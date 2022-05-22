@@ -14,4 +14,27 @@ final class CodeCoreTests: XCTestCase {
             state.isEditing = true
         }
     }
+
+    func testRemovePathElement() {
+        let id: UUID = .incrementation(0)
+        let store = TestStore(
+            initialState: CodeState(
+                pathElements: [
+                    PathElement(
+                        id: id,
+                        type: .line,
+                        startPoint: CGPoint(x: 123, y: 123),
+                        endPoint: CGPoint(x: 234, y: 234)
+                    ),
+                ],
+                isEditing: false
+            ),
+            reducer: codeReducer,
+            environment: CodeEnvironment()
+        )
+
+        store.send(.pathElement(id: id, action: .remove)) { state in
+            state.pathElements.remove(id: id)
+        }
+    }
 }
