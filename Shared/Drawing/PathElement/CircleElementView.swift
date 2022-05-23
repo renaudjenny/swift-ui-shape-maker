@@ -11,7 +11,7 @@ struct CircleElementView: View {
                 .padding()
                 .contentShape(Rectangle())
                 .onHover { hover in
-                    withAnimation(viewStore.isHovered ? nil : .easeInOut) {
+                    withAnimation(.easeInOut) {
                         viewStore.send(.hoverChanged(hover))
                     }
                 }
