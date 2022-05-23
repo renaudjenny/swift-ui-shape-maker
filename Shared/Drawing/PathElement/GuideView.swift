@@ -13,9 +13,7 @@ struct GuideView: View {
                 .gesture(
                     DragGesture()
                         .onChanged { value in
-                            withAnimation(.interactiveSpring()) {
-                                viewStore.send(.update(guide: PathElement.Guide(type: type, position: value.location)))
-                            }
+                            viewStore.send(.update(guide: PathElement.Guide(type: type, position: value.location)))
                         }
                 )
         }
