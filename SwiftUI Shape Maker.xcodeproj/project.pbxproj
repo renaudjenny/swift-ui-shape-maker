@@ -10,6 +10,9 @@
 		4C2BACC6283ADB8A006DC737 /* Collection+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C2BACC5283ADB8A006DC737 /* Collection+Safe.swift */; };
 		4C2BACC7283ADB8A006DC737 /* Collection+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C2BACC5283ADB8A006DC737 /* Collection+Safe.swift */; };
 		4C2BACC8283ADC58006DC737 /* Collection+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C2BACC5283ADB8A006DC737 /* Collection+Safe.swift */; };
+		4C2BACCA283C5631006DC737 /* DrawingPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C2BACC9283C5631006DC737 /* DrawingPath.swift */; };
+		4C2BACCB283C5631006DC737 /* DrawingPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C2BACC9283C5631006DC737 /* DrawingPath.swift */; };
+		4C2BACCC283C5631006DC737 /* DrawingPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C2BACC9283C5631006DC737 /* DrawingPath.swift */; };
 		4C31F715280A0C8B0048DE77 /* ConfigurationCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F714280A0C8B0048DE77 /* ConfigurationCore.swift */; };
 		4C31F716280A0C8B0048DE77 /* ConfigurationCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F714280A0C8B0048DE77 /* ConfigurationCore.swift */; };
 		4C31F71A280C27D70048DE77 /* PathTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F719280C27D70048DE77 /* PathTool.swift */; };
@@ -95,6 +98,7 @@
 
 /* Begin PBXFileReference section */
 		4C2BACC5283ADB8A006DC737 /* Collection+Safe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Safe.swift"; sourceTree = "<group>"; };
+		4C2BACC9283C5631006DC737 /* DrawingPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingPath.swift; sourceTree = "<group>"; };
 		4C31F714280A0C8B0048DE77 /* ConfigurationCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationCore.swift; sourceTree = "<group>"; };
 		4C31F719280C27D70048DE77 /* PathTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathTool.swift; sourceTree = "<group>"; };
 		4C31F71C280C27F20048DE77 /* PathElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathElement.swift; sourceTree = "<group>"; };
@@ -214,6 +218,7 @@
 				4C3DA6BA281FEE6500DE2E0E /* DrawingCore.swift */,
 				4C31F71F280CBE500048DE77 /* DrawingPanel.swift */,
 				4C31F719280C27D70048DE77 /* PathTool.swift */,
+				4C2BACC9283C5631006DC737 /* DrawingPath.swift */,
 			);
 			path = Drawing;
 			sourceTree = "<group>";
@@ -622,6 +627,7 @@
 				4C3DA6DE2820038600DE2E0E /* ConfigurationCore.swift in Sources */,
 				4C3DA6E228201E4700DE2E0E /* DrawingCoreTests.swift in Sources */,
 				4C7E0E5D2835B82600CF712B /* CodeCoreTests.swift in Sources */,
+				4C2BACCC283C5631006DC737 /* DrawingPath.swift in Sources */,
 				4C3DA6FD282DACEC00DE2E0E /* PathElementCoreTests.swift in Sources */,
 				4C3DA6E528201F2C00DE2E0E /* PathTool.swift in Sources */,
 			);
@@ -641,6 +647,7 @@
 				4C31F723280CBEE40048DE77 /* CircleElementView.swift in Sources */,
 				4C3DA6EA28247DF500DE2E0E /* GuideView.swift in Sources */,
 				4C31F71A280C27D70048DE77 /* PathTool.swift in Sources */,
+				4C2BACCA283C5631006DC737 /* DrawingPath.swift in Sources */,
 				4C3DA6B6281FED4000DE2E0E /* AppCore.swift in Sources */,
 				4C31F715280A0C8B0048DE77 /* ConfigurationCore.swift in Sources */,
 				4C7BC16D28073F0A001942AE /* ContentView.swift in Sources */,
@@ -664,6 +671,7 @@
 				4C31F724280CBEE40048DE77 /* CircleElementView.swift in Sources */,
 				4C3DA6EB28247DF500DE2E0E /* GuideView.swift in Sources */,
 				4C31F71B280C27D70048DE77 /* PathTool.swift in Sources */,
+				4C2BACCB283C5631006DC737 /* DrawingPath.swift in Sources */,
 				4C3DA6B7281FED4000DE2E0E /* AppCore.swift in Sources */,
 				4C31F716280A0C8B0048DE77 /* ConfigurationCore.swift in Sources */,
 				4C7BC16E28073F0A001942AE /* ContentView.swift in Sources */,

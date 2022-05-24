@@ -16,22 +16,12 @@ struct DrawingPanel: View {
                             .onEnded { _ in viewStore.send(.drawing(.endMove)) }
                     )
 
-                path(store: store.scope(state: \.drawing, action: AppAction.drawing))
+                DrawingPath(store: store.scope(state: \.drawing).actionless)
 
                 if viewStore.configuration.isPathIndicatorsDisplayed {
                     pathIndicators(store: store.scope(state: \.drawing, action: AppAction.drawing))
                 }
             }
-        }
-    }
-
-    private func path(store: Store<DrawingState, DrawingAction>) -> some View {
-        WithViewStore(store) { viewStore in
-            Path { path in
-                viewStore.pathElements.forEach {
-                    path.addElement($0, zoomLevel: viewStore.zoomLevel)
-                }
-            }.stroke()
         }
     }
 
@@ -108,27 +98,5 @@ extension DrawingPanel {
             inBondsPoint.y = DrawingPanel.standardWidth
         }
         return inBondsPoint
-    }
-}
-
-private extension Path {
-    mutating func addElement(_ element: PathElement, zoomLevel: CGFloat) {
-        switch element.type {
-        case .move:
-            move(to: element.endPoint.applyZoomLevel(zoomLevel))
-        case .line:
-            addLine(to: element.endPoint.applyZoomLevel(zoomLevel))
-        case let .quadCurve(control):
-            addQuadCurve(
-                to: element.endPoint.applyZoomLevel(zoomLevel),
-                control: control.applyZoomLevel(zoomLevel)
-            )
-        case let .curve(control1, control2):
-            addCurve(
-                to: element.endPoint.applyZoomLevel(zoomLevel),
-                control1: control1.applyZoomLevel(zoomLevel),
-                control2: control2.applyZoomLevel(zoomLevel)
-            )
-        }
     }
 }
