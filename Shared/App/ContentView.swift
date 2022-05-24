@@ -10,51 +10,56 @@ struct ContentView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            VStack {
-                VStack {
-                    HStack {
-                        Slider(value: viewStore.binding(
-                            get: \.imageOpacity,
-                            send: AppAction.imageOpacityChanged
-                        )) { Text("Image opacity") }
-                        Button("Choose an image") { openImagePicker(viewStore: viewStore) }
-                        zoom(viewStore: viewStore)
-                    }
-                    HStack {
-                        Picker("Tool", selection: viewStore.binding(
-                            get: \.drawing.selectedPathTool,
-                            send: { .drawing(.selectPathTool($0)) }
-                        )) {
-                            Text("Move").tag(PathTool.move)
-                            Text("Line").tag(PathTool.line)
-                            Text("Quad curve").tag(PathTool.quadCurve)
-                            Text("Curve").tag(PathTool.curve)
-                        }
-                        .pickerStyle(SegmentedPickerStyle())
-                        .frame(width: 300)
-                        Toggle("Display path indicators", isOn: viewStore.binding(
-                            get: \.configuration.isPathIndicatorsDisplayed,
-                            send: { .configuration(.displayPathIndicatorsToggleChanged(isOn: $0)) }
-                        ).animation())
-                        Spacer()
-                    }
+            HStack {
+                DrawingZone(store: store)
+                CodeView(store: store.scope(state: \.code, action: AppAction.code))
+            }
+            .toolbar {
+                Picker("Tool", selection: viewStore.binding(
+                    get: \.drawing.selectedPathTool,
+                    send: { .drawing(.selectPathTool($0)) }
+                )) {
+                    Text("Move").tag(PathTool.move)
+                    Text("Line").tag(PathTool.line)
+                    Text("Quad curve").tag(PathTool.quadCurve)
+                    Text("Curve").tag(PathTool.curve)
                 }
-                .padding()
-                HStack {
-                    DrawingZone(store: store)
-                    CodeView(store: store.scope(state: \.code, action: AppAction.code))
+                .pickerStyle(SegmentedPickerStyle())
+
+                Toggle(isOn: viewStore.binding(
+                    get: \.configuration.isPathIndicatorsDisplayed,
+                    send: { .configuration(.displayPathIndicatorsToggleChanged(isOn: $0)) }
+                ).animation()) {
+                    let systemImage = viewStore.configuration.isPathIndicatorsDisplayed
+                    ? "point.3.filled.connected.trianglepath.dotted"
+                    : "point.3.connected.trianglepath.dotted"
+                    Label("Display path indicators", systemImage: systemImage)
+                }
+
+                Divider()
+
+                Button { openImagePicker(viewStore: viewStore) } label: {
+                    Label("Choose an image", systemImage: "photo")
+                }
+
+                Slider(value: viewStore.binding(
+                    get: \.imageOpacity,
+                    send: AppAction.imageOpacityChanged
+                )) { Text("Image opacity") }.frame(width: 200)
+
+                Divider()
+
+                Slider(
+                    value: viewStore.binding(get: \.drawing.zoomLevel, send: { .drawing(.zoomLevelChanged($0)) }),
+                    in: 0.10...4
+                ) {
+                    Text("Zoom level")
+                }.frame(width: 200)
+
+                Button { viewStore.send(.drawing(.zoomLevelChanged(1))) } label: {
+                    Label("Reset zoom", systemImage: "magnifyingglass.circle")
                 }
             }
-        }
-    }
-
-    private func zoom(viewStore: ViewStore<AppState, AppAction>) -> some View {
-        HStack {
-            Slider(
-                value: viewStore.binding(get: \.drawing.zoomLevel, send: { .drawing(.zoomLevelChanged($0)) }),
-                in: 0.10...4
-            ) { Text("Zoom level") }
-            Text("\(Int(viewStore.drawing.zoomLevel * 100))%")
         }
     }
 
