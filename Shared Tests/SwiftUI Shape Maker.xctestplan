@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "69CBD367-FB5D-4153-9274-6EED0AD890A1",
+      "name" : "Default",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:SwiftUI Shape Maker.xcodeproj",
+        "identifier" : "4C3DA6CD2820018B00DE2E0E",
+        "name" : "Shared Tests"
+      }
+    }
+  ],
+  "version" : 1
+}

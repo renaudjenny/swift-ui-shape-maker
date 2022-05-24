@@ -1,66 +1,68 @@
 import SwiftUI
+import IdentifiedCollections
 
-enum PathElement {
-    case move(to: CGPoint)
-    case line(to: CGPoint)
-    case quadCurve(to: CGPoint, control: CGPoint)
-    case curve(to: CGPoint, control1: CGPoint, control2: CGPoint)
-
-    var to: CGPoint {
-        switch self {
-        case let .move(to), let .line(to), let .quadCurve(to: to, _), let .curve(to: to, _, _):
-            return to
-        }
+struct PathElement: Equatable, Identifiable {
+    enum PathElementType: Equatable {
+        case move
+        case line
+        case quadCurve(control: CGPoint)
+        case curve(control1: CGPoint, control2: CGPoint)
     }
 
-    mutating func update(
-        to newTo: CGPoint? = nil,
-        quadCurveControl newQuadCurveControl: CGPoint? = nil,
-        curveControls newCurveControls: (control1: CGPoint?, control2: CGPoint?)? = nil
-    ) {
-        switch self {
-        case let .move(to):
-            self = .move(to: newTo ?? to)
-        case let .line(to):
-            self = .line(to: newTo ?? to)
-        case let .quadCurve(to: to, control: control):
-            self = .quadCurve(to: newTo ?? to, control: newQuadCurveControl ?? control)
-        case let .curve(to: to, control1: control1, control2: control2):
-            self = .curve(
-                to: newTo ?? to,
-                control1: newCurveControls?.control1 ?? control1,
-                control2: newCurveControls?.control2 ?? control2
-            )
+    var id: UUID
+    var type: PathElementType
+    var startPoint: CGPoint
+    var endPoint: CGPoint
+    var isHovered = false
+    var zoomLevel: Double = 1
+
+    mutating func update(guide: Guide) {
+        switch (type, guide.type) {
+        case (.move, .to):
+            endPoint = guide.position
+        case (.line, .to):
+            endPoint = guide.position
+        case (.quadCurve, .to):
+            endPoint = guide.position
+        case (.quadCurve, .quadCurveControl):
+            type = .quadCurve(control: guide.position)
+        case (.curve, .to):
+            endPoint = guide.position
+        case let (.curve(_, control2), .curveControl1):
+            type = .curve(control1: guide.position, control2: control2)
+        case let (.curve(control1, _), .curveControl2):
+            type = .curve(control1: control1, control2: guide.position)
+        default: break
         }
     }
 }
 
 extension PathElement {
     var code: String {
-        switch self {
-        case let .move(to):
+        switch type {
+        case .move:
             return """
             path.move(
-                to: \(pointForCode(to))
+                to: \(pointForCode(endPoint))
             )
             """
-        case let .line(to):
+        case .line:
             return """
             path.addLine(
-                to: \(pointForCode(to))
+                to: \(pointForCode(endPoint))
             )
             """
-        case let .quadCurve(to, control):
+        case let .quadCurve(control):
             return """
             path.addQuadCurve(
-                to: \(pointForCode(to)),
+                to: \(pointForCode(endPoint)),
                 control: \(pointForCode(control))
             )
             """
-        case let .curve(to, control1, control2):
+        case let .curve(control1, control2):
             return """
             path.addCurve(
-                to: \(pointForCode(to)),
+                to: \(pointForCode(endPoint)),
                 control1: \(pointForCode(control1)),
                 control2: \(pointForCode(control2))
             )
@@ -80,6 +82,20 @@ extension PathElement {
             y: rect.midY \(ySign) width * \(Int(y.rounded()))/\(Int(width))
         )
         """
+    }
+}
+
+extension PathElement {
+    enum GuideType: Equatable {
+        case to
+        case quadCurveControl
+        case curveControl1
+        case curveControl2
+    }
+
+    struct Guide: Equatable {
+        let type: GuideType
+        let position: CGPoint
     }
 }
 
@@ -114,30 +130,27 @@ extension String {
     private var indentation: String { String(prefix(while: { $0 == " " })) }
 }
 
-extension Path {
-    mutating func addElement(_ element: PathElement, zoomLevel: CGFloat) {
-        switch element {
-        case let .move(to):
-            move(to: to.applyZoomLevel(zoomLevel))
-        case let .line(to):
-            addLine(to: to.applyZoomLevel(zoomLevel))
-        case let .quadCurve(to, control):
-            addQuadCurve(
-                to: to.applyZoomLevel(zoomLevel),
-                control: control.applyZoomLevel(zoomLevel)
-            )
-        case let .curve(to, control1, control2):
-            addCurve(
-                to: to.applyZoomLevel(zoomLevel),
-                control1: control1.applyZoomLevel(zoomLevel),
-                control2: control2.applyZoomLevel(zoomLevel)
-            )
-        }
-    }
-}
-
 extension CGPoint {
     func applyZoomLevel(_ zoomLevel: CGFloat) -> CGPoint {
         applying(CGAffineTransform(scaleX: zoomLevel, y: zoomLevel))
+    }
+}
+
+extension IdentifiedArray where ID == PathElement.ID, Element == PathElement {
+    func initialQuadCurveControl(to: CGPoint) -> CGPoint {
+        let lastPoint = last?.endPoint ?? .zero
+        return CGPoint(
+            x: (to.x + lastPoint.x) / 2 - 20,
+            y: (to.y + lastPoint.y) / 2 - 20
+        )
+    }
+
+    func initialCurveControls(to: CGPoint) -> (CGPoint, CGPoint) {
+        let lastPoint = last?.endPoint ?? .zero
+        let x = (to.x + lastPoint.x) / 2
+        let y = (to.y + lastPoint.y) / 2
+        let control1 = CGPoint(x: (lastPoint.x + x) / 2 - 20, y: (lastPoint.y + y) / 2 - 20)
+        let control2 = CGPoint(x: (x + to.x) / 2 + 20, y: (y + to.y) / 2 + 20)
+        return (control1, control2)
     }
 }
