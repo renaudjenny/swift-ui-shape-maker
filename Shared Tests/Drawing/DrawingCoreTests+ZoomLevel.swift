@@ -219,4 +219,24 @@ extension DrawingCoreTests {
             state.pathElements[id: .incrementation(2)]?.update(guide: amendedGuide)
         }
     }
+
+    func testIncrementZoomLevel() {
+        let environment = DrawingEnvironement.test
+        let store = TestStore(initialState: DrawingState(), reducer: drawingReducer, environment: environment)
+
+        store.send(.incrementZoomLevel)
+        store.receive(.zoomLevelChanged(1.1)) { state in
+            state.zoomLevel += 0.1
+        }
+    }
+
+    func testDecrementZoomLevel() {
+        let environment = DrawingEnvironement.test
+        let store = TestStore(initialState: DrawingState(), reducer: drawingReducer, environment: environment)
+
+        store.send(.decrementZoomLevel)
+        store.receive(.zoomLevelChanged(0.9)) { state in
+            state.zoomLevel -= 0.1
+        }
+    }
 }

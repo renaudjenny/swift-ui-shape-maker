@@ -14,6 +14,8 @@ enum DrawingAction: Equatable {
     case endMove
     case selectPathTool(PathTool)
     case zoomLevelChanged(Double)
+    case incrementZoomLevel
+    case decrementZoomLevel
 }
 
 struct DrawingEnvironement {
@@ -104,6 +106,10 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement>.c
                 state.pathElements[id: $0]?.zoomLevel = zoomLevel
             }
             return .none
+        case .incrementZoomLevel:
+            return Effect(value: .zoomLevelChanged(min(state.zoomLevel + 0.1, 4)))
+        case .decrementZoomLevel:
+            return Effect(value: .zoomLevelChanged(max(state.zoomLevel - 0.1, 0.1)))
         case let .pathElement(id, action: .update(guide)):
             guard
                 guide.type == .to,
