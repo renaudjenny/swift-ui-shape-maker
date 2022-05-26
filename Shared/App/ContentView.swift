@@ -38,20 +38,19 @@ struct ContentView: View {
                     }
                 }
 
+                ToolbarItem { Spacer() }
+
                 ToolbarItemGroup {
                     Button { openImagePicker(viewStore: viewStore) } label: {
                         Label("Choose an image", systemImage: "photo")
                     }
-
                     Slider(value: viewStore.binding(
                         get: \.imageOpacity,
                         send: AppAction.imageOpacityChanged
                     )) { Text("Image opacity") }.frame(width: 100)
-
-                    Button { openImagePicker(viewStore: viewStore) } label: {
-                        Label("Choose an image", systemImage: "photo.fill")
-                    }
                 }
+
+                ToolbarItem { Divider() }
 
                 ToolbarItemGroup {
                     Button { viewStore.send(.drawing(.decrementZoomLevel)) } label: {

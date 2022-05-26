@@ -11,5 +11,6 @@ struct SwiftUIShapeMakerApp: App {
                 environment: AppEnvironment(uuid: UUID.init)
             ))
         }
+        .windowToolbarStyle(.unified(showsTitle: false))
     }
 }
