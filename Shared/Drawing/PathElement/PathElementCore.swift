@@ -4,6 +4,7 @@ enum PathElementAction: Equatable {
     case update(guide: PathElement.Guide)
     case hoverChanged(Bool)
     case remove
+    case transform(to: PathTool)
 }
 
 struct PathElementEnvironement {}
@@ -18,6 +19,8 @@ let pathElementReducer = Reducer<PathElement, PathElementAction, PathElementEnvi
         state.isHovered = isHovered
         return .none
     case .remove:
+        return .none
+    case .transform:
         return .none
     }
 }

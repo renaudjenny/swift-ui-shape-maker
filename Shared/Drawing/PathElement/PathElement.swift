@@ -11,8 +11,19 @@ struct PathElement: Equatable, Identifiable {
 
     var id: UUID
     var type: PathElementType
-    var startPoint: CGPoint
-    var endPoint: CGPoint
+
+    @available(*, deprecated, message: "use segment instead")
+    var startPoint: CGPoint {
+        get { segment.startPoint }
+        set { segment.startPoint = newValue }
+    }
+    @available(*, deprecated, message: "use segment instead")
+    var endPoint: CGPoint {
+        get { segment.endPoint }
+        set { segment.endPoint = newValue }
+    }
+
+    var segment: Segment
     var isHovered = false
     var zoomLevel: Double = 1
 
@@ -38,6 +49,22 @@ struct PathElement: Equatable, Identifiable {
 }
 
 extension PathElement {
+    @available(*, deprecated, message: "")
+    init(
+        id: UUID,
+        type: PathElement.PathElementType,
+        startPoint: CGPoint,
+        endPoint: CGPoint,
+        isHovered: Bool = false,
+        zoomLevel: Double = 1
+    ) {
+        self.id = id
+        self.type = type
+        self.segment = Segment(startPoint: startPoint, endPoint: endPoint)
+        self.isHovered = isHovered
+        self.zoomLevel = zoomLevel
+    }
+
     var code: String {
         switch type {
         case .move:
@@ -136,7 +163,28 @@ extension CGPoint {
     }
 }
 
+struct Segment: Equatable {
+    var startPoint: CGPoint
+    var endPoint: CGPoint
+}
+
+extension Segment {
+    var initialQuadCurveControl: CGPoint { CGPoint(
+        x: (endPoint.x + startPoint.x) / 2 - 20,
+        y: (endPoint.y + startPoint.y) / 2 - 20
+    ) }
+
+    var initialCurveControls: (CGPoint, CGPoint) {
+        let x = (endPoint.x + startPoint.x) / 2
+        let y = (endPoint.y + startPoint.y) / 2
+        let control1 = CGPoint(x: (startPoint.x + x) / 2 - 20, y: (startPoint.y + y) / 2 - 20)
+        let control2 = CGPoint(x: (x + endPoint.x) / 2 + 20, y: (y + endPoint.y) / 2 + 20)
+        return (control1, control2)
+    }
+}
+
 extension IdentifiedArray where ID == PathElement.ID, Element == PathElement {
+    @available(*, deprecated, message: "use Segment methods")
     func initialQuadCurveControl(to: CGPoint) -> CGPoint {
         let lastPoint = last?.endPoint ?? .zero
         return CGPoint(
@@ -145,6 +193,7 @@ extension IdentifiedArray where ID == PathElement.ID, Element == PathElement {
         )
     }
 
+    @available(*, deprecated, message: "use Segment methods")
     func initialCurveControls(to: CGPoint) -> (CGPoint, CGPoint) {
         let lastPoint = last?.endPoint ?? .zero
         let x = (to.x + lastPoint.x) / 2

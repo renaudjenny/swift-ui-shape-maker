@@ -51,10 +51,18 @@ struct CodeView: View {
                 Text(viewStore.code.codeFormatted(extraIndentation: 2))
                     .opacity(viewStore.isHovered ? 1 : 0.8)
                 if viewStore.isHovered {
-                    Button("Remove", role: .destructive) {
-                        viewStore.send(.remove)
+                    Menu {
+                        ForEach(PathTool.allCases.filter { $0 != viewStore.type.tool }) { tool in
+                            Button { viewStore.send(.transform(to: tool)) } label: { tool.text }
+                        }
+                        Button("Remove", role: .destructive) {
+                            viewStore.send(.remove)
+                        }
+                    } label: {
+                        Label("Transform", systemImage: "scissors")
                     }
-                    .padding(.horizontal)
+                    .frame(width: 150)
+                    .padding()
                 }
             }
             .background {
@@ -104,4 +112,26 @@ struct CodeView: View {
     }
     """ }
     // swiftlint: enable indentation_width
+}
+
+private extension PathElement.PathElementType {
+    var tool: PathTool {
+        switch self {
+        case .move: return .move
+        case .line: return .line
+        case .curve: return .curve
+        case .quadCurve: return .quadCurve
+        }
+    }
+}
+
+private extension PathTool {
+    var text: Text {
+        switch self {
+        case .move: return Text("Move")
+        case .line: return Text("Line")
+        case .curve: return Text("Curve")
+        case .quadCurve: return Text("QuadCurve")
+        }
+    }
 }
