@@ -31,11 +31,11 @@ struct DrawingPanel: View {
             WithViewStore(store) { viewStore in
                 switch viewStore.type {
                 case .move, .line:
-                    GuideView(store: store, type: .to, position: viewStore.endPoint)
+                    GuideView(store: store, type: .to, position: viewStore.segment.endPoint)
                 case let .quadCurve(control):
-                    quadCurveGuides(store: store, to: viewStore.endPoint, control: control)
+                    quadCurveGuides(store: store, to: viewStore.segment.endPoint, control: control)
                 case let .curve(control1, control2):
-                    curveGuides(store: store, to: viewStore.endPoint, control1: control1, control2: control2)
+                    curveGuides(store: store, to: viewStore.segment.endPoint, control1: control1, control2: control2)
                 }
             }
         }
@@ -51,7 +51,7 @@ struct DrawingPanel: View {
                 GuideView(store: store, type: .to, position: to)
                 GuideView(store: store, type: .quadCurveControl, position: control)
                 Path { path in
-                    path.move(to: viewStore.startPoint.applyZoomLevel(viewStore.zoomLevel))
+                    path.move(to: viewStore.segment.startPoint.applyZoomLevel(viewStore.zoomLevel))
                     path.addLine(to: control.applyZoomLevel(viewStore.zoomLevel))
                     path.addLine(to: to.applyZoomLevel(viewStore.zoomLevel))
                 }.stroke(style: .init(dash: [5], dashPhase: 1))
@@ -72,7 +72,7 @@ struct DrawingPanel: View {
                 GuideView(store: store, type: .curveControl1, position: control1)
                 GuideView(store: store, type: .curveControl2, position: control2)
                 Path { path in
-                    path.move(to: viewStore.startPoint.applyZoomLevel(viewStore.zoomLevel))
+                    path.move(to: viewStore.segment.startPoint.applyZoomLevel(viewStore.zoomLevel))
                     path.addLine(to: control1.applyZoomLevel(viewStore.zoomLevel))
                     path.addLine(to: control2.applyZoomLevel(viewStore.zoomLevel))
                     path.addLine(to: to.applyZoomLevel(viewStore.zoomLevel))

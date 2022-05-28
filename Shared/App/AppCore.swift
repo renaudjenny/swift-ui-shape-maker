@@ -51,9 +51,9 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>
                 guard
                     let removedIndex = state.drawing.pathElements.index(id: id),
                     let nextID = state.drawing.pathElements[safe: removedIndex + 1]?.id,
-                    let newStartPoint = state.drawing.pathElements[safe: removedIndex - 1]?.endPoint
+                    let newStartPoint = state.drawing.pathElements[safe: removedIndex - 1]?.segment.endPoint
                 else { return .none }
-                state.drawing.pathElements[id: nextID]?.startPoint = newStartPoint
+                state.drawing.pathElements[id: nextID]?.segment.startPoint = newStartPoint
                 return .none
             case .code:
                 return .none

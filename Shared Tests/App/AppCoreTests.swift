@@ -93,14 +93,13 @@ final class AppCoreTests: XCTestCase {
         let uuid = UUID.incrementing
         let initialState = AppState(drawing: .test(environment: .init(uuid: uuid)))
         let store = TestStore(initialState: initialState, reducer: appReducer, environment: AppEnvironment(uuid: uuid))
-        let startPoint = try XCTUnwrap(initialState.drawing.pathElements.last?.endPoint)
+        let startPoint = try XCTUnwrap(initialState.drawing.pathElements.last?.segment.endPoint)
         let newPoint = CGPoint(x: 111, y: 111)
         store.send(.drawing(.addOrMovePathElement(to: newPoint))) { state in
             state.drawing.pathElements.append(PathElement(
                 id: .incrementation(2),
                 type: .line,
-                startPoint: startPoint,
-                endPoint: newPoint,
+                segment: Segment(startPoint: startPoint, endPoint: newPoint),
                 isHovered: true
             ))
             state.drawing.isAdding = true
@@ -111,8 +110,8 @@ final class AppCoreTests: XCTestCase {
 
         store.send(.code(.pathElement(id: .incrementation(1), action: .remove))) { state in
             state.drawing.pathElements.remove(id: .incrementation(1))
-            let newStartPoint = try XCTUnwrap(state.drawing.pathElements[id: .incrementation(0)]?.endPoint)
-            state.drawing.pathElements[id: .incrementation(2)]?.startPoint = newStartPoint
+            let newStartPoint = try XCTUnwrap(state.drawing.pathElements[id: .incrementation(0)]?.segment.endPoint)
+            state.drawing.pathElements[id: .incrementation(2)]?.segment.startPoint = newStartPoint
         }
     }
 }

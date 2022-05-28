@@ -30,15 +30,15 @@ struct PathElement: Equatable, Identifiable {
     mutating func update(guide: Guide) {
         switch (type, guide.type) {
         case (.move, .to):
-            endPoint = guide.position
+            segment.endPoint = guide.position
         case (.line, .to):
-            endPoint = guide.position
+            segment.endPoint = guide.position
         case (.quadCurve, .to):
-            endPoint = guide.position
+            segment.endPoint = guide.position
         case (.quadCurve, .quadCurveControl):
             type = .quadCurve(control: guide.position)
         case (.curve, .to):
-            endPoint = guide.position
+            segment.endPoint = guide.position
         case let (.curve(_, control2), .curveControl1):
             type = .curve(control1: guide.position, control2: control2)
         case let (.curve(control1, _), .curveControl2):
@@ -70,26 +70,26 @@ extension PathElement {
         case .move:
             return """
             path.move(
-                to: \(pointForCode(endPoint))
+                to: \(pointForCode(segment.endPoint))
             )
             """
         case .line:
             return """
             path.addLine(
-                to: \(pointForCode(endPoint))
+                to: \(pointForCode(segment.endPoint))
             )
             """
         case let .quadCurve(control):
             return """
             path.addQuadCurve(
-                to: \(pointForCode(endPoint)),
+                to: \(pointForCode(segment.endPoint)),
                 control: \(pointForCode(control))
             )
             """
         case let .curve(control1, control2):
             return """
             path.addCurve(
-                to: \(pointForCode(endPoint)),
+                to: \(pointForCode(segment.endPoint)),
                 control1: \(pointForCode(control1)),
                 control2: \(pointForCode(control2))
             )

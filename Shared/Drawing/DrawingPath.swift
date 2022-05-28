@@ -20,17 +20,17 @@ private struct DrawingShape: Shape {
         pathElements.forEach {
             switch $0.type {
             case .move:
-                path.move(to: $0.endPoint.applyZoomLevel(zoomLevel))
+                path.move(to: $0.segment.endPoint.applyZoomLevel(zoomLevel))
             case .line:
-                path.addLine(to: $0.endPoint.applyZoomLevel(zoomLevel))
+                path.addLine(to: $0.segment.endPoint.applyZoomLevel(zoomLevel))
             case let .quadCurve(control):
                 path.addQuadCurve(
-                    to: $0.endPoint.applyZoomLevel(zoomLevel),
+                    to: $0.segment.endPoint.applyZoomLevel(zoomLevel),
                     control: control.applyZoomLevel(zoomLevel)
                 )
             case let .curve(control1, control2):
                 path.addCurve(
-                    to: $0.endPoint.applyZoomLevel(zoomLevel),
+                    to: $0.segment.endPoint.applyZoomLevel(zoomLevel),
                     control1: control1.applyZoomLevel(zoomLevel),
                     control2: control2.applyZoomLevel(zoomLevel)
                 )

@@ -7,14 +7,12 @@ extension DrawingState {
             PathElement(
                 id: environment.uuid(),
                 type: .move,
-                startPoint: CGPoint(x: 123, y: 123),
-                endPoint: CGPoint(x: 123, y: 123)
+                segment: Segment(startPoint: CGPoint(x: 123, y: 123), endPoint: CGPoint(x: 123, y: 123))
             ),
             PathElement(
                 id: environment.uuid(),
                 type: .line,
-                startPoint: CGPoint(x: 123, y: 123),
-                endPoint: CGPoint(x: 234, y: 234)
+                segment: Segment(startPoint: CGPoint(x: 123, y: 123), endPoint: CGPoint(x: 234, y: 234))
             ),
         ])
     }
