@@ -16,8 +16,10 @@ final class DrawingCoreTests: XCTestCase {
             state.pathElements.append(PathElement(
                 id: .incrementation(0),
                 type: .move,
-                startPoint: firstElementPoint,
-                endPoint: firstElementPoint,
+                segment: Segment(
+                    startPoint: firstElementPoint,
+                    endPoint: firstElementPoint
+                ),
                 isHovered: true
             ))
             state.isAdding = true
@@ -30,8 +32,10 @@ final class DrawingCoreTests: XCTestCase {
         let actualLine = PathElement(
             id: .incrementation(1),
             type: .line,
-            startPoint: firstElementPoint,
-            endPoint: secondElementPoint,
+            segment: Segment(
+                startPoint: firstElementPoint,
+                endPoint: secondElementPoint
+            ),
             isHovered: true
         )
         store.send(.addOrMovePathElement(to: secondElementPoint)) { state in
@@ -57,8 +61,10 @@ final class DrawingCoreTests: XCTestCase {
             state.pathElements.append(PathElement(
                 id: .incrementation(2),
                 type: .move,
-                startPoint: initialState.pathElements[1].endPoint,
-                endPoint: newPoint,
+                segment: Segment(
+                    startPoint: initialState.pathElements[1].segment.endPoint,
+                    endPoint: newPoint
+                ),
                 isHovered: true
             ))
             state.isAdding = true
@@ -75,12 +81,12 @@ final class DrawingCoreTests: XCTestCase {
         }
 
         let newPoint = CGPoint(x: 456, y: 456)
+        let segment = Segment(startPoint: initialState.pathElements[1].segment.endPoint, endPoint: newPoint)
         store.send(.addOrMovePathElement(to: newPoint)) { state in
             state.pathElements.append(PathElement(
                 id: .incrementation(2),
-                type: .quadCurve(control: initialState.pathElements.initialQuadCurveControl(to: newPoint)),
-                startPoint: initialState.pathElements[1].endPoint,
-                endPoint: newPoint,
+                type: .quadCurve(control: segment.initialQuadCurveControl),
+                segment: segment,
                 isHovered: true
             ))
             state.isAdding = true
@@ -97,13 +103,13 @@ final class DrawingCoreTests: XCTestCase {
         }
 
         let newPoint = CGPoint(x: 456, y: 456)
-        let controls = initialState.pathElements.initialCurveControls(to: newPoint)
+        let segment = Segment(startPoint: initialState.pathElements[1].segment.endPoint, endPoint: newPoint)
+        let (control1, control2) = segment.initialCurveControls
         store.send(.addOrMovePathElement(to: newPoint)) { state in
             state.pathElements.append(PathElement(
                 id: .incrementation(2),
-                type: .curve(control1: controls.0, control2: controls.1),
-                startPoint: initialState.pathElements[1].endPoint,
-                endPoint: newPoint,
+                type: .curve(control1: control1, control2: control2),
+                segment: segment,
                 isHovered: true
             ))
             state.isAdding = true
@@ -122,8 +128,10 @@ final class DrawingCoreTests: XCTestCase {
         let line = PathElement(
             id: .incrementation(2),
             type: .line,
-            startPoint: initialState.pathElements[1].endPoint,
-            endPoint: CGPoint(x: DrawingPanel.standardWidth, y: DrawingPanel.standardWidth),
+            segment: Segment(
+                startPoint: initialState.pathElements[1].segment.endPoint,
+                endPoint: CGPoint(x: DrawingPanel.standardWidth, y: DrawingPanel.standardWidth)
+            ),
             isHovered: true
         )
         store.send(.addOrMovePathElement(to: outsidePoint)) { state in
@@ -138,8 +146,10 @@ final class DrawingCoreTests: XCTestCase {
         let otherLine = PathElement(
             id: .incrementation(3),
             type: .line,
-            startPoint: CGPoint(x: DrawingPanel.standardWidth, y: DrawingPanel.standardWidth),
-            endPoint: CGPoint(x: 123, y: DrawingPanel.standardWidth),
+            segment: Segment(
+                startPoint: CGPoint(x: DrawingPanel.standardWidth, y: DrawingPanel.standardWidth),
+                endPoint: CGPoint(x: 123, y: DrawingPanel.standardWidth)
+            ),
             isHovered: true
         )
         store.send(.addOrMovePathElement(to: otherPoint)) { state in
@@ -160,8 +170,10 @@ final class DrawingCoreTests: XCTestCase {
         let line = PathElement(
             id: .incrementation(2),
             type: .line,
-            startPoint: initialState.pathElements[1].endPoint,
-            endPoint: initialPoint,
+            segment: Segment(
+                startPoint: initialState.pathElements[1].segment.endPoint,
+                endPoint: initialPoint
+            ),
             isHovered: true
         )
         store.send(.addOrMovePathElement(to: initialPoint)) { state in
@@ -188,8 +200,10 @@ final class DrawingCoreTests: XCTestCase {
         let line = PathElement(
             id: .incrementation(2),
             type: .line,
-            startPoint: initialState.pathElements[1].endPoint,
-            endPoint: initialPoint,
+            segment: Segment(
+                startPoint: initialState.pathElements[1].segment.endPoint,
+                endPoint: initialPoint
+            ),
             isHovered: true
         )
         store.send(.addOrMovePathElement(to: initialPoint)) { state in
@@ -222,8 +236,10 @@ final class DrawingCoreTests: XCTestCase {
         let line = PathElement(
             id: .incrementation(2),
             type: .line,
-            startPoint: initialState.pathElements[1].endPoint,
-            endPoint: initialPoint.applyZoomLevel(1/zoomLevel),
+            segment: Segment(
+                startPoint: initialState.pathElements[1].segment.endPoint,
+                endPoint: initialPoint.applyZoomLevel(1/zoomLevel)
+            ),
             isHovered: true,
             zoomLevel: zoomLevel
         )
@@ -254,7 +270,7 @@ final class DrawingCoreTests: XCTestCase {
         store.send(.pathElement(id: id, action: .update(guide: guide))) { state in
             state.pathElements[id: id]?.update(guide: guide)
             let nextElementID: UUID = .incrementation(1)
-            state.pathElements[id: nextElementID]?.startPoint = newPosition
+            state.pathElements[id: nextElementID]?.segment.startPoint = newPosition
         }
     }
 }

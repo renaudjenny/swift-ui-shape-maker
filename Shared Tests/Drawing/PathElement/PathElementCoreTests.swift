@@ -79,12 +79,11 @@ private extension PathElement {
     static var testQuadCurve: Self {
         let drawingState = DrawingState.test(environment: .test)
         let quadCurvePoint = CGPoint(x: 345, y: 345)
-        let quadCurveControl = drawingState.pathElements.initialQuadCurveControl(to: quadCurvePoint)
+        let segment = Segment(startPoint: drawingState.pathElements[1].segment.endPoint, endPoint: quadCurvePoint)
         return PathElement(
             id: .incrementation(2),
-            type: .quadCurve(control: quadCurveControl),
-            startPoint: drawingState.pathElements[1].endPoint,
-            endPoint: quadCurvePoint
+            type: .quadCurve(control: segment.initialQuadCurveControl),
+            segment: segment
         )
     }
 }
