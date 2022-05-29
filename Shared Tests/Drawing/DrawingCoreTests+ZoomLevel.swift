@@ -236,6 +236,28 @@ extension DrawingCoreTests {
         }
     }
 
+    func testUpdatePathElementGuideUpdateTheNextstartPointWhenZoomLevelChanged() {
+        let environment = DrawingEnvironement.test
+        let initialState = DrawingState.test(environment: environment)
+        let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
+        let id: UUID = .incrementation(0)
+
+        let zoomLevel: Double = 90/100
+        store.send(.zoomLevelChanged(zoomLevel)) { state in
+            state.zoomLevel = zoomLevel
+            state.updatePathElementsZoomLevel(zoomLevel)
+        }
+
+        let newPosition = CGPoint(x: 101, y: 101)
+        let guide = PathElement.Guide(type: .to, position: newPosition)
+        store.send(.pathElement(id: id, action: .update(guide: guide))) { state in
+            let amendedGuide = PathElement.Guide(type: .to, position: newPosition.applyZoomLevel(1/zoomLevel))
+            state.pathElements[id: id]?.update(guide: amendedGuide)
+            let nextElementID: UUID = .incrementation(1)
+            state.pathElements[id: nextElementID]?.segment.startPoint = newPosition.applyZoomLevel(1/zoomLevel)
+        }
+    }
+
     func testIncrementZoomLevel() {
         let environment = DrawingEnvironement.test
         let store = TestStore(initialState: DrawingState(), reducer: drawingReducer, environment: environment)

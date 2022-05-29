@@ -111,7 +111,7 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement>.c
                 let index = state.pathElements.index(id: id),
                 let nextElementID = state.pathElements[safe: index + 1]?.id
             else { return .none }
-            state.pathElements[id: nextElementID]?.segment.startPoint = guide.position
+            state.pathElements[id: nextElementID]?.segment.startPoint = guide.position.applyZoomLevel(1/state.zoomLevel)
             return .none
         case .pathElement:
             return .none
