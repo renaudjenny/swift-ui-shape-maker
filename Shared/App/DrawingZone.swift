@@ -53,6 +53,8 @@ private extension AppState {
     var image: Image? {
         #if os(macOS)
         imageData.flatMap { NSImage(data: $0).map { Image(nsImage: $0) } }
+        #else
+        imageData.flatMap { UIImage(data: $0).map { Image(uiImage: $0) } }
         #endif
     }
 }

@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import IdentifiedCollections
+import SwiftUI
 
 struct DrawingState: Equatable {
     var pathElements: IdentifiedArrayOf<PathElement> = []
