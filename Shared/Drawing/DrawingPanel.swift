@@ -11,7 +11,7 @@ struct DrawingPanel: View {
             ZStack {
                 Color.white
                     .gesture(
-                        DragGesture()
+                        DragGesture(minimumDistance: 0)
                             .onChanged { viewStore.send(.drawing(.addOrMovePathElement(to: $0.location))) }
                             .onEnded { _ in viewStore.send(.drawing(.endMove)) }
                     )
