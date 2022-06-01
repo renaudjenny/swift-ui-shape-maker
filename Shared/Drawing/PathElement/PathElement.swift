@@ -14,6 +14,7 @@ struct PathElement: Equatable, Identifiable {
     var segment: Segment
     var isHovered = false
     var zoomLevel: Double = 1
+    var isTransformable = true
 
     mutating func update(guide: Guide) {
         switch (type, guide.type) {

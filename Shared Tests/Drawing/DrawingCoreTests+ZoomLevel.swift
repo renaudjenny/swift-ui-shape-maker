@@ -17,6 +17,7 @@ extension DrawingCoreTests {
         }
 
         let lineToMovePoint = CGPoint(x: 123, y: 123)
+        // It's not a line that is added firstly, it's always a "move" element, and it cannot be transformed
         let lineToMove = PathElement(
             id: .incrementation(0),
             type: .move,
@@ -25,10 +26,10 @@ extension DrawingCoreTests {
                 endPoint: lineToMovePoint.applyZoomLevel(1/zoomLevel)
             ),
             isHovered: true,
-            zoomLevel: zoomLevel
+            zoomLevel: zoomLevel,
+            isTransformable: false
         )
         store.send(.addOrMovePathElement(to: lineToMovePoint)) { state in
-            // It's not a line that is added firstly, it's always a "move" element
             state.pathElements = [lineToMove]
             state.isAdding = true
         }

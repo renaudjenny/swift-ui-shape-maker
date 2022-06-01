@@ -12,7 +12,7 @@ final class DrawingCoreTests: XCTestCase {
 
         let firstElementPoint = CGPoint(x: 123, y: 123)
         store.send(.addOrMovePathElement(to: firstElementPoint)) { state in
-            // It's not a line that is added firstly, it's always a "move" element
+            // It's not a line that is added firstly, it's always a "move" element, and it cannot be transformed
             state.pathElements.append(PathElement(
                 id: .incrementation(0),
                 type: .move,
@@ -20,7 +20,8 @@ final class DrawingCoreTests: XCTestCase {
                     startPoint: firstElementPoint,
                     endPoint: firstElementPoint
                 ),
-                isHovered: true
+                isHovered: true,
+                isTransformable: false
             ))
             state.isAdding = true
         }

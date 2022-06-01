@@ -47,7 +47,8 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement>.c
                     type: .move,
                     segment: Segment(startPoint: to, endPoint: to),
                     isHovered: true,
-                    zoomLevel: state.zoomLevel
+                    zoomLevel: state.zoomLevel,
+                    isTransformable: false
                 ))
                 return .none
             }

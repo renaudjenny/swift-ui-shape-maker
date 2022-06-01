@@ -50,7 +50,7 @@ struct CodeView: View {
             HStack {
                 Text(viewStore.code.codeFormatted(extraIndentation: 2))
                     .opacity(viewStore.isHovered ? 1 : 0.8)
-                if viewStore.isHovered {
+                if viewStore.isHovered && viewStore.isTransformable {
                     Menu {
                         ForEach(PathTool.allCases.filter { $0 != viewStore.type.tool }) { tool in
                             Button { viewStore.send(.transform(to: tool)) } label: { tool.text }
