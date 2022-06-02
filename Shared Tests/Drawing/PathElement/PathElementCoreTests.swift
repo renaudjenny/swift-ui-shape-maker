@@ -69,6 +69,16 @@ final class PathElementCoreTests: XCTestCase {
             state.update(guide: amendedGuide)
         }
     }
+
+    func testUpdateCurveGuideOutsidePanel() throws {
+        let store = TestStore(initialState: .test, reducer: pathElementReducer, environment: PathElementEnvironement())
+
+        let newPoint = CGPoint(x: 345, y: DrawingPanel.standardWidth + 10)
+        let guide = PathElement.Guide(type: .quadCurveControl, position: newPoint)
+        store.send(.update(guide: guide)) { state in
+            state.update(guide: guide)
+        }
+    }
 }
 
 private extension PathElement {
