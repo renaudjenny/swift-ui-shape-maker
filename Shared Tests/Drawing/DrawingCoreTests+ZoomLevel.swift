@@ -4,7 +4,8 @@ import ComposableArchitecture
 extension DrawingCoreTests {
     // swiftlint:disable:next function_body_length
     func testAddFirstElementsWhenZoomLevelChanged() throws {
-        let store = TestStore(initialState: DrawingState(), reducer: drawingReducer, environment: .test)
+        let state = BaseState(pathElements: [], state: DrawingState())
+        let store = TestStore(initialState: state, reducer: drawingReducer, environment: .test)
 
         var pathElements: [PathElement] = []
 
@@ -80,7 +81,7 @@ extension DrawingCoreTests {
 
     func testAddQuadCurveWhenZoomChanged() throws {
         let environment = DrawingEnvironement.test
-        let initialState = DrawingState.test(environment: environment)
+        let initialState = BaseState.test(environment: environment)
         let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
 
         let zoomLevel: Double = 90/100
@@ -116,7 +117,7 @@ extension DrawingCoreTests {
 
     func testAddCurveWhenZoomChanged() throws {
         let environment = DrawingEnvironement.test
-        let initialState = DrawingState.test(environment: environment)
+        let initialState = BaseState.test(environment: environment)
         let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
 
         let zoomLevel: Double = 90/100
@@ -153,7 +154,7 @@ extension DrawingCoreTests {
 
     func testAddElementWhenOutsideOfThePanelAndZoomLevelChanged() throws {
         let environment = DrawingEnvironement.test
-        let initialState = DrawingState.test(environment: environment)
+        let initialState = BaseState.test(environment: environment)
         let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
 
         let zoomLevel: Double = 90/100
@@ -202,7 +203,7 @@ extension DrawingCoreTests {
 
     func testMoveLineWhenZoomLevelChanged() throws {
         let environment = DrawingEnvironement.test
-        let initialState = DrawingState.test(environment: environment)
+        let initialState = BaseState.test(environment: environment)
         let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
 
         let zoomLevel: Double = 90/100
@@ -239,7 +240,7 @@ extension DrawingCoreTests {
 
     func testUpdatePathElementGuideUpdateTheNextstartPointWhenZoomLevelChanged() {
         let environment = DrawingEnvironement.test
-        let initialState = DrawingState.test(environment: environment)
+        let initialState = BaseState.test(environment: environment)
         let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
         let id: UUID = .incrementation(0)
 
@@ -261,7 +262,8 @@ extension DrawingCoreTests {
 
     func testIncrementZoomLevel() {
         let environment = DrawingEnvironement.test
-        let store = TestStore(initialState: DrawingState(), reducer: drawingReducer, environment: environment)
+        let state = BaseState(pathElements: [], state: DrawingState())
+        let store = TestStore(initialState: state, reducer: drawingReducer, environment: environment)
 
         store.send(.incrementZoomLevel)
         store.receive(.zoomLevelChanged(1.1)) { state in
@@ -271,7 +273,8 @@ extension DrawingCoreTests {
 
     func testDecrementZoomLevel() {
         let environment = DrawingEnvironement.test
-        let store = TestStore(initialState: DrawingState(), reducer: drawingReducer, environment: environment)
+        let state = BaseState(pathElements: [], state: DrawingState())
+        let store = TestStore(initialState: state, reducer: drawingReducer, environment: environment)
 
         store.send(.decrementZoomLevel)
         store.receive(.zoomLevelChanged(0.9)) { state in

@@ -1,8 +1,7 @@
 import ComposableArchitecture
 
 struct CodeState: Equatable {
-    var pathElements: IdentifiedArrayOf<PathElement>
-    var mode: CodeMode
+    var mode: CodeMode = .blocks
 }
 
 enum CodeMode {
@@ -18,7 +17,7 @@ enum CodeAction: Equatable {
 
 struct CodeEnvironment {}
 
-let codeReducer = Reducer<CodeState, CodeAction, CodeEnvironment>.combine(
+let codeReducer = Reducer<BaseState<CodeState>, CodeAction, CodeEnvironment>.combine(
     pathElementReducer.forEach(
         state: \.pathElements,
         action: /CodeAction.pathElement,

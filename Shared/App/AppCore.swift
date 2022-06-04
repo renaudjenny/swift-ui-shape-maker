@@ -3,13 +3,8 @@ import ComposableArchitecture
 struct AppState: Equatable {
     var configuration = ConfigurationState()
     var drawing = DrawingState()
-    var code: CodeState {
-        get { CodeState(pathElements: drawing.pathElements, mode: codeMode) }
-        set {
-            drawing.pathElements = newValue.pathElements
-            codeMode = newValue.mode
-        }
-    }
+    var code = CodeState()
+    var pathElements: IdentifiedArrayOf<PathElement> = []
     var imageData: Data?
     var imageOpacity = 1.0
     var isDrawingPanelTargetedForImageDrop = false
@@ -49,11 +44,11 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>
                 return .none
             case let .code(.pathElement(id, action: .remove)):
                 guard
-                    let removedIndex = state.drawing.pathElements.index(id: id),
-                    let nextID = state.drawing.pathElements[safe: removedIndex + 1]?.id,
-                    let newStartPoint = state.drawing.pathElements[safe: removedIndex - 1]?.segment.endPoint
+                    let removedIndex = state.pathElements.index(id: id),
+                    let nextID = state.pathElements[safe: removedIndex + 1]?.id,
+                    let newStartPoint = state.pathElements[safe: removedIndex - 1]?.segment.endPoint
                 else { return .none }
-                state.drawing.pathElements[id: nextID]?.segment.startPoint = newStartPoint
+                state.pathElements[id: nextID]?.segment.startPoint = newStartPoint
                 return .none
             case .code:
                 return .none
@@ -65,11 +60,11 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>
             environment: { _ in ConfigurationEnvironement() }
         ),
         drawingReducer.pullback(
-            state: \.drawing,
+            state: \.drawingState,
             action: /AppAction.drawing,
             environment: { DrawingEnvironement(uuid: $0.uuid) }),
         codeReducer.pullback(
-            state: \.code,
+            state: \.codeState,
             action: /AppAction.code,
             environment: { _ in CodeEnvironment() }
         ),

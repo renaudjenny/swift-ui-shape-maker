@@ -16,17 +16,17 @@ struct DrawingPanel: View {
                             .onEnded { _ in viewStore.send(.drawing(.endMove)) }
                     )
 
-                DrawingPath(store: store.scope(state: \.drawing).actionless)
+                DrawingPath(store: store.scope(state: \.drawingState).actionless)
 
                 if viewStore.configuration.isPathIndicatorsDisplayed {
-                    pathIndicators(store: store.scope(state: \.drawing, action: AppAction.drawing))
+                    pathIndicators(store: store.scope(state: \.drawingState, action: AppAction.drawing))
                 }
             }
         }
     }
 
     @ViewBuilder
-    private func pathIndicators(store: Store<DrawingState, DrawingAction>) -> some View {
+    private func pathIndicators(store: Store<BaseState<DrawingState>, DrawingAction>) -> some View {
         ForEachStore(store.scope(state: \.pathElements, action: DrawingAction.pathElement(id:action:))) { store in
             WithViewStore(store) { viewStore in
                 switch viewStore.type {

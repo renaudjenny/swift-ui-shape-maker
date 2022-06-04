@@ -4,7 +4,8 @@ import XCTest
 
 final class DrawingCoreTests: XCTestCase {
     func testAddFirstPathElement() {
-        let store = TestStore(initialState: DrawingState(), reducer: drawingReducer, environment: .test)
+        let state = BaseState(pathElements: [], state: DrawingState())
+        let store = TestStore(initialState: state, reducer: drawingReducer, environment: .test)
 
         store.send(.selectPathTool(.line)) { state in
             state.selectedPathTool = .line
@@ -50,7 +51,7 @@ final class DrawingCoreTests: XCTestCase {
 
     func testAddMoveElement() {
         let environment = DrawingEnvironement.test
-        let initialState = DrawingState.test(environment: environment)
+        let initialState = BaseState.test(environment: environment)
         let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
 
         store.send(.selectPathTool(.move)) { state in
@@ -74,7 +75,7 @@ final class DrawingCoreTests: XCTestCase {
 
     func testAddQuadCurveElement() throws {
         let environment = DrawingEnvironement.test
-        let initialState = DrawingState.test(environment: environment)
+        let initialState = BaseState.test(environment: environment)
         let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
 
         store.send(.selectPathTool(.quadCurve)) { state in
@@ -96,7 +97,7 @@ final class DrawingCoreTests: XCTestCase {
 
     func testAddCurveElement() throws {
         let environment = DrawingEnvironement.test
-        let initialState = DrawingState.test(environment: environment)
+        let initialState = BaseState.test(environment: environment)
         let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
 
         store.send(.selectPathTool(.curve)) { state in
@@ -119,7 +120,7 @@ final class DrawingCoreTests: XCTestCase {
 
     func testAddElementWhenOutsideOfThePanel() throws {
         let environment = DrawingEnvironement.test
-        let initialState = DrawingState.test(environment: environment)
+        let initialState = BaseState.test(environment: environment)
         let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
 
         store.send(.selectPathTool(.line)) { state in
@@ -161,7 +162,7 @@ final class DrawingCoreTests: XCTestCase {
 
     func testMoveLine() throws {
         let environment = DrawingEnvironement.test
-        let initialState = DrawingState.test(environment: environment)
+        let initialState = BaseState.test(environment: environment)
         let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
 
         store.send(.selectPathTool(.line)) { state in
@@ -191,7 +192,7 @@ final class DrawingCoreTests: XCTestCase {
 
     func testMoveLineOutsideOfThePanel() throws {
         let environment = DrawingEnvironement.test
-        let initialState = DrawingState.test(environment: environment)
+        let initialState = BaseState.test(environment: environment)
         let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
 
         store.send(.selectPathTool(.line)) { state in
@@ -222,7 +223,7 @@ final class DrawingCoreTests: XCTestCase {
 
     func testMoveLineOutsideOfThePanelAndZoomLevelChanged() throws {
         let environment = DrawingEnvironement.test
-        let initialState = DrawingState.test(environment: environment)
+        let initialState = BaseState.test(environment: environment)
         let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
 
         let zoomLevel: Double = 90/100
@@ -262,7 +263,7 @@ final class DrawingCoreTests: XCTestCase {
 
     func testUpdatePathElementGuideUpdateTheNextstartPoint() {
         let environment = DrawingEnvironement.test
-        let initialState = DrawingState.test(environment: environment)
+        let initialState = BaseState.test(environment: environment)
         let store = TestStore(initialState: initialState, reducer: drawingReducer, environment: environment)
         let id: UUID = .incrementation(0)
 

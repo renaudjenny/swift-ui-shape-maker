@@ -12,7 +12,7 @@ struct ContentView: View {
         WithViewStore(store) { viewStore in
             HStack {
                 DrawingZone(store: store)
-                CodeView(store: store.scope(state: \.code, action: AppAction.code))
+                CodeView(store: store.scope(state: \.codeState, action: AppAction.code))
             }
             .toolbar {
                 ToolbarItemGroup(placement: .primaryAction) {

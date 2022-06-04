@@ -87,11 +87,11 @@ final class PathElementCoreTests: XCTestCase {
 
 private extension PathElement {
     static var test: Self {
-        DrawingState.test(environment: .test).pathElements[1]
+        BaseState.test(environment: .test).pathElements[1]
     }
 
     static var testQuadCurve: Self {
-        let drawingState = DrawingState.test(environment: .test)
+        let drawingState = BaseState.test(environment: .test)
         let quadCurvePoint = CGPoint(x: 345, y: 345)
         let segment = Segment(startPoint: drawingState.pathElements[1].segment.endPoint, endPoint: quadCurvePoint)
         return PathElement(

@@ -91,12 +91,13 @@ final class AppCoreTests: XCTestCase {
 
     func testRemovePathElementFromCode() throws {
         let uuid = UUID.incrementing
-        let initialState = AppState(drawing: .test(environment: .init(uuid: uuid)))
+        var initialState = AppState()
+        initialState.drawingState = .test(environment: .init(uuid: uuid))
         let store = TestStore(initialState: initialState, reducer: appReducer, environment: AppEnvironment(uuid: uuid))
-        let startPoint = try XCTUnwrap(initialState.drawing.pathElements.last?.segment.endPoint)
+        let startPoint = try XCTUnwrap(initialState.pathElements.last?.segment.endPoint)
         let newPoint = CGPoint(x: 111, y: 111)
         store.send(.drawing(.addOrMovePathElement(to: newPoint))) { state in
-            state.drawing.pathElements.append(PathElement(
+            state.pathElements.append(PathElement(
                 id: .incrementation(2),
                 type: .line,
                 segment: Segment(startPoint: startPoint, endPoint: newPoint),
@@ -109,9 +110,9 @@ final class AppCoreTests: XCTestCase {
         }
 
         store.send(.code(.pathElement(id: .incrementation(1), action: .remove))) { state in
-            state.drawing.pathElements.remove(id: .incrementation(1))
-            let newStartPoint = try XCTUnwrap(state.drawing.pathElements[id: .incrementation(0)]?.segment.endPoint)
-            state.drawing.pathElements[id: .incrementation(2)]?.segment.startPoint = newStartPoint
+            state.pathElements.remove(id: .incrementation(1))
+            let newStartPoint = try XCTUnwrap(state.pathElements[id: .incrementation(0)]?.segment.endPoint)
+            state.pathElements[id: .incrementation(2)]?.segment.startPoint = newStartPoint
         }
     }
 }

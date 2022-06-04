@@ -1,9 +1,15 @@
 import ComposableArchitecture
 import SwiftUI
 
-extension DrawingState {
+extension DrawingEnvironement {
+    static var test: Self {
+        DrawingEnvironement(uuid: UUID.incrementing)
+    }
+}
+
+extension BaseState where State == DrawingState {
     static func test(environment: DrawingEnvironement) -> Self {
-        DrawingState(pathElements: [
+        let pathElements = IdentifiedArrayOf(uniqueElements: [
             PathElement(
                 id: environment.uuid(),
                 type: .move,
@@ -15,17 +21,12 @@ extension DrawingState {
                 segment: Segment(startPoint: CGPoint(x: 123, y: 123), endPoint: CGPoint(x: 234, y: 234))
             ),
         ])
+        return BaseState(pathElements: pathElements, state: DrawingState())
     }
 
     mutating func updatePathElementsZoomLevel(_ zoomLevel: Double) {
         pathElements.map(\.id).forEach {
             pathElements[id: $0]?.zoomLevel = zoomLevel
         }
-    }
-}
-
-extension DrawingEnvironement {
-    static var test: Self {
-        DrawingEnvironement(uuid: UUID.incrementing)
     }
 }

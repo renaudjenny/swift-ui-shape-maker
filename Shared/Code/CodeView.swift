@@ -3,7 +3,7 @@ import ComposableArchitecture
 import IdentifiedCollections
 
 struct CodeView: View {
-    let store: Store<CodeState, CodeAction>
+    let store: Store<BaseState<CodeState>, CodeAction>
 
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -85,7 +85,7 @@ struct CodeView: View {
         }
     }
 
-    private func code(viewStore: ViewStore<CodeState, CodeAction>) -> Binding<String> {
+    private func code(viewStore: ViewStore<BaseState<CodeState>, CodeAction>) -> Binding<String> {
         Binding<String>(
             get: { [
                 codeHeader,

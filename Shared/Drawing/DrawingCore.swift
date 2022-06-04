@@ -3,7 +3,6 @@ import IdentifiedCollections
 import SwiftUI
 
 struct DrawingState: Equatable {
-    var pathElements: IdentifiedArrayOf<PathElement> = []
     var isAdding = false
     var zoomLevel: Double = 1
     var selectedPathTool = PathTool.line
@@ -23,7 +22,7 @@ struct DrawingEnvironement {
     var uuid: () -> UUID
 }
 
-let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement>.combine(
+let drawingReducer = Reducer<BaseState<DrawingState>, DrawingAction, DrawingEnvironement>.combine(
     pathElementReducer.forEach(
         state: \.pathElements,
         action: /DrawingAction.pathElement,
@@ -113,7 +112,9 @@ let drawingReducer = Reducer<DrawingState, DrawingAction, DrawingEnvironement>.c
                 let index = state.pathElements.index(id: id),
                 let nextElementID = state.pathElements[safe: index + 1]?.id
             else { return .none }
-            state.pathElements[id: nextElementID]?.segment.startPoint = guide.position.applyZoomLevel(1/state.zoomLevel)
+            var amendedPathElement = state.pathElements[id: nextElementID]
+            amendedPathElement?.segment.startPoint = guide.position.applyZoomLevel(1/state.zoomLevel)
+            state.pathElements[id: nextElementID] = amendedPathElement
             return .none
         case .pathElement:
             return .none

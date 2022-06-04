@@ -27,6 +27,9 @@
 		4C31F727280CBF120048DE77 /* SquareElementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F725280CBF120048DE77 /* SquareElementView.swift */; };
 		4C31F729280D48B60048DE77 /* CodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F728280D48B60048DE77 /* CodeView.swift */; };
 		4C31F72A280D48B60048DE77 /* CodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31F728280D48B60048DE77 /* CodeView.swift */; };
+		4C3D193B284BF0AA0096404F /* AppCore+BaseState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3D193A284BF0AA0096404F /* AppCore+BaseState.swift */; };
+		4C3D193C284BF0AA0096404F /* AppCore+BaseState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3D193A284BF0AA0096404F /* AppCore+BaseState.swift */; };
+		4C3D193D284BF2180096404F /* AppCore+BaseState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3D193A284BF0AA0096404F /* AppCore+BaseState.swift */; };
 		4C3DA6AC281FEC1400DE2E0E /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 4C3DA6AB281FEC1400DE2E0E /* ComposableArchitecture */; };
 		4C3DA6AF281FEC2400DE2E0E /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 4C3DA6AE281FEC2400DE2E0E /* ComposableArchitecture */; };
 		4C3DA6B6281FED4000DE2E0E /* AppCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA6B5281FED4000DE2E0E /* AppCore.swift */; };
@@ -106,6 +109,7 @@
 		4C31F722280CBEE40048DE77 /* CircleElementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleElementView.swift; sourceTree = "<group>"; };
 		4C31F725280CBF120048DE77 /* SquareElementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareElementView.swift; sourceTree = "<group>"; };
 		4C31F728280D48B60048DE77 /* CodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeView.swift; sourceTree = "<group>"; };
+		4C3D193A284BF0AA0096404F /* AppCore+BaseState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCore+BaseState.swift"; sourceTree = "<group>"; };
 		4C3DA6B5281FED4000DE2E0E /* AppCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCore.swift; sourceTree = "<group>"; };
 		4C3DA6BA281FEE6500DE2E0E /* DrawingCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingCore.swift; sourceTree = "<group>"; };
 		4C3DA6BF281FEEC700DE2E0E /* CodeCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeCore.swift; sourceTree = "<group>"; };
@@ -196,9 +200,10 @@
 			isa = PBXGroup;
 			children = (
 				4C3DA6B5281FED4000DE2E0E /* AppCore.swift */,
+				4C3D193A284BF0AA0096404F /* AppCore+BaseState.swift */,
 				4C7BC14428073F0A001942AE /* ContentView.swift */,
-				4C7BC14328073F0A001942AE /* SwiftUIShapeMakerApp.swift */,
 				4CFF09732832DE8F007B4A5B /* DrawingZone.swift */,
+				4C7BC14328073F0A001942AE /* SwiftUIShapeMakerApp.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -630,6 +635,7 @@
 				4C2BACCC283C5631006DC737 /* DrawingPath.swift in Sources */,
 				4C3DA6FD282DACEC00DE2E0E /* PathElementCoreTests.swift in Sources */,
 				4C3DA6E528201F2C00DE2E0E /* PathTool.swift in Sources */,
+				4C3D193D284BF2180096404F /* AppCore+BaseState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -646,6 +652,7 @@
 				4C2BACC6283ADB8A006DC737 /* Collection+Safe.swift in Sources */,
 				4C31F723280CBEE40048DE77 /* CircleElementView.swift in Sources */,
 				4C3DA6EA28247DF500DE2E0E /* GuideView.swift in Sources */,
+				4C3D193B284BF0AA0096404F /* AppCore+BaseState.swift in Sources */,
 				4C31F71A280C27D70048DE77 /* PathTool.swift in Sources */,
 				4C2BACCA283C5631006DC737 /* DrawingPath.swift in Sources */,
 				4C3DA6B6281FED4000DE2E0E /* AppCore.swift in Sources */,
@@ -670,6 +677,7 @@
 				4C2BACC7283ADB8A006DC737 /* Collection+Safe.swift in Sources */,
 				4C31F724280CBEE40048DE77 /* CircleElementView.swift in Sources */,
 				4C3DA6EB28247DF500DE2E0E /* GuideView.swift in Sources */,
+				4C3D193C284BF0AA0096404F /* AppCore+BaseState.swift in Sources */,
 				4C31F71B280C27D70048DE77 /* PathTool.swift in Sources */,
 				4C2BACCB283C5631006DC737 /* DrawingPath.swift in Sources */,
 				4C3DA6B7281FED4000DE2E0E /* AppCore.swift in Sources */,

@@ -2,7 +2,7 @@ import ComposableArchitecture
 import SwiftUI
 
 struct DrawingPath: View {
-    let store: Store<DrawingState, Never>
+    let store: Store<BaseState<DrawingState>, Never>
 
     var body: some View {
         WithViewStore(store) { viewStore in
