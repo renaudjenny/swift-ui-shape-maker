@@ -41,6 +41,18 @@ struct ContentView: View {
                 ToolbarItem { Spacer() }
 
                 ToolbarItemGroup {
+                    Picker("Code mode", selection: viewStore.binding(
+                        get: \.codeMode,
+                        send: { .code(.modeChanged($0)) }
+                    )) {
+                        Label("Blocks", systemImage: "rectangle.grid.1x2").tag(CodeMode.blocks)
+                        Label("Edition", systemImage: "character.cursor.ibeam").tag(CodeMode.edition)
+                        Label("hidden", systemImage: "rectangle").tag(CodeMode.hidden)
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                }
+
+                ToolbarItemGroup {
                     Button { openImagePicker(viewStore: viewStore) } label: {
                         Label("Choose an image", systemImage: "photo")
                     }

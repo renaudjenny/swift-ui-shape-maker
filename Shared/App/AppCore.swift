@@ -4,17 +4,17 @@ struct AppState: Equatable {
     var configuration = ConfigurationState()
     var drawing = DrawingState()
     var code: CodeState {
-        get { CodeState(pathElements: drawing.pathElements, isEditing: isEditingCode) }
+        get { CodeState(pathElements: drawing.pathElements, mode: codeMode) }
         set {
             drawing.pathElements = newValue.pathElements
-            isEditingCode = newValue.isEditing
+            codeMode = newValue.mode
         }
     }
     var imageData: Data?
     var imageOpacity = 1.0
     var isDrawingPanelTargetedForImageDrop = false
     var lastZoomGestureDelta: Double?
-    var isEditingCode = false
+    var codeMode: CodeMode = .blocks
 }
 
 enum AppAction: Equatable {

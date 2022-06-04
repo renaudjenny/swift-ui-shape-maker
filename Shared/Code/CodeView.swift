@@ -8,7 +8,7 @@ struct CodeView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             ZStack {
-                if viewStore.isEditing {
+                if viewStore.mode == .edition {
                     TextEditor(text: code(viewStore: viewStore))
                         .font(.body.monospaced())
                         .multilineTextAlignment(.leading)
@@ -38,8 +38,8 @@ struct CodeView: View {
                     .background(Color.white)
                     .padding()
                 }
-            }.onTapGesture {
-                viewStore.send(.editChanged(true))
+            }.onTapGesture(count: 2) {
+                viewStore.send(.modeChanged(.edition))
             }
         }
     }

@@ -36,11 +36,6 @@ struct DrawingZone: View {
                 .padding(.horizontal, 64)
                 .padding(.vertical, 32)
             }
-            .onHover { isHovered in
-                if isHovered {
-                    viewStore.send(.code(.editChanged(false)))
-                }
-            }
             .highPriorityGesture(MagnificationGesture()
                 .onChanged { scale in viewStore.send(.lastZoomGestureDeltaChanged(scale)) }
                 .onEnded { _ in viewStore.send(.lastZoomGestureDeltaChanged(nil)) }

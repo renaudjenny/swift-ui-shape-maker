@@ -5,13 +5,13 @@ import XCTest
 final class CodeCoreTests: XCTestCase {
     func testChangeEditing() {
         let store = TestStore(
-            initialState: CodeState(pathElements: [], isEditing: false),
+            initialState: CodeState(pathElements: [], mode: .blocks),
             reducer: codeReducer,
             environment: CodeEnvironment()
         )
 
-        store.send(.editChanged(true)) { state in
-            state.isEditing = true
+        store.send(.modeChanged(.edition)) { state in
+            state.mode = .edition
         }
     }
 
@@ -26,7 +26,7 @@ final class CodeCoreTests: XCTestCase {
                         segment: Segment(startPoint: CGPoint(x: 123, y: 123), endPoint: CGPoint(x: 234, y: 234))
                     ),
                 ],
-                isEditing: false
+                mode: .blocks
             ),
             reducer: codeReducer,
             environment: CodeEnvironment()
@@ -45,10 +45,7 @@ final class CodeCoreTests: XCTestCase {
             segment: Segment(startPoint: CGPoint(x: 123, y: 123), endPoint: CGPoint(x: 234, y: 234))
         )
         let store = TestStore(
-            initialState: CodeState(
-                pathElements: [pathElement],
-                isEditing: false
-            ),
+            initialState: CodeState(pathElements: [pathElement], mode: .blocks),
             reducer: codeReducer,
             environment: CodeEnvironment()
         )

@@ -2,11 +2,17 @@ import ComposableArchitecture
 
 struct CodeState: Equatable {
     var pathElements: IdentifiedArrayOf<PathElement>
-    var isEditing: Bool
+    var mode: CodeMode
+}
+
+enum CodeMode {
+    case blocks
+    case edition
+    case hidden
 }
 
 enum CodeAction: Equatable {
-    case editChanged(Bool)
+    case modeChanged(CodeMode)
     case pathElement(id: PathElement.ID, action: PathElementAction)
 }
 
@@ -20,8 +26,8 @@ let codeReducer = Reducer<CodeState, CodeAction, CodeEnvironment>.combine(
     ),
     Reducer { state, action, _ in
         switch action {
-        case let .editChanged(isEditing):
-            state.isEditing = isEditing
+        case let .modeChanged(mode):
+            state.mode = mode
             return .none
         case .pathElement(id: let id, action: .remove):
             state.pathElements.remove(id: id)
