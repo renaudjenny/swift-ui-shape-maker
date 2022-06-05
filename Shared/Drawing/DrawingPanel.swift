@@ -10,6 +10,12 @@ struct DrawingPanel: View {
         WithViewStore(store) { viewStore in
             ZStack {
                 Color.white
+                    .overlay(viewStore.image?
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .opacity(viewStore.imageOpacity)
+                        .allowsHitTesting(false)
+                    )
                     .gesture(
                         DragGesture(minimumDistance: 0)
                             .onChanged { viewStore.send(.drawing(.addOrMovePathElement(to: $0.location))) }
@@ -98,5 +104,15 @@ extension DrawingPanel {
             inBondsPoint.y = DrawingPanel.standardWidth
         }
         return inBondsPoint
+    }
+}
+
+private extension AppState {
+    var image: Image? {
+        #if os(macOS)
+        imageData.flatMap { NSImage(data: $0).map { Image(nsImage: $0) } }
+        #else
+        imageData.flatMap { UIImage(data: $0).map { Image(uiImage: $0) } }
+        #endif
     }
 }
