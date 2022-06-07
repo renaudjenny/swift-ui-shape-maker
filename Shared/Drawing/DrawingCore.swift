@@ -113,7 +113,8 @@ let drawingReducer = Reducer<BaseState<DrawingState>, DrawingAction, DrawingEnvi
                 let nextElementID = state.pathElements[safe: index + 1]?.id
             else { return .none }
             var amendedPathElement = state.pathElements[id: nextElementID]
-            amendedPathElement?.segment.startPoint = guide.position.applyZoomLevel(1/state.zoomLevel)
+            let newStartPoint = DrawingPanel.inBoundsPoint(guide.position.applyZoomLevel(1/state.zoomLevel))
+            amendedPathElement?.segment.startPoint = newStartPoint
             state.pathElements[id: nextElementID] = amendedPathElement
             return .none
         case .pathElement:
