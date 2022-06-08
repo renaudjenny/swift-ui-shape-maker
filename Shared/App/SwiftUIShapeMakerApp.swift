@@ -5,7 +5,7 @@ import ComposableArchitecture
 struct SwiftUIShapeMakerApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView(store: Store(
+            AppView(store: Store(
                 initialState: AppState(),
                 reducer: appReducer,
                 environment: AppEnvironment(uuid: UUID.init)

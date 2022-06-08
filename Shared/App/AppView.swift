@@ -5,7 +5,7 @@ import ComposableArchitecture
 import Quartz
 #endif
 
-struct ContentView: View {
+struct AppView: View {
     let store: Store<AppState, AppAction>
 
     var body: some View {
@@ -93,7 +93,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(store: Store(
+        AppView(store: Store(
             initialState: AppState(),
             reducer: appReducer,
             environment: AppEnvironment(uuid: UUID.init)

@@ -30,6 +30,7 @@
 		4C3D193B284BF0AA0096404F /* AppCore+BaseState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3D193A284BF0AA0096404F /* AppCore+BaseState.swift */; };
 		4C3D193C284BF0AA0096404F /* AppCore+BaseState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3D193A284BF0AA0096404F /* AppCore+BaseState.swift */; };
 		4C3D193D284BF2180096404F /* AppCore+BaseState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3D193A284BF0AA0096404F /* AppCore+BaseState.swift */; };
+		4C3D194128507F470096404F /* DrawingCoreTests+UpdateGuides.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3D194028507F470096404F /* DrawingCoreTests+UpdateGuides.swift */; };
 		4C3DA6AC281FEC1400DE2E0E /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 4C3DA6AB281FEC1400DE2E0E /* ComposableArchitecture */; };
 		4C3DA6AF281FEC2400DE2E0E /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 4C3DA6AE281FEC2400DE2E0E /* ComposableArchitecture */; };
 		4C3DA6B6281FED4000DE2E0E /* AppCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA6B5281FED4000DE2E0E /* AppCore.swift */; };
@@ -66,8 +67,8 @@
 		4C7BC16A28073F0A001942AE /* TestsMacOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC16928073F0A001942AE /* TestsMacOSLaunchTests.swift */; };
 		4C7BC16B28073F0A001942AE /* SwiftUIShapeMakerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC14328073F0A001942AE /* SwiftUIShapeMakerApp.swift */; };
 		4C7BC16C28073F0A001942AE /* SwiftUIShapeMakerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC14328073F0A001942AE /* SwiftUIShapeMakerApp.swift */; };
-		4C7BC16D28073F0A001942AE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC14428073F0A001942AE /* ContentView.swift */; };
-		4C7BC16E28073F0A001942AE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC14428073F0A001942AE /* ContentView.swift */; };
+		4C7BC16D28073F0A001942AE /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC14428073F0A001942AE /* AppView.swift */; };
+		4C7BC16E28073F0A001942AE /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7BC14428073F0A001942AE /* AppView.swift */; };
 		4C7BC16F28073F0A001942AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C7BC14528073F0A001942AE /* Assets.xcassets */; };
 		4C7BC17028073F0A001942AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C7BC14528073F0A001942AE /* Assets.xcassets */; };
 		4C7E0E5D2835B82600CF712B /* CodeCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7E0E5C2835B7C800CF712B /* CodeCoreTests.swift */; };
@@ -110,6 +111,7 @@
 		4C31F725280CBF120048DE77 /* SquareElementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareElementView.swift; sourceTree = "<group>"; };
 		4C31F728280D48B60048DE77 /* CodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeView.swift; sourceTree = "<group>"; };
 		4C3D193A284BF0AA0096404F /* AppCore+BaseState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCore+BaseState.swift"; sourceTree = "<group>"; };
+		4C3D194028507F470096404F /* DrawingCoreTests+UpdateGuides.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DrawingCoreTests+UpdateGuides.swift"; sourceTree = "<group>"; };
 		4C3DA6B5281FED4000DE2E0E /* AppCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCore.swift; sourceTree = "<group>"; };
 		4C3DA6BA281FEE6500DE2E0E /* DrawingCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingCore.swift; sourceTree = "<group>"; };
 		4C3DA6BF281FEEC700DE2E0E /* CodeCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeCore.swift; sourceTree = "<group>"; };
@@ -124,7 +126,7 @@
 		4C3DA6F7282DA61E00DE2E0E /* PathElementCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathElementCore.swift; sourceTree = "<group>"; };
 		4C3DA6FC282DACEC00DE2E0E /* PathElementCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathElementCoreTests.swift; sourceTree = "<group>"; };
 		4C7BC14328073F0A001942AE /* SwiftUIShapeMakerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIShapeMakerApp.swift; sourceTree = "<group>"; };
-		4C7BC14428073F0A001942AE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		4C7BC14428073F0A001942AE /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
 		4C7BC14528073F0A001942AE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4C7BC14A28073F0A001942AE /* SwiftUI Shape Maker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftUI Shape Maker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C7BC15028073F0A001942AE /* SwiftUI Shape Maker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftUI Shape Maker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -201,7 +203,7 @@
 			children = (
 				4C3DA6B5281FED4000DE2E0E /* AppCore.swift */,
 				4C3D193A284BF0AA0096404F /* AppCore+BaseState.swift */,
-				4C7BC14428073F0A001942AE /* ContentView.swift */,
+				4C7BC14428073F0A001942AE /* AppView.swift */,
 				4CFF09732832DE8F007B4A5B /* DrawingZone.swift */,
 				4C7BC14328073F0A001942AE /* SwiftUIShapeMakerApp.swift */,
 			);
@@ -265,6 +267,7 @@
 				4C3DA6E128201E4600DE2E0E /* DrawingCoreTests.swift */,
 				4C3DA6EC2826B29E00DE2E0E /* DrawingCoreTests+ZoomLevel.swift */,
 				4C3DA6EE2826B34100DE2E0E /* DrawingCore+Tests.swift */,
+				4C3D194028507F470096404F /* DrawingCoreTests+UpdateGuides.swift */,
 			);
 			path = Drawing;
 			sourceTree = "<group>";
@@ -626,6 +629,7 @@
 				4C3DA6E728201F3D00DE2E0E /* SquareElementView.swift in Sources */,
 				4C3DA6DB2820038000DE2E0E /* CodeCore.swift in Sources */,
 				4C3DA6F5282C1EE600DE2E0E /* AppCoreTests.swift in Sources */,
+				4C3D194128507F470096404F /* DrawingCoreTests+UpdateGuides.swift in Sources */,
 				4C3DA6D9282001FA00DE2E0E /* ConfigurationCoreTests.swift in Sources */,
 				4C3DA6ED2826B29E00DE2E0E /* DrawingCoreTests+ZoomLevel.swift in Sources */,
 				4C2BACC8283ADC58006DC737 /* Collection+Safe.swift in Sources */,
@@ -657,7 +661,7 @@
 				4C2BACCA283C5631006DC737 /* DrawingPath.swift in Sources */,
 				4C3DA6B6281FED4000DE2E0E /* AppCore.swift in Sources */,
 				4C31F715280A0C8B0048DE77 /* ConfigurationCore.swift in Sources */,
-				4C7BC16D28073F0A001942AE /* ContentView.swift in Sources */,
+				4C7BC16D28073F0A001942AE /* AppView.swift in Sources */,
 				4C31F720280CBE500048DE77 /* DrawingPanel.swift in Sources */,
 				4C31F71D280C27F20048DE77 /* PathElement.swift in Sources */,
 				4C7BC16B28073F0A001942AE /* SwiftUIShapeMakerApp.swift in Sources */,
@@ -682,7 +686,7 @@
 				4C2BACCB283C5631006DC737 /* DrawingPath.swift in Sources */,
 				4C3DA6B7281FED4000DE2E0E /* AppCore.swift in Sources */,
 				4C31F716280A0C8B0048DE77 /* ConfigurationCore.swift in Sources */,
-				4C7BC16E28073F0A001942AE /* ContentView.swift in Sources */,
+				4C7BC16E28073F0A001942AE /* AppView.swift in Sources */,
 				4C31F721280CBE500048DE77 /* DrawingPanel.swift in Sources */,
 				4C31F71E280C27F20048DE77 /* PathElement.swift in Sources */,
 				4C7BC16C28073F0A001942AE /* SwiftUIShapeMakerApp.swift in Sources */,
