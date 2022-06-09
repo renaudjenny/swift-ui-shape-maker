@@ -33,29 +33,36 @@ struct DrawingPanel: View {
 
     @ViewBuilder
     private func pathIndicators(store: Store<BaseState<DrawingState>, DrawingAction>) -> some View {
-        ForEachStore(store.scope(state: \.pathElements, action: DrawingAction.pathElement(id:action:))) { store in
-            WithViewStore(store) { viewStore in
-                switch viewStore.type {
-                case .move, .line:
-                    GuideView(store: store, type: .to, position: viewStore.segment.endPoint)
-                case let .quadCurve(control):
-                    quadCurveGuides(store: store, control: control)
-                case let .curve(control1, control2):
-                    curveGuides(store: store, control1: control1, control2: control2)
+        WithViewStore(store) { viewStore in
+            let zoomLevel = viewStore.zoomLevel
+            ForEachStore(store.scope(state: \.pathElements, action: DrawingAction.pathElement(id:action:))) { store in
+                WithViewStore(store) { viewStore in
+                    switch viewStore.type {
+                    case .move, .line:
+                        GuideView(store: store, type: .to, position: viewStore.segment.endPoint, zoomLevel: zoomLevel)
+                    case let .quadCurve(control):
+                        quadCurveGuides(store: store, control: control, zoomLevel: zoomLevel)
+                    case let .curve(control1, control2):
+                        curveGuides(store: store, control1: control1, control2: control2, zoomLevel: zoomLevel)
+                    }
                 }
             }
         }
     }
 
-    private func quadCurveGuides(store: Store<PathElement, PathElementAction>, control: CGPoint) -> some View {
+    private func quadCurveGuides(
+        store: Store<PathElement, PathElementAction>,
+        control: CGPoint,
+        zoomLevel: Double
+    ) -> some View {
         WithViewStore(store) { viewStore in
             ZStack {
-                GuideView(store: store, type: .to, position: viewStore.segment.endPoint)
-                GuideView(store: store, type: .quadCurveControl, position: control)
+                GuideView(store: store, type: .to, position: viewStore.segment.endPoint, zoomLevel: zoomLevel)
+                GuideView(store: store, type: .quadCurveControl, position: control, zoomLevel: zoomLevel)
                 Path { path in
-                    path.move(to: viewStore.segment.startPoint.applyZoomLevel(viewStore.zoomLevel))
-                    path.addLine(to: control.applyZoomLevel(viewStore.zoomLevel))
-                    path.addLine(to: viewStore.segment.endPoint.applyZoomLevel(viewStore.zoomLevel))
+                    path.move(to: viewStore.segment.startPoint.applyZoomLevel(zoomLevel))
+                    path.addLine(to: control.applyZoomLevel(zoomLevel))
+                    path.addLine(to: viewStore.segment.endPoint.applyZoomLevel(zoomLevel))
                 }.stroke(style: .init(dash: [5], dashPhase: 1))
             }
         }
@@ -65,18 +72,19 @@ struct DrawingPanel: View {
     private func curveGuides(
         store: Store<PathElement, PathElementAction>,
         control1: CGPoint,
-        control2: CGPoint
+        control2: CGPoint,
+        zoomLevel: Double
     ) -> some View {
         WithViewStore(store) { viewStore in
             ZStack {
-                GuideView(store: store, type: .to, position: viewStore.segment.endPoint)
-                GuideView(store: store, type: .curveControl1, position: control1)
-                GuideView(store: store, type: .curveControl2, position: control2)
+                GuideView(store: store, type: .to, position: viewStore.segment.endPoint, zoomLevel: zoomLevel)
+                GuideView(store: store, type: .curveControl1, position: control1, zoomLevel: zoomLevel)
+                GuideView(store: store, type: .curveControl2, position: control2, zoomLevel: zoomLevel)
                 Path { path in
-                    path.move(to: viewStore.segment.startPoint.applyZoomLevel(viewStore.zoomLevel))
-                    path.addLine(to: control1.applyZoomLevel(viewStore.zoomLevel))
-                    path.addLine(to: control2.applyZoomLevel(viewStore.zoomLevel))
-                    path.addLine(to: viewStore.segment.endPoint.applyZoomLevel(viewStore.zoomLevel))
+                    path.move(to: viewStore.segment.startPoint.applyZoomLevel(zoomLevel))
+                    path.addLine(to: control1.applyZoomLevel(zoomLevel))
+                    path.addLine(to: control2.applyZoomLevel(zoomLevel))
+                    path.addLine(to: viewStore.segment.endPoint.applyZoomLevel(zoomLevel))
                 }.stroke(style: .init(dash: [5], dashPhase: 1))
             }
         }

@@ -5,15 +5,17 @@ struct GuideView: View {
     let store: Store<PathElement, PathElementAction>
     let type: PathElement.GuideType
     let position: CGPoint
+    let zoomLevel: Double
 
     var body: some View {
         WithViewStore(store) { viewStore in
             element
-                .position(position.applyZoomLevel(viewStore.zoomLevel))
+                .position(position.applyZoomLevel(zoomLevel))
                 .gesture(
                     DragGesture()
                         .onChanged { value in
-                            viewStore.send(.update(guide: PathElement.Guide(type: type, position: value.location)))
+                            let guide = PathElement.Guide(type: type, position: value.location)
+                            viewStore.send(.update(guide: guide, zoomLevel: zoomLevel))
                         }
                 )
         }

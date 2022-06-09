@@ -34,7 +34,9 @@ let drawingReducer = Reducer<BaseState<DrawingState>, DrawingAction, DrawingEnvi
             guard !state.isAdding else {
                 let lastElementID = state.pathElements[state.pathElements.count - 1].id
                 let guide = PathElement.Guide(type: .to, position: to)
-                return Effect(value: .pathElement(id: lastElementID, action: .update(guide: guide)))
+                return Effect(
+                    value: .pathElement(id: lastElementID, action: .update(guide: guide, zoomLevel: state.zoomLevel))
+                )
             }
 
             state.isAdding = true
@@ -46,7 +48,6 @@ let drawingReducer = Reducer<BaseState<DrawingState>, DrawingAction, DrawingEnvi
                     type: .move,
                     segment: Segment(startPoint: to, endPoint: to),
                     isHovered: true,
-                    zoomLevel: state.zoomLevel,
                     isTransformable: false
                 ))
                 return .none
@@ -55,28 +56,15 @@ let drawingReducer = Reducer<BaseState<DrawingState>, DrawingAction, DrawingEnvi
             let segment = Segment(startPoint: state.pathElements.last?.segment.endPoint ?? .zero, endPoint: to)
             switch state.selectedPathTool {
             case .move:
-                pathElement = PathElement(
-                    id: environment.uuid(),
-                    type: .move,
-                    segment: segment,
-                    isHovered: true,
-                    zoomLevel: state.zoomLevel
-                )
+                pathElement = PathElement(id: environment.uuid(), type: .move, segment: segment, isHovered: true)
             case .line:
-                pathElement = PathElement(
-                    id: environment.uuid(),
-                    type: .line,
-                    segment: segment,
-                    isHovered: true,
-                    zoomLevel: state.zoomLevel
-                )
+                pathElement = PathElement(id: environment.uuid(), type: .line, segment: segment, isHovered: true)
             case .quadCurve:
                 pathElement = PathElement(
                     id: environment.uuid(),
                     type: .quadCurve( control: segment.initialQuadCurveControl),
                     segment: segment,
-                    isHovered: true,
-                    zoomLevel: state.zoomLevel
+                    isHovered: true
                 )
             case .curve:
                 let (control1, control2) = segment.initialCurveControls
@@ -84,8 +72,7 @@ let drawingReducer = Reducer<BaseState<DrawingState>, DrawingAction, DrawingEnvi
                     id: environment.uuid(),
                     type: .curve(control1: control1, control2: control2),
                     segment: segment,
-                    isHovered: true,
-                    zoomLevel: state.zoomLevel
+                    isHovered: true
                 )
             }
             state.pathElements.append(pathElement)
@@ -98,15 +85,12 @@ let drawingReducer = Reducer<BaseState<DrawingState>, DrawingAction, DrawingEnvi
             return .none
         case let .zoomLevelChanged(zoomLevel):
             state.zoomLevel = zoomLevel
-            state.pathElements.map(\.id).forEach {
-                state.pathElements[id: $0]?.zoomLevel = zoomLevel
-            }
             return .none
         case .incrementZoomLevel:
             return Effect(value: .zoomLevelChanged(min(state.zoomLevel + 0.1, 4)))
         case .decrementZoomLevel:
             return Effect(value: .zoomLevelChanged(max(state.zoomLevel - 0.1, 0.1)))
-        case let .pathElement(id, action: .update(guide)):
+        case let .pathElement(id, action: .update(guide, _)):
             guard
                 guide.type == .to,
                 let index = state.pathElements.index(id: id),
