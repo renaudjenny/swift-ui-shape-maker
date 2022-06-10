@@ -16,7 +16,7 @@ final class PathElementCoreTests: XCTestCase {
 
         let newPoint = CGPoint(x: 345, y: 345)
         let guide = PathElement.Guide(type: .to, position: newPoint)
-        store.send(.update(guide: guide)) { state in
+        store.send(.update(guide: guide, zoomLevel: 1)) { state in
             state.update(guide: guide)
         }
     }
@@ -30,40 +30,28 @@ final class PathElementCoreTests: XCTestCase {
 
         let control = CGPoint(x: 300, y: 300)
         let guide = PathElement.Guide(type: .quadCurveControl, position: control)
-        store.send(.update(guide: guide)) { state in
+        store.send(.update(guide: guide, zoomLevel: 1)) { state in
             state.update(guide: guide)
         }
     }
 
     func testUpdateGuideWhenZoomLevelChanged() throws {
         let zoomLevel: Double = 90/100
-        var initialState: PathElement = .test
-        initialState.zoomLevel = zoomLevel
-        let store = TestStore(
-            initialState: initialState,
-            reducer: pathElementReducer,
-            environment: PathElementEnvironement()
-        )
+        let store = TestStore(initialState: .test, reducer: pathElementReducer, environment: PathElementEnvironement())
 
         let newPoint = CGPoint(x: 345, y: 345)
         let guide = PathElement.Guide(type: .to, position: newPoint)
-        store.send(.update(guide: guide)) { state in
+        store.send(.update(guide: guide, zoomLevel: zoomLevel)) { state in
             state.update(guide: PathElement.Guide(type: .to, position: newPoint.applyZoomLevel(1/zoomLevel)))
         }
     }
 
     func testUpdateGuideWhenZoomLevelChangedAndPositionOutsidePanel() throws {
         let zoomLevel: Double = 90/100
-        var initialState: PathElement = .test
-        initialState.zoomLevel = zoomLevel
-        let store = TestStore(
-            initialState: initialState,
-            reducer: pathElementReducer,
-            environment: PathElementEnvironement()
-        )
+        let store = TestStore(initialState: .test, reducer: pathElementReducer, environment: PathElementEnvironement())
         let newPoint = CGPoint(x: 100, y: DrawingPanel.standardWidth + 10)
         let guide = PathElement.Guide(type: .to, position: newPoint)
-        store.send(.update(guide: guide)) { state in
+        store.send(.update(guide: guide, zoomLevel: zoomLevel)) { state in
             let newPoint = CGPoint(x: 100 * 1/zoomLevel, y: DrawingPanel.standardWidth)
             let amendedGuide = PathElement.Guide(type: .to, position: newPoint)
             state.update(guide: amendedGuide)
@@ -79,7 +67,7 @@ final class PathElementCoreTests: XCTestCase {
 
         let newPoint = CGPoint(x: 345, y: DrawingPanel.standardWidth + 10)
         let guide = PathElement.Guide(type: .quadCurveControl, position: newPoint)
-        store.send(.update(guide: guide)) { state in
+        store.send(.update(guide: guide, zoomLevel: 1)) { state in
             state.type = .quadCurve(control: newPoint)
         }
     }

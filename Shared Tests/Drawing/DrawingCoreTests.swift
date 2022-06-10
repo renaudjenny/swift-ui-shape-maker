@@ -185,7 +185,7 @@ final class DrawingCoreTests: XCTestCase {
         let nextPoint = CGPoint(x: 234, y: 234)
         let guide = PathElement.Guide(type: .to, position: nextPoint)
         store.send(.addOrMovePathElement(to: nextPoint))
-        store.receive(.pathElement(id: .incrementation(2), action: .update(guide: guide))) { state in
+        store.receive(.pathElement(id: .incrementation(2), action: .update(guide: guide, zoomLevel: 1))) { state in
             state.pathElements[id: .incrementation(2)]?.update(guide: guide)
         }
     }
@@ -215,7 +215,7 @@ final class DrawingCoreTests: XCTestCase {
         let nextPoint = CGPoint(x: DrawingPanel.standardWidth + 10, y: 234)
         let guide = PathElement.Guide(type: .to, position: nextPoint)
         store.send(.addOrMovePathElement(to: nextPoint))
-        store.receive(.pathElement(id: .incrementation(2), action: .update(guide: guide))) { state in
+        store.receive(.pathElement(id: .incrementation(2), action: .update(guide: guide, zoomLevel: 1))) { state in
             let amendedGuide = PathElement.Guide(type: .to, position: CGPoint(x: DrawingPanel.standardWidth, y: 234))
             state.pathElements[id: .incrementation(2)]?.update(guide: amendedGuide)
         }
@@ -229,7 +229,6 @@ final class DrawingCoreTests: XCTestCase {
         let zoomLevel: Double = 90/100
         store.send(.zoomLevelChanged(zoomLevel)) { state in
             state.zoomLevel = zoomLevel
-            state.updatePathElementsZoomLevel(zoomLevel)
         }
         store.send(.selectPathTool(.line)) { state in
             state.selectedPathTool = .line
@@ -242,8 +241,7 @@ final class DrawingCoreTests: XCTestCase {
                 startPoint: initialState.pathElements[1].segment.endPoint,
                 endPoint: initialPoint.applyZoomLevel(1/zoomLevel)
             ),
-            isHovered: true,
-            zoomLevel: zoomLevel
+            isHovered: true
         )
         store.send(.addOrMovePathElement(to: initialPoint)) { state in
             state.pathElements.append(line)
@@ -252,7 +250,8 @@ final class DrawingCoreTests: XCTestCase {
         let nextPoint = CGPoint(x: DrawingPanel.standardWidth + 10, y: 234)
         let guide = PathElement.Guide(type: .to, position: nextPoint)
         store.send(.addOrMovePathElement(to: nextPoint))
-        store.receive(.pathElement(id: .incrementation(2), action: .update(guide: guide))) { state in
+        let action: PathElementAction = .update(guide: guide, zoomLevel: zoomLevel)
+        store.receive(.pathElement(id: .incrementation(2), action: action)) { state in
             let amendedGuide = PathElement.Guide(
                 type: .to,
                 position: CGPoint(x: DrawingPanel.standardWidth, y: 234 * 1/zoomLevel)

@@ -23,10 +23,4 @@ extension BaseState where State == DrawingState {
         ])
         return BaseState(pathElements: pathElements, state: DrawingState())
     }
-
-    mutating func updatePathElementsZoomLevel(_ zoomLevel: Double) {
-        pathElements.map(\.id).forEach {
-            pathElements[id: $0]?.zoomLevel = zoomLevel
-        }
-    }
 }

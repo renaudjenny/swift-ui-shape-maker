@@ -10,7 +10,7 @@ extension DrawingCoreTests {
 
         let newPosition = CGPoint(x: 101, y: 101)
         let guide = PathElement.Guide(type: .to, position: newPosition)
-        store.send(.pathElement(id: id, action: .update(guide: guide))) { state in
+        store.send(.pathElement(id: id, action: .update(guide: guide, zoomLevel: 1))) { state in
             state.pathElements[id: id]?.update(guide: guide)
             let nextElementID: UUID = .incrementation(1)
             state.pathElements[id: nextElementID]?.segment.startPoint = newPosition
@@ -25,7 +25,7 @@ extension DrawingCoreTests {
 
         let newPosition = CGPoint(x: 101, y: DrawingPanel.standardWidth + 10)
         let guide = PathElement.Guide(type: .to, position: newPosition)
-        store.send(.pathElement(id: id, action: .update(guide: guide))) { state in
+        store.send(.pathElement(id: id, action: .update(guide: guide, zoomLevel: 1))) { state in
             let amendedNewPosition = CGPoint(x: 101, y: DrawingPanel.standardWidth)
             let amendedGuide = PathElement.Guide(type: .to, position: amendedNewPosition)
             state.pathElements[id: id]?.update(guide: amendedGuide)
