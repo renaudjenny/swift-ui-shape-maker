@@ -9,7 +9,6 @@ struct AppState: Equatable {
     var imageOpacity = 1.0
     var isDrawingPanelTargetedForImageDrop = false
     var lastZoomGestureDelta: Double?
-    var codeMode: CodeMode = .blocks
 }
 
 enum AppAction: Equatable {

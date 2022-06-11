@@ -12,7 +12,10 @@ struct AppView: View {
         WithViewStore(store) { viewStore in
             HStack {
                 DrawingZone(store: store)
-                CodeView(store: store.scope(state: \.codeState, action: AppAction.code))
+                if viewStore.code.mode != .hidden {
+                    CodeView(store: store.scope(state: \.codeState, action: AppAction.code))
+                        .transition(.move(edge: .trailing))
+                }
             }
             .toolbar {
                 ToolbarItemGroup(placement: .primaryAction) {
@@ -42,9 +45,9 @@ struct AppView: View {
 
                 ToolbarItemGroup {
                     Picker("Code mode", selection: viewStore.binding(
-                        get: \.codeMode,
+                        get: \.code.mode,
                         send: { .code(.modeChanged($0)) }
-                    )) {
+                    ).animation()) {
                         Label("Blocks", systemImage: "rectangle.grid.1x2").tag(CodeMode.blocks)
                         Label("Edition", systemImage: "character.cursor.ibeam").tag(CodeMode.edition)
                         Label("hidden", systemImage: "rectangle").tag(CodeMode.hidden)
