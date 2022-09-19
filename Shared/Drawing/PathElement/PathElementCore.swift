@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import SwiftUI
 
 enum PathElementAction: Equatable {
     case update(guide: PathElement.Guide, zoomLevel: Double)

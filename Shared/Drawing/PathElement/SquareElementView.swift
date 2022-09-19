@@ -10,11 +10,7 @@ struct SquareElementView: View {
                 .frame(width: 5, height: 5)
                 .padding()
                 .contentShape(Rectangle())
-                .onHover { hover in
-                    withAnimation(.easeInOut) {
-                        viewStore.send(.hoverChanged(hover))
-                    }
-                }
+                .onHover { hover in viewStore.send(.hoverChanged(hover), animation: .easeInOut) }
                 .scaleEffect(viewStore.isHovered ? 2 : 1)
         }
     }

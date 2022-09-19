@@ -77,11 +77,7 @@ struct CodeView: View {
                 }
             }
             .contentShape(Rectangle())
-            .onHover { isHovered in
-                withAnimation(.easeInOut) {
-                    viewStore.send(.hoverChanged(isHovered))
-                }
-            }
+            .onHover { isHovered in viewStore.send(.hoverChanged(isHovered), animation: .easeInOut) }
         }
     }
 

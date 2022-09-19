@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import Foundation
 
 struct AppState: Equatable {
     var configuration = ConfigurationState()
@@ -59,11 +60,11 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>
             environment: { _ in ConfigurationEnvironement() }
         ),
         drawingReducer.pullback(
-            state: \.drawingState,
+            state: \AppState.drawingState,
             action: /AppAction.drawing,
             environment: { DrawingEnvironement(uuid: $0.uuid) }),
         codeReducer.pullback(
-            state: \.codeState,
+            state: \AppState.codeState,
             action: /AppAction.code,
             environment: { _ in CodeEnvironment() }
         ),

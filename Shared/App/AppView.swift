@@ -89,7 +89,8 @@ struct AppView: View {
         #if os(macOS)
         let pictureTaker = IKPictureTaker.pictureTaker()
         pictureTaker?.runModal()
-        pictureTaker?.outputImage().map { $0.tiffRepresentation.map { viewStore.send(.updateImageData($0)) } }
+        guard let data = pictureTaker?.outputImage().tiffRepresentation else { return }
+        viewStore.send(.updateImageData(data))
         #endif
     }
 }

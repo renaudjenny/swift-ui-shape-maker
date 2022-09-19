@@ -19,7 +19,7 @@ struct CodeEnvironment {}
 
 let codeReducer = Reducer<BaseState<CodeState>, CodeAction, CodeEnvironment>.combine(
     pathElementReducer.forEach(
-        state: \.pathElements,
+        state: \BaseState<CodeState>.pathElements,
         action: /CodeAction.pathElement,
         environment: { _ in PathElementEnvironement() }
     ),
