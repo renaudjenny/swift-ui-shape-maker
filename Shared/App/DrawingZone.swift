@@ -15,7 +15,7 @@ struct DrawingZone: View {
                             send: AppAction.drawingPanelTargetedForDropChanged
                         )
                     ) { items in
-                        _ = items.first?.loadObject(ofClass: URL.self, completionHandler: { url, error in
+                        _ = items.first?.loadObject(ofClass: URL.self, completionHandler: { @MainActor url, error in
                             guard error == nil, let url = url, let data = try? Data(contentsOf: url) else { return }
                             viewStore.send(.updateImageData(data))
                         })
